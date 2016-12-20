@@ -1,0 +1,25 @@
+
+////~~~~~~~~~  Hammvee - Driving Hammer Package ~~~~~~~~~~\\\\
+
+
+
+
+running the hammvee :
+
+1. Loading in Gazebo
+
+   roslaunch hammvee hammvee_empty_world.launch
+   or 
+   roslaunch hammvee hammvee_testworld.launch
+
+2. Controlling the hammvee
+
+ rqt -> topic message publisher gui   
+
+   -> /HAMMVEE_LLC/Steering_Angle - (+/- Theta ). to steer the hammer using the ackerman mechanisem
+   -> /HAMMVEE_LLC/Velocity - (+/- Vel) .  to give velocity to the hammer
+
+
+   *note  : Rate > 30,  -30<Theta<30 degrees  , -20<Vel<20 rad/sec
+
+
