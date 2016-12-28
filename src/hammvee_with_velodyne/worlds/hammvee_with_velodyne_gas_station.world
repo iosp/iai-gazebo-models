@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<sdf version="1.4">        <!-- Setting World Parameters -->
+  <world name="default">
+    <!--include>
+      <uri>model://ground_plane</uri>
+    </include-->
+
+    <include>
+      <uri>model://sun</uri>		 <!-- Loading Sun -->
+    </include>
+
+    <include>
+	    <uri>model://ground_plane</uri>	   <!-- Loading Group Plane -->
+	    <name>ground_plane</name>
+            <pose>0 0 0 0 0 0</pose>
+   </include>
+    
+   <include>
+      <uri>model://hammvee_with_velodyne</uri>
+      <name>hammvee_with_velodyne</name>
+      <pose>0.0 0.0 0.3 0 0 3.5</pose>
+    </include>
+    
+    <include>
+      <uri>model://gas_station</uri>
+      <name>gas_station</name>
+      <pose>-10.0 10.0 0 0 0 0</pose>
+    </include>
+  </world>
+</sdf>
