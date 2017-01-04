@@ -1,6 +1,7 @@
 <!-------------------------->
 <!--Wheels Setup-->
 <link name='left_wheel_1'>
+<self_collide>0</self_collide>
 	<pose>2.61707 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
@@ -48,6 +49,7 @@
 	</axis>
 </joint>
 <link name='left_wheel_2'>
+<self_collide>0</self_collide>
 	<pose>1.00737 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
@@ -95,6 +97,7 @@
 	</axis>
 </joint>
 <link name='left_wheel_3'>
+<self_collide>0</self_collide>
 	<pose>-2.67222 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
@@ -142,6 +145,7 @@
 	</axis>
 </joint>
 <link name='left_wheel_4'>
+<self_collide>0</self_collide>
 	<pose>-4.28192 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
@@ -189,6 +193,7 @@
 	</axis>
 </joint>
 <link name='right_wheel_1'>
+<self_collide>0</self_collide>
 	<pose>2.61707 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
@@ -236,6 +241,7 @@
 	</axis>
 </joint>
 <link name='right_wheel_2'>
+<self_collide>0</self_collide>
 	<pose>1.00737 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
@@ -283,6 +289,7 @@
 	</axis>
 </joint>
 <link name='right_wheel_3'>
+<self_collide>0</self_collide>
 	<pose>-2.67222 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
@@ -330,6 +337,7 @@
 	</axis>
 </joint>
 <link name='right_wheel_4'>
+<self_collide>0</self_collide>
 	<pose>-4.28192 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
