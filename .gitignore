@@ -13,6 +13,7 @@ cmake_install.cmake
 *~
 *.pyc
 install/*
+src/CMakeLists.txt
 *.idea*
 .metadata/*
 runsnake*/
@@ -22,4 +23,6 @@ core
 *.user
 *.cbp
 *.autosave
+
 CATKIN_IGNORE
+
