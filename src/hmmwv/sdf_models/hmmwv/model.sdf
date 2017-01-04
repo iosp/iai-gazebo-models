@@ -3,7 +3,7 @@
 <sdf version='1.4'>
 	<model name='hmmwv'>
 		<link name='body'>
-			<pose>0 0  0 0 0</pose>
+			<pose>0 0 0 0 0 0</pose>
 			<gravity>1</gravity>
 			<self_collide>1</self_collide>
 			<inertial>
@@ -30,7 +30,7 @@
 				<pose>1.65953 0 1.20715 0 0.09472 0</pose>
 				<geometry>
 					<box>
-						<size>1.622 2.414 0.22</size>
+						<size>1.622 2.414 0.1</size>
 					</box>
 				</geometry>
 			</collision>
@@ -486,7 +486,7 @@
       <iyz>0.0</iyz>
       <izz>0.01</izz>
     </inertia>
-    <mass>20</mass>
+    <mass>50</mass>
   </inertial>
   <visual name='visual'>
     <pose>0 0 0 0 0 3.14159265359</pose>
@@ -522,7 +522,7 @@
       <iyz>0.0</iyz>
       <izz>0.01</izz>
     </inertia>
-    <mass>20</mass>
+    <mass>50</mass>
   </inertial>
   <visual name='visual'>
     <pose>0 0 0 0 0 0</pose>
