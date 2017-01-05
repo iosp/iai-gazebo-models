@@ -23,5 +23,6 @@ core
 *.user
 *.cbp
 *.autosave
+
 CATKIN_IGNORE
 
