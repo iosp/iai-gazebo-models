@@ -6,12 +6,12 @@
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>5.9</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>9.88</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>5.9</izz>
 		</inertia>
 	</inertial>
 	<collision name='wheel_col'>
@@ -27,7 +27,7 @@
 		<pose>0 -0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.15</length>
+				<length>0.1</length>
 				<radius>0.495</radius>
 			</cylinder>
 		</geometry>
@@ -51,7 +51,7 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 0 3.14159265</pose>
+		<pose>0 0 0 0 0 3.1469265</pose>
 		<geometry>
 			<mesh>
 				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
@@ -74,12 +74,12 @@
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>5.9</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>9.88</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>5.9</izz>
 		</inertia>
 	</inertial>
 	<collision name='wheel_col'>
@@ -95,7 +95,7 @@
 		<pose>0 -0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.15</length>
+				<length>0.1</length>
 				<radius>0.495</radius>
 			</cylinder>
 		</geometry>
@@ -119,7 +119,7 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 0 3.14159265</pose>
+		<pose>0 0 0 0 0 3.1469265</pose>
 		<geometry>
 			<mesh>
 				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
@@ -142,12 +142,12 @@
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>5.9</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>9.88</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>5.9</izz>
 		</inertia>
 	</inertial>
 	<collision name='wheel_col'>
@@ -163,7 +163,7 @@
 		<pose>0 0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.15</length>
+				<length>0.1</length>
 				<radius>0.495</radius>
 			</cylinder>
 		</geometry>
@@ -210,12 +210,12 @@
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>5.9</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>9.88</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>5.9</izz>
 		</inertia>
 	</inertial>
 	<collision name='wheel_col'>
@@ -231,7 +231,7 @@
 		<pose>0 0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.15</length>
+				<length>0.1</length>
 				<radius>0.495</radius>
 			</cylinder>
 		</geometry>
