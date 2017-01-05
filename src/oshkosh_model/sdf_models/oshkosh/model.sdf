@@ -5,7 +5,7 @@
 		<link name='body'>
 			<pose>0 0 1.27525 0 0 0</pose>
 			<gravity>1</gravity>
-			<self_collide>1</self_collide>
+			<self_collide>0</self_collide>
 			<inertial>
 				<pose>0.00 0.00 0 0 0 0</pose>
 				<mass>2000</mass>
