@@ -15,7 +15,6 @@ cmake_install.cmake
 install/*
 src/CMakeLists.txt
 *.idea*
-/src/monitoring/plp_waypoint/nbproject/private/
 .metadata/*
 runsnake*/
 wasroscomm*/
@@ -24,4 +23,6 @@ core
 *.user
 *.cbp
 *.autosave
+
 CATKIN_IGNORE
+
