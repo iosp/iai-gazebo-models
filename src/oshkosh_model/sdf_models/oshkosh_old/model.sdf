@@ -105,11 +105,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_left_2">
@@ -146,11 +141,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_left_3">
@@ -187,11 +177,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_left_4">
@@ -228,11 +213,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_right_1">
@@ -269,11 +249,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>-1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_right_2">
@@ -312,11 +287,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>-1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_right_3">
@@ -353,11 +323,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>-1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_right_4">
@@ -394,11 +359,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>-1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <!--End of suspension setup-->
@@ -566,7 +526,7 @@
 		<pose>0 -0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -613,7 +573,7 @@
 		<pose>0 -0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -660,7 +620,7 @@
 		<pose>0 -0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -707,7 +667,7 @@
 		<pose>0 -0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -754,7 +714,7 @@
 		<pose>0 0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -801,7 +761,7 @@
 		<pose>0 0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -848,7 +808,7 @@
 		<pose>0 0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -895,7 +855,7 @@
 		<pose>0 0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -925,7 +885,8 @@
 	</axis>
 </joint>
 <!--End of wheels setup-->
-<!-------------------------->	<plugin name="oshkosh_driving_plugin" filename="liboshkosh_driving_plugin.so"/>
+<!-------------------------->
+	<plugin name="oshkosh_driving_plugin" filename="liboshkosh_driving_plugin.so"/>
 		<!--<plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so"><robotNamespace>/Sahar</robotNamespace><jointName>left_wheel_1, </jointName><updateRate>50.0</updateRate><alwaysOn>true</alwaysOn></plugin>-->
 	</model>
 </sdf>
