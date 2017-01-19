@@ -22,7 +22,6 @@
         <uri>model://oshkosh/meshes/Suspension.dae</uri>
       </mesh>
     </geometry>
-
   </visual>
 </link>
 <joint name="spring_left_1" type="revolute">
@@ -35,11 +34,11 @@
       <upper>0.08</upper>
     </limit>
     <xyz>1 0 0</xyz>
-    <dynamics>
+    <!--<dynamics>
       <spring_stiffness>40001</spring_stiffness>
       <spring_reference>-0.1</spring_reference>
       <damping>2002</damping>
-    </dynamics>
+    </dynamics>-->
   </axis>
 </joint>
 <link name="suspension_left_2">
@@ -63,7 +62,6 @@
         <uri>model://oshkosh/meshes/Suspension.dae</uri>
       </mesh>
     </geometry>
-
   </visual>
 </link>
 <joint name="spring_left_2" type="revolute">
@@ -76,11 +74,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_left_3">
@@ -104,7 +97,6 @@
         <uri>model://oshkosh/meshes/Suspension.dae</uri>
       </mesh>
     </geometry>
-
   </visual>
 </link>
 <joint name="spring_left_3" type="revolute">
@@ -117,11 +109,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_left_4">
@@ -145,7 +132,6 @@
         <uri>model://oshkosh/meshes/Suspension.dae</uri>
       </mesh>
     </geometry>
-
   </visual>
 </link>
 <joint name="spring_left_4" type="revolute">
@@ -158,11 +144,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_right_1">
@@ -186,7 +167,6 @@
         <uri>model://oshkosh/meshes/Suspension.dae</uri>
       </mesh>
     </geometry>
-
   </visual>
 </link>
 <joint name="spring_right_1" type="revolute">
@@ -199,11 +179,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>-1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_right_2">
@@ -229,7 +204,6 @@
         <uri>model://oshkosh/meshes/Suspension.dae</uri>
       </mesh>
     </geometry>
-
   </visual>
 </link>
 <joint name="spring_right_2" type="revolute">
@@ -242,11 +216,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>-1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_right_3">
@@ -270,7 +239,6 @@
         <uri>model://oshkosh/meshes/Suspension.dae</uri>
       </mesh>
     </geometry>
-
   </visual>
 </link>
 <joint name="spring_right_3" type="revolute">
@@ -283,11 +251,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>-1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <link name="suspension_right_4">
@@ -311,7 +274,6 @@
         <uri>model://oshkosh/meshes/Suspension.dae</uri>
       </mesh>
     </geometry>
-
   </visual>
 </link>
 <joint name="spring_right_4" type="revolute">
@@ -324,11 +286,6 @@
       <upper>0.08</upper>
     </limit>
     <xyz>-1 0 0</xyz>
-    <dynamics>
-      <spring_stiffness>40001</spring_stiffness>
-      <spring_reference>-0.1</spring_reference>
-      <damping>2002</damping>
-    </dynamics>
   </axis>
 </joint>
 <!--End of suspension setup-->
