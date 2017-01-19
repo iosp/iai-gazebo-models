@@ -103,7 +103,7 @@ public:
     SuspenDamp = config.Damper;
     SuspenTarget = config.Target;
   }
-  
+
   // Called by the world update start event, This function is the event that will be called every update
 public:
   void OnUpdate(const common::UpdateInfo &_info) // we are not using the pointer to the info so its commanted as an option
@@ -131,17 +131,17 @@ public:
     }
     // std::cout << "Applying efforts"<<std::endl;
     apply_efforts();
+    apply_steering();
     ApplySuspension();
     breaker();
 
     // std::cout << this->spring_right_1->GetAngle(0).Radian() << std::endl;
-    SpeedMsg.data=Speed;
+    SpeedMsg.data = Speed;
     platform_Speedometer_pub.publish(SpeedMsg);
     connection.data = true;
     platform_hb_pub_.publish(connection);
-
   }
-   void apply_efforts()
+  void apply_efforts()
   {
     double WheelTorque = Throttle_command * power;
     // std::cout << " Controlling wheels"<< std::endl;
@@ -150,6 +150,9 @@ public:
     wheel_controller(this->right_wheel_1, WheelTorque);
     wheel_controller(this->right_wheel_2, WheelTorque);
     // std::cout << " Controlling Steering"<< std::endl;
+  }
+  void apply_steering()
+  {
     double ThetaAckerman = 0;
     double ThetaOuter = 0;
     if (Steering_Request > 0)
@@ -159,7 +162,7 @@ public:
       steer_controller(this->streer_joint_left_1, Steering_Request);
       steer_controller(this->streer_joint_right_1, ThetaAckerman);
     }
-    else if(Steering_Request < 0)
+    else if (Steering_Request < 0)
     {
       ThetaAckerman = atan(1 / ((1 / (tan(-Steering_Request)) + (VehicleWidth / VehicleLength))));
       steer_controller(this->streer_joint_left_1, -ThetaAckerman);
@@ -181,12 +184,14 @@ public:
     double Joint_Force = WheelPower - damping * wheel_omega;
 
     wheel_joint->SetForce(0, Joint_Force);
-    if(wheel_joint==right_wheel_2){
-     wheelsSpeedSum=wheelsSpeedSum+wheel_omega; 
-    Speed=wheelsSpeedSum*WheelRadius/4;
-    wheelsSpeedSum=0;
+    if (wheel_joint == right_wheel_2)
+    {
+      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
+      Speed = wheelsSpeedSum * WheelRadius / 4;
+      wheelsSpeedSum = 0;
     }
-    else wheelsSpeedSum=wheelsSpeedSum+wheel_omega;
+    else
+      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
   }
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
@@ -218,13 +223,13 @@ public:
       TempDamping = damping;
       damping = 10000 * BreakPedal * BreakPedal;
       Breaks = true;
-      std::cout << "Break on "<<damping<<std::endl;
+      std::cout << "Break on " << damping << std::endl;
     }
     else if (BreakPedal == 0 && Breaks)
     {
       damping = TempDamping;
       Breaks = false;
-      std::cout << "Breaks off "<<damping<<std::endl;
+      std::cout << "Breaks off " << damping << std::endl;
     }
     if (BreakPedal >= 0.09 && Breaks)
       damping = 10000 * BreakPedal * BreakPedal;
@@ -298,7 +303,7 @@ public:
     Angular_command_timer.Start();
     Angular_command_mutex.unlock();
   }
-    void On_Break_command(const std_msgs::Float64ConstPtr &msg)
+  void On_Break_command(const std_msgs::Float64ConstPtr &msg)
   {
     Breaking_command_mutex.lock();
     // Recieving referance velocity
@@ -370,7 +375,7 @@ public:
   double DesiredAngleR = 0;
   double wheelsSpeedSum = 0;
   float tempTime = 0;
-  float Speed=0;
+  float Speed = 0;
   bool Breaks = false;
   //Dynamic Configuration Definitions
   dynamic_reconfigure::Server<hmmwv::hmmwvConfig> *model_reconfiguration_server;

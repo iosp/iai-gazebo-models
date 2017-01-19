@@ -13,14 +13,14 @@
 	<pose>2.61707 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>30</mass>
+		<mass>50</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>7.34</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>12.6</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>7.34</izz>
 		</inertia>
 	</inertial>
 	<collision name='left_wheel_1_col'>
@@ -82,14 +82,14 @@
 	<pose>1.00737 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>30</mass>
+		<mass>50</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>7.34</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>12.6</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>7.34</izz>
 		</inertia>
 	</inertial>
 	<collision name='left_wheel_2_col'>
@@ -151,14 +151,14 @@
 	<pose>-2.67222 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>30</mass>
+		<mass>50</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>7.34</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>12.6</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>7.34</izz>
 		</inertia>
 	</inertial>
 	<collision name='left_wheel_3_col'>
@@ -220,14 +220,14 @@
 	<pose>-4.28192 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>30</mass>
+		<mass>50</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>7.34</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>12.6</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>7.34</izz>
 		</inertia>
 	</inertial>
 	<collision name='left_wheel_4_col'>
@@ -289,14 +289,14 @@
 	<pose>2.61707 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>30</mass>
+		<mass>50</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>7.34</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>12.6</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>7.34</izz>
 		</inertia>
 	</inertial>
 	<collision name='right_wheel_1_col'>
@@ -358,14 +358,14 @@
 	<pose>1.00737 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>30</mass>
+		<mass>50</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>7.34</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>12.6</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>7.34</izz>
 		</inertia>
 	</inertial>
 	<collision name='right_wheel_2_col'>
@@ -427,14 +427,14 @@
 	<pose>-2.67222 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>30</mass>
+		<mass>50</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>7.34</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>12.6</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>7.34</izz>
 		</inertia>
 	</inertial>
 	<collision name='right_wheel_3_col'>
@@ -496,14 +496,14 @@
 	<pose>-4.28192 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>30</mass>
+		<mass>50</mass>
 		<inertia>
-			<ixx>15</ixx>
+			<ixx>7.34</ixx>
 			<ixy>0</ixy>
 			<ixz>0</ixz>
-			<iyy>30</iyy>
+			<iyy>12.6</iyy>
 			<iyz>0</iyz>
-			<izz>15</izz>
+			<izz>7.34</izz>
 		</inertia>
 	</inertial>
 	<collision name='right_wheel_4_col'>
