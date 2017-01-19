@@ -3,6 +3,7 @@
 <sdf version='1.4'>
 	<model name='Oshkosh'>
 		<link name='body'>
+		<self_collide>0</self_collide>
 			<pose>0 0 1.27525 0 0 0</pose>
 			<gravity>1</gravity>
 			<self_collide>0</self_collide>
