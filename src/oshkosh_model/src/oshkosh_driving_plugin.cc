@@ -28,6 +28,9 @@
 // Maximum time delay before a "no command" behaviour is initiated.
 #define command_MAX_DELAY 0.3
 #define PI 3.14159265359
+#define VehicleLength 6
+#define VehicleWidth 2
+#define WheelRadius 0.71
 //#define MY_GAZEBO_VER 5
 
 namespace gazebo
@@ -63,7 +66,14 @@ public:
     this->streer_joint_left_2 = this->model->GetJoint("steering_joint_left_2");
     this->streer_joint_right_1 = this->model->GetJoint("steering_joint_right_1");
     this->streer_joint_right_2 = this->model->GetJoint("steering_joint_right_2");
-
+    this->spring_left_1 = this->model->GetJoint("spring_left_1");
+    this->spring_right_1 = this->model->GetJoint("spring_right_1");
+    this->spring_left_2 = this->model->GetJoint("spring_left_2");
+    this->spring_right_2 = this->model->GetJoint("spring_right_2");
+    this->spring_left_3 = this->model->GetJoint("spring_left_3");
+    this->spring_right_3 = this->model->GetJoint("spring_right_3");
+    this->spring_left_4 = this->model->GetJoint("spring_left_4");
+    this->spring_right_4 = this->model->GetJoint("spring_right_4");
     // Starting Timers
     Throttle_command_timer.Start();
     Angular_command_timer.Start();
@@ -71,12 +81,12 @@ public:
     this->Ros_nh = new ros::NodeHandle("oshkoshDrivingPlugin_node");
 
     // Subscribe to the topic, and register a callback
-    Steering_rate_sub = this->Ros_nh->subscribe("/Oshkosh/Driving/Steering", 100, &oshkoshDrivingPlugin::On_Angular_command, this);
-    Velocity_rate_sub = this->Ros_nh->subscribe("/Oshkosh/Driving/Tourque", 100, &oshkoshDrivingPlugin::On_Throttle_command, this);
-    Breaking_sub = this->Ros_nh->subscribe("/Oshkosh/Driving/Break", 100, &oshkoshDrivingPlugin::On_Break_command, this);
+    Steering_rate_sub = this->Ros_nh->subscribe("/Oshkosh/Driving/Steering", 60, &oshkoshDrivingPlugin::On_Angular_command, this);
+    Velocity_rate_sub = this->Ros_nh->subscribe("/Oshkosh/Driving/Throttle", 60, &oshkoshDrivingPlugin::On_Throttle_command, this);
+    BreakPedal_sub = this->Ros_nh->subscribe("/Oshkosh/Driving/Break", 60, &oshkoshDrivingPlugin::On_Break_command, this);
 
-    platform_hb_pub_ = this->Ros_nh->advertise<std_msgs::Bool>("/Sahar/link_with_platform", 100);
-
+    platform_hb_pub_ = this->Ros_nh->advertise<std_msgs::Bool>("/Oshkosh/link_with_platform", 60);
+    platform_Speedometer_pub = this->Ros_nh->advertise<std_msgs::Float64>("/Oshkosh/Speedometer", 60);
     // Listen to the update event. This event is broadcast every simulation iteration.
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&oshkoshDrivingPlugin::OnUpdate, this, _1));
     std::cout << "Setting up dynamic config" << std::endl;
@@ -84,10 +94,7 @@ public:
     this->model_reconfiguration_server = new dynamic_reconfigure::Server<oshkosh_model::oshkosh_modelConfig>(*(this->Ros_nh));
     this->model_reconfiguration_server->setCallback(boost::bind(&oshkoshDrivingPlugin::dynamic_Reconfiguration_callback, this, _1, _2));
     std::cout << "dynamic configuration is set up" << std::endl;
-    /* initialize random seed: */
-    // srand (time(NULL));
-    // this->Linear_Noise_dist = new std::normal_distribution<double>(0,1);
-    // this->Angular_Noise_dist = new std::normal_distribution<double>(0,1);
+
     Steering_Request = 0;
     Throttle_command = 0;
     std::cout << "Driving Plugin Loaded" << std::endl;
@@ -102,6 +109,9 @@ public:
     Steering_Speed = config.Steering;
     damping = config.Damping;
     power = config.Power;
+    suspenSpring = config.Spring;
+    SuspenDamp = config.Damper;
+    SuspenTarget = config.Target;
   }
 
   // Called by the world update start event, This function is the event that will be called every update
@@ -122,7 +132,7 @@ public:
     if (Breaking_command_timer.GetElapsed().Float() > command_MAX_DELAY)
     {
       // Brakes
-      Break = 1;
+      BreakPedal = 1;
     }
     if (Angular_command_timer.GetElapsed().Float() > command_MAX_DELAY)
     {
@@ -132,23 +142,78 @@ public:
     // std::cout << "Applying efforts"<<std::endl;
 
     apply_efforts();
-    breaker(Break);
+    apply_steering();
+    ApplySuspension();
+    breaker();
 
     // std::cout << "Applied"<<std::endl;
+    SpeedMsg.data = Speed;
+    platform_Speedometer_pub.publish(SpeedMsg);
     std_msgs::Bool connection;
     connection.data = true;
     platform_hb_pub_.publish(connection);
   }
-  double WheelPower = 0;
-  double DesiredAngle = 0;
+  void apply_efforts()
+  {
+    float WheelTorque = power * Throttle_command;
+    // std::cout << " Controlling wheels"<< std::endl;
+    wheel_controller(this->left_wheel_1 , WheelTorque);
+    wheel_controller(this->left_wheel_2 , WheelTorque);
+    wheel_controller(this->left_wheel_3, WheelTorque);
+    wheel_controller(this->left_wheel_4, WheelTorque);
+    wheel_controller(this->right_wheel_1, WheelTorque);
+    wheel_controller(this->right_wheel_2, WheelTorque);
+    wheel_controller(this->right_wheel_3, WheelTorque);
+    wheel_controller(this->right_wheel_4, WheelTorque);
+    // std::cout << " Finished applying efforts"<< std::endl;
+  }
+    void apply_steering()
+  {
+    double ThetaAckerman = 0;
+    double ThetaOuter = 0;
+    if (Steering_Request > 0)
+    {
+
+      ThetaAckerman = atan(1 / ((1 / (tan(Steering_Request)) + (VehicleWidth / VehicleLength))));
+      steer_controller(this->streer_joint_left_1, Steering_Request);
+      steer_controller(this->streer_joint_right_1, ThetaAckerman);
+      steer_controller(this->streer_joint_left_2, Steering_Request);
+      steer_controller(this->streer_joint_right_2, ThetaAckerman);
+    }
+    else if (Steering_Request < 0)
+    {
+      ThetaAckerman = atan(1 / ((1 / (tan(-Steering_Request)) + (VehicleWidth / VehicleLength))));
+      steer_controller(this->streer_joint_left_1, -ThetaAckerman);
+      steer_controller(this->streer_joint_right_1, Steering_Request);
+      steer_controller(this->streer_joint_left_2, -ThetaAckerman);
+      steer_controller(this->streer_joint_right_2, Steering_Request);
+    }
+    else
+    {
+      steer_controller(this->streer_joint_left_1, 0);
+      steer_controller(this->streer_joint_right_1, 0);
+      steer_controller(this->streer_joint_left_2, 0);
+      steer_controller(this->streer_joint_right_2, 0);
+    }
+
+    // std::cout << ThetaAckerman << std::endl;
+  }
   void wheel_controller(physics::JointPtr wheel_joint, double Tourque)
   {
-    WheelPower = WheelPower + 0.001 * (Tourque - WheelPower);
+    WheelPower = WheelPower + 0.002 * (Tourque - WheelPower);
 
     double wheel_omega = wheel_joint->GetVelocity(0);
-    double effort_command = WheelPower - damping * wheel_omega;
+    double Joint_Force = WheelPower - damping * wheel_omega;
 
-    wheel_joint->SetForce(0, effort_command);
+    wheel_joint->SetForce(0, Joint_Force);
+    if (wheel_joint == right_wheel_4)
+    {
+      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
+      Speed = wheelsSpeedSum * WheelRadius / 8;
+      wheelsSpeedSum = 0;
+    }
+    else
+      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
   }
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
@@ -167,96 +232,45 @@ public:
     // std::cout << "efforting"<< std::endl;
     // this->jointController->SetJointPosition(steer_joint, Angle*0.61);
   }
-
-  void apply_efforts()
-  {
-    float WheelTorque = power * Throttle_command;
-    // std::cout << " Controlling wheels"<< std::endl;
-    // wheel_controller(this->left_wheel_1 , WheelTorque);
-    // wheel_controller(this->left_wheel_2 , WheelTorque);
-    wheel_controller(this->left_wheel_3, WheelTorque);
-    wheel_controller(this->left_wheel_4, WheelTorque);
-    // wheel_controller(this->right_wheel_1, WheelTorque);
-    // wheel_controller(this->right_wheel_2, WheelTorque);
-    wheel_controller(this->right_wheel_3, WheelTorque);
-    wheel_controller(this->right_wheel_4, WheelTorque);
-    // std::cout << " Controlling Steering"<< std::endl;
-    steer_controller(this->streer_joint_left_2, Steering_Request);
-    steer_controller(this->streer_joint_left_1, Steering_Request);
-    steer_controller(this->streer_joint_right_1, Steering_Request);
-    steer_controller(this->streer_joint_right_2, Steering_Request);
-    // std::cout << " Finished applying efforts"<< std::endl;
-  }
-  void breaker(int breaking)
+  void breaker()
   {
 
     // std::cout << " getting angle"<< std::endl;
-    if (breaking >= 0.09 && !Breaks)
+    if (BreakPedal >= 0.09 && !Breaks)
     {
       TempDamping = damping;
-      damping = 10000 * Break * Break;
+      damping = 10000 * BreakPedal * BreakPedal;
       Breaks = true;
-      // std::cout << "Break on "<<damping<<std::endl;
+      std::cout << "Break on " << damping << std::endl;
     }
-    else if (breaking == 0 && Breaks)
+    else if (BreakPedal == 0 && Breaks)
     {
       damping = TempDamping;
       Breaks = false;
-      // std::cout << "Breaks off "<<damping<<std::endl;
+      std::cout << "Breaks off " << damping << std::endl;
     }
-    if (breaking >= 0.09 && Breaks)
-      damping = 1000 * Break * Break;
+    if (BreakPedal >= 0.09 && Breaks)
+      damping = 10000 * BreakPedal * BreakPedal;
 
     // std::cout << "efforting"<< std::endl;
     // this->jointController->SetJointPosition(steer_joint, Angle*0.61);
   }
-
-  void On_Break_command(const std_msgs::Float64ConstPtr &msg)
+  void ApplySuspension()
   {
-    Breaking_command_mutex.lock();
-    // Recieving referance velocity
-    if (msg->data >= 1)
-      Break = 1;
-    else if (msg->data >= 0.09)
-      Break = msg->data;
-    else
-      Break = 0;
-
-// Reseting timer every message
-#if GAZEBO_MAJOR_VERSION >= 5
-    Breaking_command_timer.Reset();
-#endif
-    Breaking_command_timer.Start();
-
-    Breaking_command_mutex.unlock();
+    Suspension(spring_left_1);
+    Suspension(spring_left_2);
+    Suspension(spring_right_1);
+    Suspension(spring_right_2);
+    Suspension(spring_left_3);
+    Suspension(spring_left_4);
+    Suspension(spring_right_3);
+    Suspension(spring_right_4);
   }
-  // The subscriber callback , each time data is published to the subscriber this function is being called and recieves the data in pointer msg
-  void On_Angular_command(const std_msgs::Float64ConstPtr &msg)
-  {
-    Angular_command_mutex.lock();
-    // Recieving referance steering angle
-    if (msg->data > 1)
-    {
-      Steering_Request = 1;
-    }
-    else if (msg->data < -1)
-    {
-      Steering_Request = -1;
-    }
-    else
-    {
-      Steering_Request = msg->data;
-    }
-
-// Reseting timer every time LLC publishes message
-#if GAZEBO_MAJOR_VERSION >= 5
-    Angular_command_timer.Reset();
-#endif
-    Angular_command_timer.Start();
-
-    Angular_command_mutex.unlock();
+  void Suspension(physics::JointPtr Suspension)
+  { //The function to control the suspension of the Vehicle
+    double SpringForce = -(Suspension->GetAngle(0).Radian() + SuspenTarget) * suspenSpring - Suspension->GetVelocity(0) * SuspenDamp;
+    Suspension->SetForce(0, SpringForce);
   }
-
   // The subscriber callback , each time data is published to the subscriber this function is being called and recieves the data in pointer msg
   void On_Throttle_command(const std_msgs::Float64ConstPtr &msg)
   {
@@ -284,7 +298,51 @@ public:
 
     Throttle_command_mutex.unlock();
   }
+  // The subscriber callback , each time data is published to the subscriber this function is being called and recieves the data in pointer msg
+  void On_Angular_command(const std_msgs::Float64ConstPtr &msg)
+  {
+    Angular_command_mutex.lock();
+    // Recieving referance steering angle
+    if (msg->data > 1)
+    {
+      Steering_Request = 1;
+    }
+    else if (msg->data < -1)
+    {
+      Steering_Request = -1;
+    }
+    else
+    {
+      Steering_Request = msg->data;
+    }
+    Steering_Request = -Steering_Request;
+// Reseting timer every time LLC publishes message
+#if GAZEBO_MAJOR_VERSION >= 5
+    Angular_command_timer.Reset();
+#endif
+    Angular_command_timer.Start();
 
+    Angular_command_mutex.unlock();
+  }
+
+  void On_Break_command(const std_msgs::Float64ConstPtr &msg)
+  {
+    Breaking_command_mutex.lock();
+    // Recieving referance velocity
+    if (msg->data >= 1)
+      BreakPedal = 1;
+    else if (msg->data >= 0.09)
+      BreakPedal = msg->data;
+    else
+      BreakPedal = 0;
+
+// Reseting timer every message
+#if GAZEBO_MAJOR_VERSION >= 5
+    Breaking_command_timer.Reset();
+#endif
+    Breaking_command_timer.Start();
+    Breaking_command_mutex.unlock();
+  }
   float gazebo_ver;
 
   // Defining private Pointer to model
@@ -304,7 +362,14 @@ public:
   physics::JointPtr streer_joint_left_2;
   physics::JointPtr streer_joint_right_1;
   physics::JointPtr streer_joint_right_2;
-
+  physics::JointPtr spring_left_1;
+  physics::JointPtr spring_right_1;
+  physics::JointPtr spring_left_2;
+  physics::JointPtr spring_right_2;
+  physics::JointPtr spring_left_3;
+  physics::JointPtr spring_right_3;
+  physics::JointPtr spring_left_4;
+  physics::JointPtr spring_right_4;
   // Defining private Pointer to the update event connection
   event::ConnectionPtr updateConnection;
 
@@ -314,9 +379,12 @@ public:
   // Defining private Ros Subscribers
   ros::Subscriber Steering_rate_sub;
   ros::Subscriber Velocity_rate_sub;
-  ros::Subscriber Breaking_sub;
+  ros::Subscriber BreakPedal_sub;
   // Defining private Ros Publishers
   ros::Publisher platform_hb_pub_;
+  ros::Publisher platform_Speedometer_pub;
+  std_msgs::Bool connection;
+  std_msgs::Float64 SpeedMsg;
 
   // Defining private Timers
   common::Timer Throttle_command_timer;
@@ -328,16 +396,23 @@ public:
   boost::mutex Angular_command_mutex;
   boost::mutex Throttle_command_mutex;
   boost::mutex Breaking_command_mutex;
+  //helper vars
   float Throttle_command;
   float Steering_Request;
-  int Break = 1;
+  float BreakPedal = 1;
   double Linear_ref_vel;
   double Angular_ref_vel;
-
+  double WheelPower = 0;
+  double DesiredAngle = 0;
+  double DesiredAngleR = 0;
+  double wheelsSpeedSum = 0;
+  float tempTime = 0;
+  float Speed = 0;
   bool Breaks = false;
   //Dynamic Configuration Definitions
   dynamic_reconfigure::Server<oshkosh_model::oshkosh_modelConfig> *model_reconfiguration_server;
-  double control_P, control_I, control_D, Steering_Speed, damping, power, TempDamping;
+    double control_P, control_I, control_D, Steering_Speed,
+      damping, power, TempDamping, suspenSpring, SuspenDamp, SuspenTarget;
 };
 
 // Tell Gazebo about this plugin, so that Gazebo can call Load on this plugin.
