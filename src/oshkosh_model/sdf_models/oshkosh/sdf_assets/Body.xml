@@ -27,8 +27,6 @@
 					</box>
 				</geometry>
 			</collision>
-
--->
 			<collision name='body_collision_front'>
 				<pose>2.25 0 1.00 0 0 0</pose>
 				<geometry>

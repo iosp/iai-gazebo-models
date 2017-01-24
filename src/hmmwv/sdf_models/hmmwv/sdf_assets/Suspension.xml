@@ -93,6 +93,10 @@
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
     <xyz>1 0 0</xyz>
+    <limit>
+      <lower>-0.5</lower>
+      <upper>0.5</upper>
+    </limit>
   </axis><!--Front left wheel-->
 </joint>
 <joint name="suspension_main_wheel_joint_left_1" type="revolute">
@@ -195,6 +199,10 @@
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
     <xyz>1 0 0</xyz>
+    <limit>
+      <lower>-0.5</lower>
+      <upper>0.5</upper>
+    </limit>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_left_2" type="revolute">
@@ -297,6 +305,10 @@
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
     <xyz>1 0 0</xyz>
+    <limit>
+      <lower>-0.5</lower>
+      <upper>0.5</upper>
+    </limit>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_right_1" type="revolute">
@@ -399,6 +411,10 @@
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
     <xyz>1 0 0</xyz>
+    <limit>
+      <lower>-0.5</lower>
+      <upper>0.5</upper>
+    </limit>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_right_2" type="revolute">

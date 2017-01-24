@@ -30,8 +30,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>1 0 0</xyz>
     <!--<dynamics>
@@ -70,8 +70,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>1 0 0</xyz>
   </axis>
@@ -105,8 +105,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>1 0 0</xyz>
   </axis>
@@ -140,8 +140,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>1 0 0</xyz>
   </axis>
@@ -175,8 +175,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>-1 0 0</xyz>
   </axis>
@@ -212,8 +212,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>-1 0 0</xyz>
   </axis>
@@ -247,8 +247,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>-1 0 0</xyz>
   </axis>
@@ -282,8 +282,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>-1 0 0</xyz>
   </axis>
