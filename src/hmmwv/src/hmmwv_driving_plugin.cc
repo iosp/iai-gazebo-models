@@ -32,6 +32,9 @@
 #define VehicleLength 3.5932
 #define VehicleWidth 1.966
 #define WheelRadius 0.39
+#define HP 190 //HP @3400 rpm
+#define POWER 142 //KW @3400 rpm
+#define Transmissions 4
 //#define MY_GAZEBO_VER 5
 
 namespace gazebo
@@ -374,6 +377,8 @@ public:
   double DesiredAngle = 0;
   double DesiredAngleR = 0;
   double wheelsSpeedSum = 0;
+  double RPM = 0;
+  double Tourque = 0;
   float tempTime = 0;
   float Speed = 0;
   bool Breaks = false;

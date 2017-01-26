@@ -7,7 +7,7 @@
 			<gravity>1</gravity>
 			<self_collide>1</self_collide>
 			<inertial>
-				<pose>0.00 0.00 0.5 0 0 0</pose>
+				<pose>0.00 0.00 0.75 0 0 0</pose>
 				<mass>2000</mass>
 				<inertia>
 					<ixx>500</ixx>
@@ -55,7 +55,7 @@
 				<geometry>
 					<mesh>
 						<scale>1 1 1</scale>
-						<uri>model://hmmwv/meshes/hmmwv_body.dae</uri>
+						<uri>model://../Assets/hmmwv_body.dae</uri>
 					</mesh>
 				</geometry>
 			</visual>
@@ -81,7 +81,7 @@
     <pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_left_suspension.dae</uri>
+				<uri>model://../Assets/hmmwv_left_suspension.dae</uri>
 			</mesh>
 		</geometry>
   </visual>
@@ -187,7 +187,7 @@
     <pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_left_suspension.dae</uri>
+				<uri>model://../Assets/hmmwv_left_suspension.dae</uri>
 			</mesh>
 		</geometry>
   </visual>
@@ -293,7 +293,7 @@
     <pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_suspension.dae</uri>
+				<uri>model://../Assets/hmmwv_right_suspension.dae</uri>
 			</mesh>
 		</geometry>
   </visual>
@@ -399,7 +399,7 @@
     <pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_suspension.dae</uri>
+				<uri>model://../Assets/hmmwv_right_suspension.dae</uri>
 			</mesh>
 		</geometry>
   </visual>
@@ -626,7 +626,7 @@
 		<pose>0 0 0 0 0 3.1469265</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
+				<uri>model://../Assets/hmmwv_wheel.dae</uri>
 			</mesh>
 		</geometry>
 	</visual>
@@ -694,7 +694,7 @@
 		<pose>0 0 0 0 0 3.1469265</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
+				<uri>model://../Assets/hmmwv_wheel.dae</uri>
 			</mesh>
 		</geometry>
 	</visual>
@@ -762,7 +762,7 @@
 		<pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
+				<uri>model://../Assets/hmmwv_wheel.dae</uri>
 			</mesh>
 		</geometry>
 	</visual>
@@ -830,7 +830,7 @@
 		<pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
+				<uri>model://../Assets/hmmwv_wheel.dae</uri>
 			</mesh>
 		</geometry>
 	</visual>
