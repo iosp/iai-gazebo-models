@@ -33,7 +33,7 @@
 #define VehicleWidth 1.966
 #define WheelRadius 0.39
 #define HP 190 //HP @3400 rpm
-#define Power 142 //KW @3400 rpm
+#define POWER 142 //KW @3400 rpm
 #define Transmissions 4
 //#define MY_GAZEBO_VER 5
 
