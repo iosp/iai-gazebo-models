@@ -149,7 +149,8 @@ public:
   void EngineCalculations()
   {
     ThrottlePedal=ThrottlePedal+deltaSimTime*5*(Throttle_command-ThrottlePedal);
-    CurrentRPM+=((ThrottlePedal+0.112)*50/CurrentGear-0.008*CurrentRPM/CurrentGear)*1000*deltaSimTime;
+    EngineLoad=CurrentRPM-Speed*WheelRadius;
+    CurrentRPM+=ThrottlePedal*7-EngineLoad;
     std::cout <<CurrentRPM<< " RPM at Gear "  << CurrentGear << std::endl;
     if(CurrentRPM>5000&&CurrentGear<TRANSMISSIONS)
     {
