@@ -34,7 +34,7 @@
 #define WheelRadius 0.39
 #define HP 190 //HP @3400 rpm
 #define POWER 142 //KW @3400 rpm
-#define Transmissions 4
+#define TRANSMISSIONS 4
 //#define MY_GAZEBO_VER 5
 
 namespace gazebo
@@ -133,6 +133,8 @@ public:
       Steering_Request = 0;
     }
     // std::cout << "Applying efforts"<<std::endl;
+
+    EngineCalculations();
     apply_efforts();
     apply_steering();
     ApplySuspension();
@@ -144,15 +146,53 @@ public:
     connection.data = true;
     platform_hb_pub_.publish(connection);
   }
+  void EngineCalculations()
+  {
+    ThrottlePedal=ThrottlePedal+deltaSimTime*5*(Throttle_command-ThrottlePedal);
+    EngineLoad=CurrentRPM-Speed*WheelRadius;
+    CurrentRPM+=ThrottlePedal*7-EngineLoad;
+    std::cout <<CurrentRPM<< " RPM at Gear "  << CurrentGear << std::endl;
+    if(CurrentRPM>5000&&CurrentGear<TRANSMISSIONS)
+    {
+      CurrentGear++;
+
+      CurrentRPM-=3300;
+    }
+    else if(CurrentRPM<1200&&CurrentGear>1)
+    {
+      CurrentGear--;
+
+      CurrentRPM+=3000/CurrentGear;
+    }
+
+    Torque=(CurrentRPM-700)*CurrentGear;
+  }
   void apply_efforts()
   {
-    double WheelTorque = Throttle_command * power;
+    double WheelTorque = Torque;
     // std::cout << " Controlling wheels"<< std::endl;
     wheel_controller(this->left_wheel_1, WheelTorque);
     wheel_controller(this->left_wheel_2, WheelTorque);
     wheel_controller(this->right_wheel_1, WheelTorque);
     wheel_controller(this->right_wheel_2, WheelTorque);
     // std::cout << " Controlling Steering"<< std::endl;
+  }
+  void wheel_controller(physics::JointPtr wheel_joint, double Torque2)
+  {
+    WheelPower = Torque2;
+
+    double wheel_omega = wheel_joint->GetVelocity(0);
+    double Joint_Force = WheelPower - damping * wheel_omega;
+
+    wheel_joint->SetForce(0, Joint_Force);
+    if (wheel_joint == right_wheel_2)
+    {
+      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
+      Speed = wheelsSpeedSum * WheelRadius / 4;
+      wheelsSpeedSum = 0;
+    }
+    else
+      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
   }
   void apply_steering()
   {
@@ -178,23 +218,6 @@ public:
     }
 
     // std::cout << ThetaAckerman << std::endl;
-  }
-  void wheel_controller(physics::JointPtr wheel_joint, double Tourque)
-  {
-    WheelPower = WheelPower + 0.005 * (Tourque - WheelPower);
-
-    double wheel_omega = wheel_joint->GetVelocity(0);
-    double Joint_Force = WheelPower - damping * wheel_omega;
-
-    wheel_joint->SetForce(0, Joint_Force);
-    if (wheel_joint == right_wheel_2)
-    {
-      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
-      Speed = wheelsSpeedSum * WheelRadius / 4;
-      wheelsSpeedSum = 0;
-    }
-    else
-      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
   }
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
@@ -369,6 +392,7 @@ public:
   boost::mutex Breaking_command_mutex;
   //helper vars
   float Throttle_command;
+  float ThrottlePedal;
   float Steering_Request;
   float BreakPedal = 1;
   double Linear_ref_vel;
@@ -377,8 +401,9 @@ public:
   double DesiredAngle = 0;
   double DesiredAngleR = 0;
   double wheelsSpeedSum = 0;
-  double RPM = 0;
-  double Tourque = 0;
+  double CurrentRPM = 0;
+  double CurrentGear = 1;
+  double Torque = 0;
   float tempTime = 0;
   float Speed = 0;
   bool Breaks = false;
