@@ -32,8 +32,8 @@
 #define VehicleLength 3.5932
 #define VehicleWidth 1.966
 #define WheelRadius 0.39
-#define HP 190 //HP @3400 rpm
-#define POWER 142 //KW @3400 rpm
+#define HP 190 //190 HP @3400 rpm=142KW @3400 rpm & 515 NM @1300
+#define POWER 142
 #define TRANSMISSIONS 4
 //#define MY_GAZEBO_VER 5
 
@@ -99,8 +99,9 @@ public:
     control_P = config.Steer_control_P;
     control_I = config.Steer_control_I;
     control_D = config.Steer_control_D;
-    Steering_Speed = config.Steering;
+    steeringSpeed = config.Steering;
     damping = config.Damping;
+    friction = config.Friction;
     power = config.Power;
     suspenSpring = config.Spring;
     SuspenDamp = config.Damper;
@@ -109,11 +110,11 @@ public:
 
   // Called by the world update start event, This function is the event that will be called every update
 public:
-  void OnUpdate(const common::UpdateInfo &_info) // we are not using the pointer to the info so its commanted as an option
+  void OnUpdate(const common::UpdateInfo &simInfo) // we are not using the pointer to the info so its commanted as an option
   {
 
-    deltaSimTime = _info.simTime.Double() - sim_Time.Double();
-    sim_Time = _info.simTime;
+    deltaSimTime = simInfo.simTime.Double() - simTime.Double();
+    simTime = simInfo.simTime;
     // std::cout << "update function started"<<std::endl;
     // std::cout << "command_timer = " << command_timer.GetElapsed().Float() << std::endl;
     // Applying effort to the wheels , brakes if no message income
@@ -141,31 +142,35 @@ public:
     breaker();
 
     // std::cout << this->spring_right_1->GetAngle(0).Radian() << std::endl;
-    SpeedMsg.data = Speed;
+    SpeedMsg.data = Speed * 3.6;
     platform_Speedometer_pub.publish(SpeedMsg);
     connection.data = true;
     platform_hb_pub_.publish(connection);
   }
   void EngineCalculations()
   {
-    ThrottlePedal=ThrottlePedal+deltaSimTime*5*(Throttle_command-ThrottlePedal);
-    EngineLoad=CurrentRPM-Speed*WheelRadius;
-    CurrentRPM+=ThrottlePedal*7-EngineLoad;
-    std::cout <<CurrentRPM<< " RPM at Gear "  << CurrentGear << std::endl;
-    if(CurrentRPM>5000&&CurrentGear<TRANSMISSIONS)
+    ThrottlePedal = ThrottlePedal + deltaSimTime * 5 * (Throttle_command - ThrottlePedal);
+    if (Throttle_command < 0 && Speed > 5)
+      ThrottlePedal = 0;
+    CurrentRPM = fabs(Speed) * GearRatio[CurrentGear] * 3.1 / (WheelRadius * 2 * PI / 60) + 550;
+    if (CurrentGear < TRANSMISSIONS && Speed * 3.6 > ShiftSpeed[CurrentGear])
     {
       CurrentGear++;
-
-      CurrentRPM-=3300;
+      ShiftTime = simTime.Double() + 0.25;
     }
-    else if(CurrentRPM<1200&&CurrentGear>1)
+    else if (CurrentGear > 1 && Speed * 3.6 < ShiftSpeed[CurrentGear - 1] - 10)
     {
       CurrentGear--;
-
-      CurrentRPM+=3000/CurrentGear;
+      ShiftTime = simTime.Double() + 0.25;
     }
-
-    Torque=(CurrentRPM-700)*CurrentGear;
+    int indexRPM = ((int)CurrentRPM) / 600;
+    double interpolatedEngineTorque = 400 + 0.1620123 * CurrentRPM - 0.00005657748 * CurrentRPM * CurrentRPM;
+    // double interpolatedEngineTorque=(TorqueRPM600[indexRPM]+TorqueRPM600[indexRPM+1]*fmod(CurrentRPM,600)/600)/(1+fmod(CurrentRPM,600)/600);
+    Torque = ThrottlePedal * interpolatedEngineTorque * GearRatio[CurrentGear] * power;
+    if (simTime < ShiftTime)
+      Torque = 0;
+    EngineLoad = Torque;
+    // std::cout << CurrentRPM << " RPM at Gear " << CurrentGear << " Speed " << Speed * 3.6 << " Engine Torque " << EngineLoad << std::endl;
   }
   void apply_efforts()
   {
@@ -177,22 +182,24 @@ public:
     wheel_controller(this->right_wheel_2, WheelTorque);
     // std::cout << " Controlling Steering"<< std::endl;
   }
-  void wheel_controller(physics::JointPtr wheel_joint, double Torque2)
+  void wheel_controller(physics::JointPtr wheelJoint, double Torque2)
   {
     WheelPower = Torque2;
 
-    double wheel_omega = wheel_joint->GetVelocity(0);
-    double Joint_Force = WheelPower - damping * wheel_omega;
-
-    wheel_joint->SetForce(0, Joint_Force);
-    if (wheel_joint == right_wheel_2)
+    double wheelOmega = wheelJoint->GetVelocity(0);
+    if (abs(wheelOmega > 1))
+      jointforce = WheelPower - damping * wheelOmega - friction * wheelOmega / fabs(wheelOmega);
+    else
+      jointforce = WheelPower - damping * wheelOmega;
+    wheelJoint->SetForce(0, jointforce);
+    if (wheelJoint == right_wheel_2)
     {
-      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
+      wheelsSpeedSum = wheelsSpeedSum + wheelOmega;
       Speed = wheelsSpeedSum * WheelRadius / 4;
       wheelsSpeedSum = 0;
     }
     else
-      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
+      wheelsSpeedSum = wheelsSpeedSum + wheelOmega;
   }
   void apply_steering()
   {
@@ -222,20 +229,20 @@ public:
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
     // std::cout << " getting angle"<< std::endl;
-    double wheel_angle = steer_joint->GetAngle(0).Radian();
-    double steer_omega = steer_joint->GetVelocity(0);
+    double currentWheelAngle = steer_joint->GetAngle(0).Radian();
+    double steeringOmega = steer_joint->GetVelocity(0);
     if (steer_joint == this->streer_joint_left_1)
     {
-      DesiredAngle = DesiredAngle + Steering_Speed * deltaSimTime * (Angle - DesiredAngle);
-      double Joint_Force = control_P * (0.6 * DesiredAngle - wheel_angle) - control_D * (steer_omega);
-      steer_joint->SetForce(0, Joint_Force);
-      //  std::cout << wheel_angle<< std::endl;
+      DesiredAngle = DesiredAngle + steeringSpeed * deltaSimTime * (Angle - DesiredAngle);
+      double jointforce = control_P * (0.6 * DesiredAngle - currentWheelAngle) - control_D * (steeringOmega);
+      steer_joint->SetForce(0, jointforce);
+      //  std::cout << currentWheelAngle<< std::endl;
     }
     else
     {
-      DesiredAngleR = DesiredAngleR + Steering_Speed * deltaSimTime * (Angle - DesiredAngleR);
-      double Joint_Force = control_P * (0.6 * DesiredAngleR - wheel_angle) - control_D * (steer_omega);
-      steer_joint->SetForce(0, Joint_Force);
+      DesiredAngleR = DesiredAngleR + steeringSpeed * deltaSimTime * (Angle - DesiredAngleR);
+      double jointforce = control_P * (0.6 * DesiredAngleR - currentWheelAngle) - control_D * (steeringOmega);
+      steer_joint->SetForce(0, jointforce);
     }
     // std::cout << "efforting"<< std::endl;
     // this->jointController->SetJointPosition(steer_joint, Angle*0.61);
@@ -384,32 +391,38 @@ public:
   common::Timer Throttle_command_timer;
   common::Timer Angular_command_timer;
   common::Timer Breaking_command_timer;
-  common::Time sim_Time;
+  common::Time simTime;
 
   // Defining private Mutex
   boost::mutex Angular_command_mutex;
   boost::mutex Throttle_command_mutex;
   boost::mutex Breaking_command_mutex;
   //helper vars
-  float Throttle_command;
-  float ThrottlePedal;
-  float Steering_Request;
+  float Throttle_command = 0;
+  float ThrottlePedal = 0;
+  float Steering_Request = 0;
   float BreakPedal = 1;
-  double Linear_ref_vel;
-  double Angular_ref_vel;
+  double friction = 0;
   double WheelPower = 0;
   double DesiredAngle = 0;
   double DesiredAngleR = 0;
   double wheelsSpeedSum = 0;
   double CurrentRPM = 0;
-  double CurrentGear = 1;
+  double ShiftTime = 0;
+  double EngineLoad = 0;
+  int CurrentGear = 1;
   double Torque = 0;
+  double jointforce = 0;
   float tempTime = 0;
   float Speed = 0;
   bool Breaks = false;
+  double ShiftSpeed[TRANSMISSIONS] = {0, 15, 30, 50};
+  double GearRatio[TRANSMISSIONS + 1] = {0, 3.2, 2.5, 1.5, 0.8};
+  double TorqueRPM600[8] = {0, 350, 515, 500, 450, 300, 200, 200};
+  double PowerRPM600[8] = {0, 10, 60, 80, 120, 142, 120, 120};
   //Dynamic Configuration Definitions
   dynamic_reconfigure::Server<hmmwv::hmmwvConfig> *model_reconfiguration_server;
-  double control_P, control_I, control_D, Steering_Speed,
+  double control_P, control_I, control_D, steeringSpeed,
       damping, power, TempDamping, suspenSpring, SuspenDamp, SuspenTarget;
 };
 
