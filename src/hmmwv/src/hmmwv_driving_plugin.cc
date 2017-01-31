@@ -168,9 +168,9 @@ public:
     // double interpolatedEngineTorque=(TorqueRPM600[indexRPM]+TorqueRPM600[indexRPM+1]*fmod(CurrentRPM,600)/600)/(1+fmod(CurrentRPM,600)/600);
     Torque = ThrottlePedal * interpolatedEngineTorque * GearRatio[CurrentGear] * power;
     if (simTime < ShiftTime)
-      Torque = 0;
+      Torque *= 0.5;
     EngineLoad = Torque;
-    // std::cout << CurrentRPM << " RPM at Gear " << CurrentGear << " Speed " << Speed * 3.6 << " Engine Torque " << EngineLoad << std::endl;
+    std::cout << CurrentRPM << " RPM at Gear " << CurrentGear << " Speed " << Speed * 3.6 << " Engine Torque " << EngineLoad << std::endl;
   }
   void apply_efforts()
   {
@@ -416,7 +416,7 @@ public:
   float tempTime = 0;
   float Speed = 0;
   bool Breaks = false;
-  double ShiftSpeed[TRANSMISSIONS] = {0, 15, 30, 50};
+  double ShiftSpeed[TRANSMISSIONS] = {0, 20, 40, 65};
   double GearRatio[TRANSMISSIONS + 1] = {0, 3.2, 2.5, 1.5, 0.8};
   double TorqueRPM600[8] = {0, 350, 515, 500, 450, 300, 200, 200};
   double PowerRPM600[8] = {0, 10, 60, 80, 120, 142, 120, 120};
