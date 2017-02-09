@@ -8,7 +8,7 @@
  <plugin name="velodyne_16_control" filename="libvelodyne_16.so"> 
        <rate>10</rate>       <!-- HZ -->
        <angleRes>0.2</angleRes> <!-- horiz resolution -->
-       <verticalAngleResolution>1.333355</verticalAngleResolution>   <!-- for validation and RVIZ publish calculate -->
+       <verticalAngleResolution>1.875</verticalAngleResolution>   <!-- for validation and RVIZ publish calculate -->
        <!--<RVIZPublishRate>10.0</RVIZPublishRate>   HZ -->
        <topic>/SENSORS/VELODYNE_16</topic>
        <tf_x>0</tf_x>
@@ -84,22 +84,22 @@
       <sensor type="ray" name="velodyne_ray_0">
         <pose>0 0 -0.004645 1.5707 0 0</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
 
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -107,21 +107,21 @@
       <sensor type="ray" name="velodyne_ray_1">
         <pose>0 0 -0.004645 1.5707 0 0.1745329252</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -129,21 +129,21 @@
       <sensor type="ray" name="velodyne_ray_2">
         <pose>0 0 -0.004645 1.5707 0 0.3490658504</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -151,21 +151,21 @@
       <sensor type="ray" name="velodyne_ray_3">
         <pose>0 0 -0.004645 1.5707 0 0.5235987756</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -173,21 +173,21 @@
       <sensor type="ray" name="velodyne_ray_4">
         <pose>0 0 -0.004645 1.5707 0 0.6981317008</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -195,21 +195,21 @@
       <sensor type="ray" name="velodyne_ray_5">
         <pose>0 0 -0.004645 1.5707 0 0.872664626</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -217,21 +217,21 @@
       <sensor type="ray" name="velodyne_ray_6">
         <pose>0 0 -0.004645 1.5707 0 1.0471975512</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -239,21 +239,21 @@
       <sensor type="ray" name="velodyne_ray_7">
         <pose>0 0 -0.004645 1.5707 0 1.2217304764</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -261,21 +261,21 @@
       <sensor type="ray" name="velodyne_ray_8">
         <pose>0 0 -0.004645 1.5707 0 1.3962634016</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -283,21 +283,21 @@
       <sensor type="ray" name="velodyne_ray_9">
         <pose>0 0 -0.004645 1.5707 0 1.5707963268</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -305,21 +305,21 @@
       <sensor type="ray" name="velodyne_ray_10">
         <pose>0 0 -0.004645 1.5707 0 1.745329252</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -327,21 +327,21 @@
       <sensor type="ray" name="velodyne_ray_11">
         <pose>0 0 -0.004645 1.5707 0 1.9198621772</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -349,21 +349,21 @@
       <sensor type="ray" name="velodyne_ray_12">
         <pose>0 0 -0.004645 1.5707 0 2.0943951024</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -371,21 +371,21 @@
       <sensor type="ray" name="velodyne_ray_13">
         <pose>0 0 -0.004645 1.5707 0 2.2689280276</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -394,21 +394,21 @@
         <pose>0 0 -0.004645 1.5707 0 2.4434609528
 </pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -416,21 +416,21 @@
       <sensor type="ray" name="velodyne_ray_15">
         <pose>0 0 -0.004645 1.5707 0 2.617993878</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -439,21 +439,21 @@
       <sensor type="ray" name="velodyne_ray_16">
         <pose>0 0 -0.004645 1.5707 0 2.7925268032</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -461,21 +461,21 @@
       <sensor type="ray" name="velodyne_ray_17">
         <pose>0 0 -0.004645 1.5707 0 2.9670597284</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -483,21 +483,21 @@
       <sensor type="ray" name="velodyne_ray_18">
         <pose>0 0 -0.004645 1.5707 0 3.1415926536</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -505,21 +505,21 @@
       <sensor type="ray" name="velodyne_ray_19">
         <pose>0 0 -0.004645 1.5707 0 3.3161255788</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -527,21 +527,21 @@
       <sensor type="ray" name="velodyne_ray_20">
         <pose>0 0 -0.004645 1.5707 0 3.490658504</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -549,21 +549,21 @@
       <sensor type="ray" name="velodyne_ray_21">
         <pose>0 0 -0.004645 1.5707 0 3.6651914292</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -571,21 +571,21 @@
       <sensor type="ray" name="velodyne_ray_22">
         <pose>0 0 -0.004645 1.5707 0 3.8397243544</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -593,21 +593,21 @@
       <sensor type="ray" name="velodyne_ray_23">
         <pose>0 0 -0.004645 1.5707 0 4.0142572796</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -615,21 +615,21 @@
       <sensor type="ray" name="velodyne_ray_24">
         <pose>0 0 -0.004645 1.5707 0 4.1887902048</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -637,21 +637,21 @@
       <sensor type="ray" name="velodyne_ray_25">
         <pose>0 0 -0.004645 1.5707 0 4.36332313</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -659,21 +659,21 @@
       <sensor type="ray" name="velodyne_ray_26">
         <pose>0 0 -0.004645 1.5707 0 4.5378560552</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -681,21 +681,21 @@
       <sensor type="ray" name="velodyne_ray_27">
         <pose>0 0 -0.004645 1.5707 0 4.7123889804</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -703,21 +703,21 @@
       <sensor type="ray" name="velodyne_ray_28">
         <pose>0 0 -0.004645 1.5707 0 4.8869219056</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -725,21 +725,21 @@
       <sensor type="ray" name="velodyne_ray_29">
         <pose>0 0 -0.004645 1.5707 0 5.0614548308</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -747,21 +747,21 @@
       <sensor type="ray" name="velodyne_ray_30">
         <pose>0 0 -0.004645 1.5707 0 5.235987756</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -769,21 +769,21 @@
       <sensor type="ray" name="velodyne_ray_31">
         <pose>0 0 -0.004645 1.5707 0 5.4105206812</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -791,21 +791,21 @@
       <sensor type="ray" name="velodyne_ray_32">
         <pose>0 0 -0.004645 1.5707 0 5.5850536064</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -813,21 +813,21 @@
       <sensor type="ray" name="velodyne_ray_33">
         <pose>0 0 -0.004645 1.5707 0 5.7595865316</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -835,21 +835,21 @@
       <sensor type="ray" name="velodyne_ray_34">
         <pose>0 0 -0.004645 1.5707 0 5.9341194568</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -857,21 +857,21 @@
       <sensor type="ray" name="velodyne_ray_35">
         <pose>0 0 -0.004645 1.5707 0 6.108652382</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>100</update_rate>
         <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
             </horizontal>
           </scan>
 
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.01</resolution>
+            <resolution>0.03</resolution>
           </range>
         </ray>
       </sensor>
@@ -884,13 +884,7 @@
       <child>top</child>
       <axis>
         <xyz>0 0 1</xyz>
-        <limit>
-          <lower>-10000000000000000</lower>
-          <upper>10000000000000000</upper>
-        </limit>
       </axis>
     </joint>
-  
-    
   </model>
 </sdf>

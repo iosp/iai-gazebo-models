@@ -20,11 +20,11 @@
 
 #include <math.h>
 
-//#define NUM_OF_PLANS 32
-#define NUM_OF_PLANS 16
+//#define NUM_OF_PLANES 32
+#define NUM_OF_PLANES 16
 #define NUM_OF_RAY_SENSORS 36
 //#define ANGULAR_STEPS 1800 // 360 * 5
-#define ANGULAR_STEPS 3600
+#define ANGULAR_STEPS 1800
 using namespace std;
 
 namespace gazebo
@@ -54,7 +54,7 @@ namespace gazebo
 		 br.sendTransform(st);
 	}
 
-	void thread_RVIZ(double rangesArray[][NUM_OF_PLANS], common::Time time)
+	void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], common::Time time)
 	{
 //		ros::Time lastUpdateTime = ros::Time::now();
 //		while(true)
@@ -123,13 +123,13 @@ namespace gazebo
 
     		myRays[i]->GetRanges(newVector);
 
-    		if(newVector.size() == NUM_OF_PLANS)
+    		if(newVector.size() == NUM_OF_PLANES)
     		{
     			// int j = fmod(tick + i*(360/NUM_OF_RAY_SENSORS),360);
     			int j = fmod(tick + i*(ANGULAR_STEPS/NUM_OF_RAY_SENSORS),ANGULAR_STEPS);
 
 
-    			for(int k = 0 ; k < NUM_OF_PLANS ; k++)
+    			for(int k = 0 ; k < NUM_OF_PLANES ; k++)
     			{
     				rangesArray[j][k] = newVector[k];
     			}
@@ -244,19 +244,19 @@ namespace gazebo
 	  }
 	}
 
-	void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANS], ros::Time time)
+	void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time)
 	{
 		sensor_msgs::PointCloud points;
 		for(int tick = 0 ; tick < ANGULAR_STEPS ; tick++)
 		{
-			for(int j = 0 ; j < NUM_OF_PLANS ; j++)
+			for(int j = 0 ; j < NUM_OF_PLANES ; j++)
 			{
 				if(rangesArray[tick][j] > 69 )
 					continue;
 
 				geometry_msgs::Point32 point;
 				double yaw_ang = tick * (2* M_PI/ANGULAR_STEPS); //* (3.14159 /180);
-				double pitch_ang((j-23) * verticalAngleResolutionFromSDF * (M_PI /180));
+				double pitch_ang((j-NUM_OF_PLANES/2) * verticalAngleResolutionFromSDF * (M_PI /180));
 				point.x = rangesArray[tick][j] * cos(pitch_ang) * cos(yaw_ang);
 				point.y = rangesArray[tick][j] * cos(pitch_ang) * sin(yaw_ang);
 				point.z	= rangesArray[tick][j] * sin (pitch_ang);
@@ -284,7 +284,7 @@ namespace gazebo
 	double angleRes;
 	double velocity;
 	double rate;
-    double rangesArray[ANGULAR_STEPS][NUM_OF_PLANS];
+    double rangesArray[ANGULAR_STEPS][NUM_OF_PLANES];
  //   double RVIZPublishRate;
     double verticalAngleResolutionFromSDF;
     double VerticalAngelResolutionReal[NUM_OF_RAY_SENSORS];
