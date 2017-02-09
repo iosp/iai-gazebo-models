@@ -18,7 +18,7 @@
 		<pose>0 -0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -65,7 +65,7 @@
 		<pose>0 -0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -112,7 +112,7 @@
 		<pose>0 -0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -159,7 +159,7 @@
 		<pose>0 -0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -206,7 +206,7 @@
 		<pose>0 0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -253,7 +253,7 @@
 		<pose>0 0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -300,7 +300,7 @@
 		<pose>0 0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>
@@ -347,7 +347,7 @@
 		<pose>0 0.1 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>
+				<!--<length>0.5</length>-->
 				<radius>0.78</radius>
 			</sphere>
 		</geometry>

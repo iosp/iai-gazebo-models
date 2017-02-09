@@ -65,7 +65,7 @@
 <!--Suspension setup-->
 <!--Front left wheel-->
 <link name="suspension_main_left_1">
-<pose>1.79660 0.27504 0.65450 1.09557 0 0</pose>
+<pose>1.79660 0.27504 0.65450 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.01</ixx>
@@ -78,13 +78,12 @@
      <mass>50</mass>
   </inertial>
   <visual name='visual'>
-    <pose>0 0 -0.35 0 0 0</pose>
-    <geometry>
-      <cylinder>
-        <radius>0.05</radius>
-        <length>0.7</length>
-      </cylinder>
-    </geometry>
+    <pose>0 0 0 0 0 0</pose>
+		<geometry>
+			<mesh>
+				<uri>model://hmmwv/meshes/hmmwv_left_suspension.dae</uri>
+			</mesh>
+		</geometry>
   </visual>
 </link>
 <link name="suspension_holder_left_1">
@@ -104,10 +103,11 @@
     <pose>0 0 -0.25 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.05</radius>
+        <radius>0.025</radius>
         <length>0.5</length>
       </cylinder>
     </geometry>
+    <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>
   </visual>
 </link>
 <link name="suspension_left_1">
@@ -127,8 +127,8 @@
     <pose>0 0 0 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.05</radius>
-        <length>0.3</length>
+        <radius>0.025</radius>
+        <length>0.1</length>
       </cylinder>
     </geometry>
   </visual>
@@ -138,7 +138,7 @@
   <child>suspension_main_left_1</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_holder_joint_left_1" type="revolute">
@@ -146,7 +146,7 @@
   <child>suspension_holder_left_1</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_holder_wheel_joint_left_1" type="revolute">
@@ -154,7 +154,7 @@
   <child>suspension_left_1</child>
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis><!--Front left wheel-->
 </joint>
 <joint name="suspension_main_wheel_joint_left_1" type="revolute">
@@ -162,12 +162,12 @@
   <child>suspension_left_1</child>
   <pose>0.0 0.0 -0.11 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <!--Back left wheel-->
 <link name="suspension_main_left_2">
-<pose>-1.79660 0.27504 0.65450 1.09557 0 0</pose>
+<pose>-1.79660 0.27504 0.65450 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.01</ixx>
@@ -180,13 +180,12 @@
      <mass>50</mass>
   </inertial>
   <visual name='visual'>
-    <pose>0 0 -0.35 0 0 0</pose>
-    <geometry>
-      <cylinder>
-        <radius>0.05</radius>
-        <length>0.7</length>
-      </cylinder>
-    </geometry>
+    <pose>0 0 0 0 0 0</pose>
+		<geometry>
+			<mesh>
+				<uri>model://hmmwv/meshes/hmmwv_left_suspension.dae</uri>
+			</mesh>
+		</geometry>
   </visual>
 </link>
 <link name="suspension_holder_left_2">
@@ -206,10 +205,11 @@
     <pose>0 0 -0.25 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.05</radius>
+        <radius>0.025</radius>
         <length>0.5</length>
       </cylinder>
     </geometry>
+    <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>
   </visual>
 </link>
 <link name="suspension_left_2">
@@ -229,8 +229,8 @@
     <pose>0 0 0 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.05</radius>
-        <length>0.3</length>
+        <radius>0.025</radius>
+        <length>0.1</length>
       </cylinder>
     </geometry>
   </visual>
@@ -240,7 +240,7 @@
   <child>suspension_main_left_2</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_holder_joint_left_2" type="revolute">
@@ -248,7 +248,7 @@
   <child>suspension_holder_left_2</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_holder_holder_wheel_joint_left_2" type="revolute">
@@ -256,7 +256,7 @@
   <child>suspension_left_2</child>
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_left_2" type="revolute">
@@ -264,12 +264,12 @@
   <child>suspension_left_2</child>
   <pose>0.0 0.0 -0.11 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <!--Front right wheel-->
 <link name="suspension_main_right_1">
-<pose>1.79660 -0.27504 0.65450 -1.09557 0 0</pose>
+<pose>1.79660 -0.27504 0.65450 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.01</ixx>
@@ -282,13 +282,12 @@
      <mass>50</mass>
   </inertial>
   <visual name='visual'>
-    <pose>0 0 -0.35 0 0 0</pose>
-    <geometry>
-      <cylinder>
-        <radius>0.05</radius>
-        <length>0.7</length>
-      </cylinder>
-    </geometry>
+    <pose>0 0 0 0 0 0</pose>
+		<geometry>
+			<mesh>
+				<uri>model://hmmwv/meshes/hmmwv_right_suspension.dae</uri>
+			</mesh>
+		</geometry>
   </visual>
 </link>
 <link name="suspension_holder_right_1">
@@ -308,10 +307,11 @@
     <pose>0 0 -0.25 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.05</radius>
+        <radius>0.025</radius>
         <length>0.5</length>
       </cylinder>
     </geometry>
+    <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>
   </visual>
 </link>
 <link name="suspension_right_1">
@@ -331,8 +331,8 @@
     <pose>0 0 0 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.05</radius>
-        <length>0.3</length>
+        <radius>0.025</radius>
+        <length>0.1</length>
       </cylinder>
     </geometry>
   </visual>
@@ -342,7 +342,7 @@
   <child>suspension_main_right_1</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>-1 0 0 </xyz>
+    <xyz>-1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_holder_joint_right_1" type="revolute">
@@ -350,7 +350,7 @@
   <child>suspension_holder_right_1</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_holder_wheel_joint_right_1" type="revolute">
@@ -358,7 +358,7 @@
   <child>suspension_right_1</child>
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_right_1" type="revolute">
@@ -366,12 +366,12 @@
   <child>suspension_right_1</child>
   <pose>0.0 0.0 -0.11 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <!--Back right wheel-->
 <link name="suspension_main_right_2">
-<pose>-1.79660 -0.27504 0.65450 -1.09557 0 0</pose>
+<pose>-1.79660 -0.27504 0.65450 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.01</ixx>
@@ -384,13 +384,12 @@
      <mass>50</mass>
   </inertial>
   <visual name='visual'>
-    <pose>0 0 -0.35 0 0 0</pose>
-    <geometry>
-      <cylinder>
-        <radius>0.05</radius>
-        <length>0.7</length>
-      </cylinder>
-    </geometry>
+    <pose>0 0 0 0 0 0</pose>
+		<geometry>
+			<mesh>
+				<uri>model://hmmwv/meshes/hmmwv_right_suspension.dae</uri>
+			</mesh>
+		</geometry>
   </visual>
 </link>
 <link name="suspension_holder_right_2">
@@ -410,10 +409,11 @@
     <pose>0 0 -0.25 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.05</radius>
+        <radius>0.025</radius>
         <length>0.5</length>
       </cylinder>
     </geometry>
+    <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>
   </visual>
 </link>
 <link name="suspension_right_2">
@@ -433,8 +433,8 @@
     <pose>0 0 0 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.05</radius>
-        <length>0.3</length>
+        <radius>0.025</radius>
+        <length>0.1</length>
       </cylinder>
     </geometry>
   </visual>
@@ -444,7 +444,7 @@
   <child>suspension_main_right_2</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>-1 0 0 </xyz>
+    <xyz>-1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_holder_joint_right_2" type="revolute">
@@ -452,7 +452,7 @@
   <child>suspension_holder_right_2</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_holder_wheel_joint_right_2" type="revolute">
@@ -460,7 +460,7 @@
   <child>suspension_right_2</child>
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_right_2" type="revolute">
@@ -468,7 +468,7 @@
   <child>suspension_right_2</child>
   <pose>0.0 0.0 -0.11 0.0 0.0 0.0</pose>
   <axis>
-    <xyz>1 0 0 </xyz>
+    <xyz>1 0 0</xyz>
   </axis>
 </joint>
 <!--End of suspension setup-->
@@ -492,17 +492,21 @@
     <pose>0 0 0 0 0 3.14159265359</pose>
     <geometry>
       <cylinder>
-        <radius>0.1</radius>
+        <radius>0.02</radius>
         <length>0.3</length>
       </cylinder>
     </geometry>
+    <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>
   </visual>
 </link>
 <joint name="steering_joint_left_1" type="revolute">
   <parent>suspension_left_1</parent>
   <child>steering_left_1</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
-  <axis> <dynamics><damping>1</damping></dynamics>
+  <axis>
+    <dynamics>
+      <damping>1</damping>
+    </dynamics>
     <limit>
       <lower>-0.61</lower>
       <upper>0.61</upper>
@@ -510,7 +514,6 @@
     <xyz>0 0 1</xyz>
   </axis>
 </joint>
-
 <link name="steering_right_1">
   <pose>1.79660 -1.04 0.48924 0 0 0</pose>
   <inertial>
@@ -528,17 +531,21 @@
     <pose>0 0 0 0 0 0</pose>
     <geometry>
       <cylinder>
-        <radius>0.1</radius>
+        <radius>0.02</radius>
         <length>0.3</length>
       </cylinder>
     </geometry>
+    <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>
   </visual>
 </link>
 <joint name="steering_joint_right_1" type="revolute">
   <parent>suspension_right_1</parent>
   <child>steering_right_1</child>
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
-  <axis> <dynamics><damping>1</damping></dynamics>
+  <axis>
+    <dynamics>
+      <damping>1</damping>
+    </dynamics>
     <limit>
       <lower>-0.61</lower>
       <upper>0.61</upper>
@@ -546,8 +553,6 @@
     <xyz>0 0 1</xyz>
   </axis>
 </joint>
-
-
 <!--End of steering setup-->
 <!--------------------------><!-------------------------->
 <!--wheels Setup-->
