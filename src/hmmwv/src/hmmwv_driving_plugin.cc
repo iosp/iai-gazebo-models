@@ -25,6 +25,8 @@
 #include <hmmwv/hmmwvConfig.h>
 #include <boost/bind.hpp> // Boost Bind
 
+#include <tf/transform_broadcaster.h>
+
 // Maximum time delay before a "no command" behaviour is initiated.
 #define command_MAX_DELAY 0.3
 
@@ -146,7 +148,20 @@ public:
     platform_Speedometer_pub.publish(SpeedMsg);
     connection.data = true;
     platform_hb_pub_.publish(connection);
+    tf::Transform transform;
+	  transform.setOrigin( tf::Vector3(model->GetWorldPose().pos.x, model->GetWorldPose().pos.y, model->GetWorldPose().pos.z) );
+	  transform.setRotation(tf::Quaternion(model->GetWorldPose().rot.x,model->GetWorldPose().rot.y,model->GetWorldPose().rot.z,model->GetWorldPose().rot.w));
+
+	  TF_Broadcast(transform, "WORLD", model->GetName(), simInfo.simTime);
+
   }
+  	void TF_Broadcast(tf::Transform transform, std::string frame_id, std::string child_frame_id, common::Time time)
+	{
+		 static tf::TransformBroadcaster br;
+		 tf::StampedTransform st(transform, ros::Time::now()/*(time.sec, time.nsec)*/, frame_id, child_frame_id);
+		 br.sendTransform(st);
+
+	}
   void EngineCalculations()
   {
     ThrottlePedal = ThrottlePedal + deltaSimTime * 5 * (Throttle_command - ThrottlePedal);
@@ -170,7 +185,7 @@ public:
     if (simTime < ShiftTime)
       Torque *= 0.5;
     EngineLoad = Torque;
-    std::cout << CurrentRPM << " RPM at Gear " << CurrentGear << " Speed " << Speed * 3.6 << " Engine Torque " << EngineLoad << std::endl;
+    // std::cout << CurrentRPM << " RPM at Gear " << CurrentGear << " Speed " << Speed * 3.6 << " Engine Torque " << EngineLoad << std::endl;
   }
   void apply_efforts()
   {

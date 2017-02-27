@@ -1,0 +1,355 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+    <world name="default">
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 -0.766790 -0.514022 0.304701</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.4 0.4 0.4 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+      </light>
+     <light name='user_directional_light_0' type='directional'>
+      <pose frame=''>0 0 8 1.25 0.5 0.5</pose>
+      <diffuse>1 0.992157 0.980392 1</diffuse>
+      <specular>0.0941176 0.0941176 0.0941176 1</specular>
+      <direction>0.1 0.1 -0.9</direction>
+      <attenuation>
+        <range>100</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>1</cast_shadows>
+    </light>
+    <scene>
+      <ambient>0.5 0.5 0.5 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+            <sky>
+                <time>10</time>
+                <clouds>
+                    <speed>5</speed>
+                    <direction>1.14</direction>
+                    <humidity>0.3</humidity>
+                </clouds>
+            </sky>
+        </scene>
+        <physics type="ode">
+			<gravity>0 0 -9.81</gravity>
+			<max_step_size>0.001</max_step_size>
+			<real_time_factor>1</real_time_factor>
+			<real_time_update_rate>1000</real_time_update_rate>
+			<ode>
+				<solver>
+					<type>quick</type>
+					<iters>150</iters>
+					<sor>1.4</sor>
+				</solver>
+			</ode>
+        </physics>
+        <gui>
+            <camera name="camera_pose">
+                <pose>80 -60 60 0 0.5 2</pose>
+            </camera>
+        </gui>
+        <physics type="ode">
+			<gravity>0 0 -9.81</gravity>
+			<max_step_size>0.001</max_step_size>
+			<real_time_factor>1</real_time_factor>
+			<real_time_update_rate>1000</real_time_update_rate>
+			<ode>
+				<solver>
+					<type>quick</type>
+					<iters>150</iters>
+					<sor>1.4</sor>
+				</solver>
+			</ode>
+	</physics>
+        <!--include>
+            <uri>model://ground_plane</uri>
+            <name>ground_plane</name>
+            <pose>0 0 0 0 0 0</pose>
+        </include-->
+        <include>
+            <uri>model://fiat500_velodyne</uri>
+            <name>fiat500</name>
+            <pose>3.8 1.2 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_1</name>
+            <pose>0 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_2</name>
+            <pose>9.5 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_3</name>
+            <pose>19.0 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_4</name>
+            <pose>28.5 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_5</name>
+            <pose>38.0 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_6</name>
+            <pose>47.5 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_7</name>
+            <pose>57.0 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_8</name>
+            <pose>66.5 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_9</name>
+            <pose>76.0 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_10</name>
+            <pose>85.5 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road_11</name>
+            <pose>95.0 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1</name>
+            <pose>104.541000 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_0</name>
+            <pose>114.512000 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_1</name>
+            <pose>122.543000 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_2</name>
+            <pose>91.659218 -1.308711 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_3</name>
+            <pose>91.661240 -10.918033 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_4</name>
+            <pose>91.661476 -20.548208 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_5</name>
+            <pose>91.661270 -29.705105 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_6</name>
+            <pose>91.665352 -39.448486 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_7</name>
+            <pose>91.666039 -48.945526 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_8</name>
+            <pose>91.662575 -58.475044 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_9</name>
+            <pose>91.656700 -68.250275 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_10</name>
+            <pose>91.656273 -77.885429 0 0 0 -1.570796</pose>
+        </include>
+         <include>
+            <uri>model://road1</uri>
+            <name>road1_11</name>
+            <pose>91.653687 -87.554634 0 0 0 -1.570796</pose>
+        </include>
+         <include>
+            <uri>model://road1</uri>
+            <name>road1_12</name>
+            <pose>91.657219 -97.237610 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_13</name>
+            <pose>91.656403 -106.799110 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_14</name>
+            <pose>91.657860 -116.672020 0 0 0 -1.570796</pose>
+        </include>
+         <include>
+            <uri>model://road1</uri>
+            <name>road1_15</name>
+            <pose>91.657738 -126.639458 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_16</name>
+            <pose>91.658997 -136.378006 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_17</name>
+            <pose>91.656761 -146.045212 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_18</name>
+            <pose>91.656075 -155.705032 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://road1</uri>
+            <name>road1_19</name>
+            <pose>91.650932 -162.925735 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://gas_station</uri>
+            <name>gas_station</name>
+            <pose>24.931652 -12.121319 0 0 0 -1.570801</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1</name>
+            <pose>12.756436 9.301147 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_0</name>
+            <pose>32.066284 9.340128 0 0 0 0</pose>
+        </include>
+         <include>
+            <uri>model://tree1</uri>
+            <name>tree1_1</name>
+            <pose>51.000000 9.403620 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_2</name>
+            <pose>51.091290 -2.028496 -0.402956 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_3</name>
+            <pose>71.157730 9.373977 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_4</name>
+            <pose>85.608078 9.505116 -0.186451 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_5</name>
+            <pose>109.167709 9.598273 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_6</name>
+            <pose>127.977379 9.592316 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_7</name>
+            <pose>70.715408 -2.127438 -0.425207 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_8</name>
+            <pose>109.496910 -2.041185 -0.409352 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_9</name>
+            <pose>128.507141 -1.878881 -0.438536 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <name>tree1_10</name>
+            <pose>85.494705 -2.156073 -0.417134 0 0 0</pose>
+        </include>  
+        <include>
+            <uri>model://Testing_grounds_tree</uri>
+            <name>Testing_grounds_tree</name>
+            <pose>60.563725 40.628471 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://Testing_grounds_tree</uri>
+            <name>Testing_grounds_tree_0</name>
+            <pose>81.000000 53.000000 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://Testing_grounds_tree</uri>
+            <name>Testing_grounds_tree_1</name>
+            <pose>23.000000 53.000000 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://house_1</uri>
+            <name>House 1</name>
+            <pose>77.512800 -17.280800 0 0 0 1.570801</pose>
+        </include>
+        <include>
+            <uri>model://house_2</uri>
+            <name>House 2</name>
+            <pose>111.000000 -47.000000 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://house_3</uri>
+            <name>House 3</name>
+            <pose>76.425797 -78.493500 0 0 0 -1.570796</pose>
+        </include>
+        <include>
+            <uri>model://house_1</uri>
+            <name>House 1_0</name>
+            <pose>117.000000 -126.000000 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://house_2</uri>
+            <name>House 2_0</name>
+            <pose>68.637703 -149.694000 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://nisuy100x100x2</uri>
+            <name>nisuy1001002</name>
+            <pose>1.0 7.5 -1.1 0 0 0</pose>
+        </include>
+    </world>
+</sdf>

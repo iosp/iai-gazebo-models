@@ -1070,7 +1070,7 @@
 <!--End of wheels setup-->
 <!-------------------------->
     <include>
-      <uri>model://velodyne_16</uri>
+      <uri>model://velodyne</uri>
       <pose>3.6 0 2.3 0 0 0</pose>
       <name>velodyne_16</name>
     </include>
