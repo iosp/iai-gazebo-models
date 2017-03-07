@@ -37,6 +37,7 @@
 #define HP 190 //190 HP @3400 rpm=142KW @3400 rpm & 515 NM @1300
 #define POWER 142
 #define TRANSMISSIONS 4
+#define IDLE_RPM 550
 //#define MY_GAZEBO_VER 5
 
 namespace gazebo
@@ -164,25 +165,25 @@ public:
 	}
   void EngineCalculations()
   {
-    ThrottlePedal = ThrottlePedal + deltaSimTime * 5 * (Throttle_command - ThrottlePedal);
+    ThrottlePedal = ThrottlePedal + deltaSimTime * 5 * (Throttle_command - ThrottlePedal); //move the gas pedal smoothly
     if (Throttle_command < 0 && Speed > 5)
       ThrottlePedal = 0;
-    CurrentRPM = fabs(Speed) * GearRatio[CurrentGear] * 3.1 / (WheelRadius * 2 * PI / 60) + 550;
-    if (CurrentGear < TRANSMISSIONS && Speed * 3.6 > ShiftSpeed[CurrentGear])
+    CurrentRPM = fabs(Speed) * GearRatio[CurrentGear] * 3.1 / (WheelRadius * 2 * PI / 60) + IDLE_RPM; //Calculating RPM from wheel speed. 3.1 being the Final Drive Gear ratio.
+    if (CurrentGear < TRANSMISSIONS && Speed * 3.6 > ShiftSpeed[CurrentGear]) //simulating Torque drop in transmission
     {
       CurrentGear++;
       ShiftTime = simTime.Double() + 0.25;
     }
-    else if (CurrentGear > 1 && Speed * 3.6 < ShiftSpeed[CurrentGear - 1] - 10)
+    else if (CurrentGear > 1 && Speed * 3.6 < ShiftSpeed[CurrentGear - 1] - 10) //simulating Torque drop in transmission
     {
       CurrentGear--;
       ShiftTime = simTime.Double() + 0.25;
     }
     int indexRPM = ((int)CurrentRPM) / 600;
-    double interpolatedEngineTorque = 400 + 0.1620123 * CurrentRPM - 0.00005657748 * CurrentRPM * CurrentRPM;
-    // double interpolatedEngineTorque=(TorqueRPM600[indexRPM]+TorqueRPM600[indexRPM+1]*fmod(CurrentRPM,600)/600)/(1+fmod(CurrentRPM,600)/600);
+    double interpolatedEngineTorque = 400 + 0.1620123 * CurrentRPM - 0.00005657748 * CurrentRPM * CurrentRPM; //An extracted function from the TorqueRPM600 array
+    // double interpolatedEngineTorque=(TorqueRPM600[indexRPM]+TorqueRPM600[indexRPM+1]*fmod(CurrentRPM,600)/600)/(1+fmod(CurrentRPM,600)/600); Deprecated interpolation code
     Torque = ThrottlePedal * interpolatedEngineTorque * GearRatio[CurrentGear] * power;
-    if (simTime < ShiftTime)
+    if (simTime < ShiftTime)  //simulating Torque drop in transmission
       Torque *= 0.5;
     EngineLoad = Torque;
     // std::cout << CurrentRPM << " RPM at Gear " << CurrentGear << " Speed " << Speed * 3.6 << " Engine Torque " << EngineLoad << std::endl;
@@ -220,14 +221,13 @@ public:
   {
     double ThetaAckerman = 0;
     double ThetaOuter = 0;
-    if (Steering_Request > 0)
+    if (Steering_Request > 0) //turning right
     {
-
       ThetaAckerman = atan(1 / ((1 / (tan(Steering_Request)) + (VehicleWidth / VehicleLength))));
       steer_controller(this->streer_joint_left_1, Steering_Request);
       steer_controller(this->streer_joint_right_1, ThetaAckerman);
     }
-    else if (Steering_Request < 0)
+    else if (Steering_Request < 0) //turning left
     {
       ThetaAckerman = atan(1 / ((1 / (tan(-Steering_Request)) + (VehicleWidth / VehicleLength))));
       steer_controller(this->streer_joint_left_1, -ThetaAckerman);
@@ -239,7 +239,7 @@ public:
       steer_controller(this->streer_joint_right_1, 0);
     }
 
-    // std::cout << ThetaAckerman << std::endl;
+    //  std::cout << ThetaAckerman << std::endl;
   }
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
@@ -444,3 +444,5 @@ public:
 // Tell Gazebo about this plugin, so that Gazebo can call Load on this plugin.
 GZ_REGISTER_MODEL_PLUGIN(hmmwvDrivingPlugin)
 }
+// 4*(0.8654*50+0.65450*50+0.48924*50+0.48924*50)+0.48924*80*4-0.48924*50*2+2000 is 0.863347 which is the CoM height.
+// LeftRearWheelLoc = (1.79660 1.04 0.48924)

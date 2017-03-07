@@ -3,17 +3,17 @@ import roslib
 import rospy
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64
-publ = rospy.Publisher('/hmmwv/Driving/Throttle', Float64, queue_size=10)
+publ = rospy.Publisher('/hmmwv/Driving/Throttleottle', Float64, queue_size=10)
 pubr = rospy.Publisher('/hmmwv/Driving/Steering', Float64, queue_size=10)
-v_l=0
-v_r=0
+Throttle=0
+Steer=0
 def callback(msg):
 
-    v_l = msg.linear.x
-    v_r = msg.angular.z
-    rospy.loginfo(v_l)
-    publ.publish(Float64(v_l))
-    pubr.publish(Float64(-v_r))
+    Throttle = msg.linear.x
+    Steer = msg.angular.z
+    rospy.loginfo(Throttle)
+    publ.publish(Float64(Throttle))
+    pubr.publish(Float64(-Steer))
 
 def listener():
     rospy.init_node('cmd_vel_listener')

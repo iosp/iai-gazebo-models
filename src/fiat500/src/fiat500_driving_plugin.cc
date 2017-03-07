@@ -181,7 +181,7 @@ public:
       CurrentGear--;
       ShiftTime = simTime.Double() + 0.25;
     }
-    int indexRPM = ((int)CurrentRPM) / 600;
+    // int indexRPM = ((int)CurrentRPM) / 600;
     double interpolatedEngineTorque = 400 + 0.1620123 * CurrentRPM - 0.00005657748 * CurrentRPM * CurrentRPM;
     // double interpolatedEngineTorque=(TorqueRPM600[indexRPM]+TorqueRPM600[indexRPM+1]*fmod(CurrentRPM,600)/600)/(1+fmod(CurrentRPM,600)/600);
     Torque = ThrottlePedal * interpolatedEngineTorque * GearRatio[CurrentGear] * power;
