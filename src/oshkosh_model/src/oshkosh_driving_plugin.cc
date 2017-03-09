@@ -25,6 +25,8 @@
 #include <oshkosh_model/oshkosh_modelConfig.h>
 #include <boost/bind.hpp> // Boost Bind
 
+#include <tf/transform_broadcaster.h>
+
 // Maximum time delay before a "no command" behaviour is initiated.
 #define command_MAX_DELAY 0.3
 #define PI 3.14159265359
@@ -116,10 +118,10 @@ public:
 
   // Called by the world update start event, This function is the event that will be called every update
 public:
-  void OnUpdate(const common::UpdateInfo &_info) // we are not using the pointer to the info so its commanted as an option
+  void OnUpdate(const common::UpdateInfo &simInfo) // we are not using the pointer to the info so its commanted as an option
   {
-    deltaSimTime = _info.simTime.Double() - sim_Time.Double();
-    sim_Time = _info.simTime;
+    deltaSimTime = simInfo.simTime.Double() - sim_Time.Double();
+    sim_Time = simInfo.simTime;
     // std::cout << "update function started"<<std::endl;
     // std::cout << "command_timer = " << command_timer.GetElapsed().Float() << std::endl;
 
@@ -152,7 +154,19 @@ public:
     std_msgs::Bool connection;
     connection.data = true;
     platform_hb_pub_.publish(connection);
+    tf::Transform transform;
+	  transform.setOrigin( tf::Vector3(model->GetWorldPose().pos.x, model->GetWorldPose().pos.y, model->GetWorldPose().pos.z) );
+	  transform.setRotation(tf::Quaternion(model->GetWorldPose().rot.x,model->GetWorldPose().rot.y,model->GetWorldPose().rot.z,model->GetWorldPose().rot.w));
+
+	  TF_Broadcast(transform, "WORLD", model->GetName(), simInfo.simTime);
+
   }
+  	void TF_Broadcast(tf::Transform transform, std::string frame_id, std::string child_frame_id, common::Time time)
+	{
+		 static tf::TransformBroadcaster br;
+		 tf::StampedTransform st(transform, ros::Time::now()/*(time.sec, time.nsec)*/, frame_id, child_frame_id);
+		 br.sendTransform(st);
+	}
   void apply_efforts()
   {
     float WheelTorque = power * Throttle_command;

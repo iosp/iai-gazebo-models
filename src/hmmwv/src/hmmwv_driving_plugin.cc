@@ -25,16 +25,20 @@
 #include <hmmwv/hmmwvConfig.h>
 #include <boost/bind.hpp> // Boost Bind
 
+#include <tf/transform_broadcaster.h>
+
 // Maximum time delay before a "no command" behaviour is initiated.
 #define command_MAX_DELAY 0.3
 
 #define PI 3.14159265359
 #define VehicleLength 3.5932
 #define VehicleWidth 1.966
-#define WheelRadius 0.39
-#define HP 190 //HP @3400 rpm
-#define POWER 142 //KW @3400 rpm
-#define Transmissions 4
+#define WheelRadius 0.497
+#define HP 190 //190 HP @3400 rpm=142KW @3400 rpm & 515 NM @1300
+#define POWER 142
+#define TRANSMISSIONS 4
+#define IDLE_RPM 550
+
 //#define MY_GAZEBO_VER 5
 
 namespace gazebo
@@ -99,8 +103,9 @@ public:
     control_P = config.Steer_control_P;
     control_I = config.Steer_control_I;
     control_D = config.Steer_control_D;
-    Steering_Speed = config.Steering;
+    steeringSpeed = config.Steering;
     damping = config.Damping;
+    friction = config.Friction;
     power = config.Power;
     suspenSpring = config.Spring;
     SuspenDamp = config.Damper;
@@ -109,11 +114,11 @@ public:
 
   // Called by the world update start event, This function is the event that will be called every update
 public:
-  void OnUpdate(const common::UpdateInfo &_info) // we are not using the pointer to the info so its commanted as an option
+  void OnUpdate(const common::UpdateInfo &simInfo) // we are not using the pointer to the info so its commanted as an option
   {
 
-    deltaSimTime = _info.simTime.Double() - sim_Time.Double();
-    sim_Time = _info.simTime;
+    deltaSimTime = simInfo.simTime.Double() - simTime.Double();
+    simTime = simInfo.simTime;
     // std::cout << "update function started"<<std::endl;
     // std::cout << "command_timer = " << command_timer.GetElapsed().Float() << std::endl;
     // Applying effort to the wheels , brakes if no message income
@@ -139,10 +144,48 @@ public:
     breaker();
 
     // std::cout << this->spring_right_1->GetAngle(0).Radian() << std::endl;
-    SpeedMsg.data = Speed;
+    SpeedMsg.data = Speed * 3.6;
     platform_Speedometer_pub.publish(SpeedMsg);
     connection.data = true;
     platform_hb_pub_.publish(connection);
+    tf::Transform transform;
+	  transform.setOrigin( tf::Vector3(model->GetWorldPose().pos.x, model->GetWorldPose().pos.y, model->GetWorldPose().pos.z) );
+	  transform.setRotation(tf::Quaternion(model->GetWorldPose().rot.x,model->GetWorldPose().rot.y,model->GetWorldPose().rot.z,model->GetWorldPose().rot.w));
+
+	  TF_Broadcast(transform, "WORLD", model->GetName(), simInfo.simTime);
+
+  }
+  	void TF_Broadcast(tf::Transform transform, std::string frame_id, std::string child_frame_id, common::Time time)
+	{
+		 static tf::TransformBroadcaster br;
+		 tf::StampedTransform st(transform, ros::Time::now()/*(time.sec, time.nsec)*/, frame_id, child_frame_id);
+		 br.sendTransform(st);
+
+	}
+  void EngineCalculations()
+  {
+    ThrottlePedal = ThrottlePedal + deltaSimTime * 5 * (Throttle_command - ThrottlePedal); //move the gas pedal smoothly
+    if (Throttle_command < 0 && Speed > 5)
+      ThrottlePedal = 0;
+    CurrentRPM = fabs(Speed) * GearRatio[CurrentGear] * 3.1 / (WheelRadius * 2 * PI / 60) + IDLE_RPM; //Calculating RPM from wheel speed. 3.1 being the Final Drive Gear ratio.
+    if (CurrentGear < TRANSMISSIONS && Speed * 3.6 > ShiftSpeed[CurrentGear]) //simulating Torque drop in transmission
+    {
+      CurrentGear++;
+      ShiftTime = simTime.Double() + 0.25;
+    }
+    else if (CurrentGear > 1 && Speed * 3.6 < ShiftSpeed[CurrentGear - 1] - 10) //simulating Torque drop in transmission
+    {
+      CurrentGear--;
+      ShiftTime = simTime.Double() + 0.25;
+    }
+    int indexRPM = ((int)CurrentRPM) / 600;
+    double interpolatedEngineTorque = 400 + 0.1620123 * CurrentRPM - 0.00005657748 * CurrentRPM * CurrentRPM; //An extracted function from the TorqueRPM600 array
+    // double interpolatedEngineTorque=(TorqueRPM600[indexRPM]+TorqueRPM600[indexRPM+1]*fmod(CurrentRPM,600)/600)/(1+fmod(CurrentRPM,600)/600); Deprecated interpolation code
+    Torque = ThrottlePedal * interpolatedEngineTorque * GearRatio[CurrentGear] * power;
+    if (simTime < ShiftTime)  //simulating Torque drop in transmission
+      Torque *= 0.5;
+    EngineLoad = Torque;
+    // std::cout << CurrentRPM << " RPM at Gear " << CurrentGear << " Speed " << Speed * 3.6 << " Engine Torque " << EngineLoad << std::endl;
   }
   void apply_efforts()
   {
@@ -154,18 +197,37 @@ public:
     wheel_controller(this->right_wheel_2, WheelTorque);
     // std::cout << " Controlling Steering"<< std::endl;
   }
+  void wheel_controller(physics::JointPtr wheelJoint, double Torque2)
+  {
+    WheelPower = Torque2;
+
+    double wheelOmega = wheelJoint->GetVelocity(0);
+    if (abs(wheelOmega > 1))
+      jointforce = WheelPower - damping * wheelOmega - friction * wheelOmega / fabs(wheelOmega);
+    else
+      jointforce = WheelPower - damping * wheelOmega;
+    wheelJoint->SetForce(0, jointforce);
+    if (wheelJoint == right_wheel_2)
+    {
+      wheelsSpeedSum = wheelsSpeedSum + wheelOmega;
+      Speed = wheelsSpeedSum * WheelRadius / 4;
+      wheelsSpeedSum = 0;
+    }
+    else
+      wheelsSpeedSum = wheelsSpeedSum + wheelOmega;
+  }
+
   void apply_steering()
   {
     double ThetaAckerman = 0;
     double ThetaOuter = 0;
-    if (Steering_Request > 0)
+    if (Steering_Request > 0) //turning right
     {
-
       ThetaAckerman = atan(1 / ((1 / (tan(Steering_Request)) + (VehicleWidth / VehicleLength))));
       steer_controller(this->streer_joint_left_1, Steering_Request);
       steer_controller(this->streer_joint_right_1, ThetaAckerman);
     }
-    else if (Steering_Request < 0)
+    else if (Steering_Request < 0) //turning left
     {
       ThetaAckerman = atan(1 / ((1 / (tan(-Steering_Request)) + (VehicleWidth / VehicleLength))));
       steer_controller(this->streer_joint_left_1, -ThetaAckerman);
@@ -177,7 +239,7 @@ public:
       steer_controller(this->streer_joint_right_1, 0);
     }
 
-    // std::cout << ThetaAckerman << std::endl;
+    //  std::cout << ThetaAckerman << std::endl;
   }
   void wheel_controller(physics::JointPtr wheel_joint, double Tourque)
   {
@@ -199,20 +261,24 @@ public:
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
     // std::cout << " getting angle"<< std::endl;
-    double wheel_angle = steer_joint->GetAngle(0).Radian();
-    double steer_omega = steer_joint->GetVelocity(0);
+    double currentWheelAngle = steer_joint->GetAngle(0).Radian();
+    double steeringOmega = steer_joint->GetVelocity(0);
     if (steer_joint == this->streer_joint_left_1)
     {
-      DesiredAngle = DesiredAngle + Steering_Speed * deltaSimTime * (Angle - DesiredAngle);
-      double Joint_Force = control_P * (0.6 * DesiredAngle - wheel_angle) - control_D * (steer_omega);
-      steer_joint->SetForce(0, Joint_Force);
-      //  std::cout << wheel_angle<< std::endl;
+      DesiredAngle = DesiredAngle + steeringSpeed * deltaSimTime * (Angle - DesiredAngle);
+      if (fabs(Angle - DesiredAngle)<0.01)DesiredAngle=Angle;
+      IerL+=DesiredAngleR - currentWheelAngle;
+      double jointforce = control_P * (DesiredAngle - currentWheelAngle)+control_I*IerL - control_D * (steeringOmega);
+      steer_joint->SetForce(0, jointforce);
+      //  std::cout << currentWheelAngle<< std::endl;
     }
     else
     {
-      DesiredAngleR = DesiredAngleR + Steering_Speed * deltaSimTime * (Angle - DesiredAngleR);
-      double Joint_Force = control_P * (0.6 * DesiredAngleR - wheel_angle) - control_D * (steer_omega);
-      steer_joint->SetForce(0, Joint_Force);
+      DesiredAngleR = DesiredAngleR + steeringSpeed * deltaSimTime * (Angle - DesiredAngleR);
+      if (fabs(Angle - DesiredAngleR)<0.01)DesiredAngleR=Angle;
+      IerR+=DesiredAngleR - currentWheelAngle;
+      double jointforce = control_P * (DesiredAngleR - currentWheelAngle)+control_I*IerR - control_D * (steeringOmega);
+      steer_joint->SetForce(0, jointforce);
     }
     // std::cout << "efforting"<< std::endl;
     // this->jointController->SetJointPosition(steer_joint, Angle*0.61);
@@ -361,33 +427,48 @@ public:
   common::Timer Throttle_command_timer;
   common::Timer Angular_command_timer;
   common::Timer Breaking_command_timer;
-  common::Time sim_Time;
+  common::Time simTime;
 
   // Defining private Mutex
   boost::mutex Angular_command_mutex;
   boost::mutex Throttle_command_mutex;
   boost::mutex Breaking_command_mutex;
   //helper vars
-  float Throttle_command;
-  float Steering_Request;
+
+  float Throttle_command = 0;
+  float ThrottlePedal = 0;
+  float Steering_Request = 0;
+
   float BreakPedal = 1;
-  double Linear_ref_vel;
-  double Angular_ref_vel;
+  double friction = 0;
   double WheelPower = 0;
   double DesiredAngle = 0;
   double DesiredAngleR = 0;
   double wheelsSpeedSum = 0;
-  double RPM = 0;
-  double Tourque = 0;
+
+  double CurrentRPM = 0;
+  double ShiftTime = 0;
+  double EngineLoad = 0;
+  int CurrentGear = 1;
+  double Torque = 0;
+  double jointforce = 0;
   float tempTime = 0;
   float Speed = 0;
   bool Breaks = false;
+  double IerL=0;
+  double IerR=0;
+  double ShiftSpeed[TRANSMISSIONS] = {0, 20, 40, 65};
+  double GearRatio[TRANSMISSIONS + 1] = {0, 3.2, 2.5, 1.5, 0.8};
+  double TorqueRPM600[8] = {0, 350, 515, 500, 450, 300, 200, 200};
+  double PowerRPM600[8] = {0, 10, 60, 80, 120, 142, 120, 120};
   //Dynamic Configuration Definitions
   dynamic_reconfigure::Server<hmmwv::hmmwvConfig> *model_reconfiguration_server;
-  double control_P, control_I, control_D, Steering_Speed,
+  double control_P, control_I, control_D, steeringSpeed,
       damping, power, TempDamping, suspenSpring, SuspenDamp, SuspenTarget;
 };
 
 // Tell Gazebo about this plugin, so that Gazebo can call Load on this plugin.
 GZ_REGISTER_MODEL_PLUGIN(hmmwvDrivingPlugin)
 }
+// 4*(0.8654*50+0.65450*50+0.48924*50+0.48924*50)+0.48924*80*4-0.48924*50*2+2000 is 0.863347 which is the CoM height.
+// LeftRearWheelLoc = (1.79660 1.04 0.48924)
