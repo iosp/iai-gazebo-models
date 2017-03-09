@@ -38,6 +38,7 @@
 #define POWER 142
 #define TRANSMISSIONS 4
 #define IDLE_RPM 550
+
 //#define MY_GAZEBO_VER 5
 
 namespace gazebo
@@ -137,8 +138,6 @@ public:
       Steering_Request = 0;
     }
     // std::cout << "Applying efforts"<<std::endl;
-
-    EngineCalculations();
     apply_efforts();
     apply_steering();
     ApplySuspension();
@@ -190,7 +189,7 @@ public:
   }
   void apply_efforts()
   {
-    double WheelTorque = Torque;
+    double WheelTorque = Throttle_command * power;
     // std::cout << " Controlling wheels"<< std::endl;
     wheel_controller(this->left_wheel_1, WheelTorque);
     wheel_controller(this->left_wheel_2, WheelTorque);
@@ -217,6 +216,7 @@ public:
     else
       wheelsSpeedSum = wheelsSpeedSum + wheelOmega;
   }
+
   void apply_steering()
   {
     double ThetaAckerman = 0;
@@ -240,6 +240,23 @@ public:
     }
 
     //  std::cout << ThetaAckerman << std::endl;
+  }
+  void wheel_controller(physics::JointPtr wheel_joint, double Tourque)
+  {
+    WheelPower = WheelPower + 0.005 * (Tourque - WheelPower);
+
+    double wheel_omega = wheel_joint->GetVelocity(0);
+    double Joint_Force = WheelPower - damping * wheel_omega;
+
+    wheel_joint->SetForce(0, Joint_Force);
+    if (wheel_joint == right_wheel_2)
+    {
+      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
+      Speed = wheelsSpeedSum * WheelRadius / 4;
+      wheelsSpeedSum = 0;
+    }
+    else
+      wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
   }
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
@@ -417,15 +434,18 @@ public:
   boost::mutex Throttle_command_mutex;
   boost::mutex Breaking_command_mutex;
   //helper vars
+
   float Throttle_command = 0;
   float ThrottlePedal = 0;
   float Steering_Request = 0;
+
   float BreakPedal = 1;
   double friction = 0;
   double WheelPower = 0;
   double DesiredAngle = 0;
   double DesiredAngleR = 0;
   double wheelsSpeedSum = 0;
+
   double CurrentRPM = 0;
   double ShiftTime = 0;
   double EngineLoad = 0;
