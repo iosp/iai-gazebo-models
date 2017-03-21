@@ -56,7 +56,7 @@
 				<geometry>
 					<mesh>
 						<scale>1 1 1</scale>
-						<uri>model://oshkosh/meshes/HEMTT2.dae</uri>
+						<uri>model://../Assets/Oshkosh/HEMTT2.dae</uri>
 					</mesh>
 				</geometry>
 			</visual>

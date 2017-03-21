@@ -19,7 +19,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
 
@@ -55,7 +55,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
 
@@ -91,7 +91,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
 
@@ -127,7 +127,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
 
@@ -163,7 +163,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
 
@@ -201,7 +201,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
 
@@ -237,7 +237,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
 
@@ -273,7 +273,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
 

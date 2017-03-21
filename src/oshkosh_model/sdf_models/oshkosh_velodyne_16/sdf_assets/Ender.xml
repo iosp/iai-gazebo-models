@@ -1,6 +1,6 @@
     <include>
       <uri>model://velodyne_16</uri>
-      <pose>3.6 0 2.3 0 0 0</pose>
+      <pose>3.8 0 3.0 0 0 0</pose>
       <name>velodyne_16</name>
     </include>
     <joint name='velodyne_joint' type='revolute'>

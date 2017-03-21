@@ -56,7 +56,7 @@
 				<geometry>
 					<mesh>
 						<scale>1 1 1</scale>
-						<uri>model://oshkosh/meshes/HEMTT2.dae</uri>
+						<uri>model://../Assets/Oshkosh/HEMTT2.dae</uri>
 					</mesh>
 				</geometry>
 			</visual>
@@ -82,7 +82,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -122,7 +122,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -157,7 +157,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -192,7 +192,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -227,7 +227,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -264,7 +264,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -299,7 +299,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -334,7 +334,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -559,10 +559,10 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 -0 0</pose>
+		<pose>0 0 0 0 -0 3.14159265359</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_left_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -629,10 +629,10 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 -0 0</pose>
+		<pose>0 0 0 0 -0 3.14159265359</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_left_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -699,10 +699,10 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 -0 0</pose>
+		<pose>0 0 0 0 -0 3.14159265359</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_left_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -769,10 +769,10 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 -0 0</pose>
+		<pose>0 0 0 0 -0 3.14159265359</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_left_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -842,7 +842,7 @@
 		<pose>0 0 0 0 -0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_right_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -912,7 +912,7 @@
 		<pose>0 0 0 0 -0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_right_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -982,7 +982,7 @@
 		<pose>0 0 0 0 -0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_right_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -1052,7 +1052,7 @@
 		<pose>0 0 0 0 -0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_right_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
