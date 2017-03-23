@@ -847,12 +847,12 @@
 <!--End of wheels setup-->
 <!-------------------------->
     <include>
-      <uri>model://velodyne_16</uri>
+      <uri>model://velodyne</uri>
       <pose>0 0 2 0 0 0</pose>
-      <name>velodyne_16</name>
+      <name>velodyne</name>
     </include>
     <joint name='velodyne_joint' type='revolute'>
-      <child>velodyne_16::base</child>
+      <child>velodyne::base</child>
       <parent>body</parent>
       <axis>
         <xyz>0 0 0</xyz>

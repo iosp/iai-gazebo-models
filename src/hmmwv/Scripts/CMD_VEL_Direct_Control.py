@@ -7,6 +7,8 @@ pubt = rospy.Publisher('/hmmwv/Driving/Throttle', Float64, queue_size=10)
 pubs = rospy.Publisher('/hmmwv/Driving/Steering', Float64, queue_size=10)
 Throttle=0
 Steer=0
+rospy.init_node('cmd_vel_listener')
+rate = rospy.Rate(30)
 def callback(msg):
 
     Throttle = msg.linear.x
@@ -16,8 +18,9 @@ def callback(msg):
     pubs.publish(Float64(-Steer))
 
 def listener():
-    rospy.init_node('cmd_vel_listener')
+    
     rospy.Subscriber("/cmd_vel", Twist, callback)
+    rate.sleep()
     rospy.spin()
 
 if __name__ == '__main__':
