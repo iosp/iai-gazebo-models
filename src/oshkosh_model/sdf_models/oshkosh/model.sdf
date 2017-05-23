@@ -27,8 +27,6 @@
 					</box>
 				</geometry>
 			</collision>
-
--->
 			<collision name='body_collision_front'>
 				<pose>2.25 0 1.00 0 0 0</pose>
 				<geometry>
@@ -58,7 +56,7 @@
 				<geometry>
 					<mesh>
 						<scale>1 1 1</scale>
-						<uri>model://oshkosh/meshes/HEMTT2.dae</uri>
+						<uri>model://../Assets/Oshkosh/HEMTT2.dae</uri>
 					</mesh>
 				</geometry>
 			</visual>
@@ -84,7 +82,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -95,8 +93,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>1 0 0</xyz>
     <!--<dynamics>
@@ -124,7 +122,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -135,8 +133,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>1 0 0</xyz>
   </axis>
@@ -159,7 +157,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -170,8 +168,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>1 0 0</xyz>
   </axis>
@@ -194,7 +192,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -205,8 +203,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>1 0 0</xyz>
   </axis>
@@ -229,7 +227,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -240,8 +238,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>-1 0 0</xyz>
   </axis>
@@ -266,7 +264,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -277,8 +275,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>-1 0 0</xyz>
   </axis>
@@ -301,7 +299,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -312,8 +310,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>-1 0 0</xyz>
   </axis>
@@ -336,7 +334,7 @@
     <geometry>
       <mesh>
         <scale>1 1 1</scale>
-        <uri>model://oshkosh/meshes/Suspension.dae</uri>
+        <uri>model://../Assets/Oshkosh/Suspension.dae</uri>
       </mesh>
     </geometry>
   </visual>
@@ -347,8 +345,8 @@
   <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
   <axis>
     <limit>
-      <lower>-0.8</lower>
-      <upper>0.08</upper>
+      <lower>-0.4</lower>
+      <upper>0.15</upper>
     </limit>
     <xyz>-1 0 0</xyz>
   </axis>
@@ -514,7 +512,7 @@
 	<pose>2.61707 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>50</mass>
+		<mass>80</mass>
 		<inertia>
 			<ixx>7.34</ixx>
 			<ixy>0</ixy>
@@ -561,10 +559,10 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 -0 0</pose>
+		<pose>0 0 0 0 -0 3.14159265359</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_left_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -584,7 +582,7 @@
 	<pose>1.00737 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>50</mass>
+		<mass>80</mass>
 		<inertia>
 			<ixx>7.34</ixx>
 			<ixy>0</ixy>
@@ -631,10 +629,10 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 -0 0</pose>
+		<pose>0 0 0 0 -0 3.14159265359</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_left_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -654,7 +652,7 @@
 	<pose>-2.67222 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>50</mass>
+		<mass>80</mass>
 		<inertia>
 			<ixx>7.34</ixx>
 			<ixy>0</ixy>
@@ -701,10 +699,10 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 -0 0</pose>
+		<pose>0 0 0 0 -0 3.14159265359</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_left_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -724,7 +722,7 @@
 	<pose>-4.28192 1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>50</mass>
+		<mass>80</mass>
 		<inertia>
 			<ixx>7.34</ixx>
 			<ixy>0</ixy>
@@ -771,10 +769,10 @@
 		</geometry>
 	</collision>
 	<visual name='left_wheel'>
-		<pose>0 0 0 0 -0 0</pose>
+		<pose>0 0 0 0 -0 3.14159265359</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_left_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -794,7 +792,7 @@
 	<pose>2.61707 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>50</mass>
+		<mass>80</mass>
 		<inertia>
 			<ixx>7.34</ixx>
 			<ixy>0</ixy>
@@ -844,7 +842,7 @@
 		<pose>0 0 0 0 -0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_right_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -864,7 +862,7 @@
 	<pose>1.00737 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>50</mass>
+		<mass>80</mass>
 		<inertia>
 			<ixx>7.34</ixx>
 			<ixy>0</ixy>
@@ -914,7 +912,7 @@
 		<pose>0 0 0 0 -0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_right_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -934,7 +932,7 @@
 	<pose>-2.67222 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>50</mass>
+		<mass>80</mass>
 		<inertia>
 			<ixx>7.34</ixx>
 			<ixy>0</ixy>
@@ -984,7 +982,7 @@
 		<pose>0 0 0 0 -0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_right_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->
@@ -1004,7 +1002,7 @@
 	<pose>-4.28192 -1.06 0.72 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
-		<mass>50</mass>
+		<mass>80</mass>
 		<inertia>
 			<ixx>7.34</ixx>
 			<ixy>0</ixy>
@@ -1054,7 +1052,7 @@
 		<pose>0 0 0 0 -0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://oshkosh/meshes/Oshkosh_right_Wheel.dae</uri>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
 			</mesh>
 		</geometry>
 		<!--		<material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse><specular>1 1 1 1</specular><emissive>0 0 0 1</emissive></material>-->

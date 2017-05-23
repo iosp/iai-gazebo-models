@@ -7,7 +7,7 @@
 			<gravity>1</gravity>
 			<self_collide>1</self_collide>
 			<inertial>
-				<pose>0.00 0.00 0.5 0 0 0</pose>
+				<pose>0.00 0.00 1 0 0 0</pose>
 				<mass>2000</mass>
 				<inertia>
 					<ixx>500</ixx>
@@ -55,7 +55,7 @@
 				<geometry>
 					<mesh>
 						<scale>1 1 1</scale>
-						<uri>model://hmmwv/meshes/hmmwv_body.dae</uri>
+						<uri>model://../Assets/hmmwv_body.dae</uri>
 					</mesh>
 				</geometry>
 			</visual>
@@ -81,7 +81,7 @@
     <pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_left_suspension.dae</uri>
+				<uri>model://../Assets/hmmwv_left_suspension.dae</uri>
 			</mesh>
 		</geometry>
   </visual>
@@ -155,6 +155,10 @@
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
     <xyz>1 0 0</xyz>
+    <limit>
+      <lower>-0.5</lower>
+      <upper>0.5</upper>
+    </limit>
   </axis><!--Front left wheel-->
 </joint>
 <joint name="suspension_main_wheel_joint_left_1" type="revolute">
@@ -183,7 +187,7 @@
     <pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_left_suspension.dae</uri>
+				<uri>model://../Assets/hmmwv_left_suspension.dae</uri>
 			</mesh>
 		</geometry>
   </visual>
@@ -257,6 +261,10 @@
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
     <xyz>1 0 0</xyz>
+    <limit>
+      <lower>-0.5</lower>
+      <upper>0.5</upper>
+    </limit>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_left_2" type="revolute">
@@ -285,7 +293,7 @@
     <pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_suspension.dae</uri>
+				<uri>model://../Assets/hmmwv_right_suspension.dae</uri>
 			</mesh>
 		</geometry>
   </visual>
@@ -359,6 +367,10 @@
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
     <xyz>1 0 0</xyz>
+    <limit>
+      <lower>-0.5</lower>
+      <upper>0.5</upper>
+    </limit>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_right_1" type="revolute">
@@ -387,7 +399,7 @@
     <pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_suspension.dae</uri>
+				<uri>model://../Assets/hmmwv_right_suspension.dae</uri>
 			</mesh>
 		</geometry>
   </visual>
@@ -461,6 +473,10 @@
   <pose>0.0 0.0 0.21 0.0 0.0 0.0</pose>
   <axis>
     <xyz>1 0 0</xyz>
+    <limit>
+      <lower>-0.5</lower>
+      <upper>0.5</upper>
+    </limit>
   </axis>
 </joint>
 <joint name="suspension_main_wheel_joint_right_2" type="revolute">
@@ -610,7 +626,7 @@
 		<pose>0 0 0 0 0 3.1469265</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
+				<uri>model://../Assets/hmmwv_wheel.dae</uri>
 			</mesh>
 		</geometry>
 	</visual>
@@ -678,7 +694,7 @@
 		<pose>0 0 0 0 0 3.1469265</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
+				<uri>model://../Assets/hmmwv_wheel.dae</uri>
 			</mesh>
 		</geometry>
 	</visual>
@@ -746,7 +762,7 @@
 		<pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
+				<uri>model://../Assets/hmmwv_wheel.dae</uri>
 			</mesh>
 		</geometry>
 	</visual>
@@ -814,7 +830,7 @@
 		<pose>0 0 0 0 0 0</pose>
 		<geometry>
 			<mesh>
-				<uri>model://hmmwv/meshes/hmmwv_right_wheel.dae</uri>
+				<uri>model://../Assets/hmmwv_wheel.dae</uri>
 			</mesh>
 		</geometry>
 	</visual>
