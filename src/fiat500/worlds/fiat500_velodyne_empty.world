@@ -351,5 +351,10 @@
             <name>nisuy1001002</name>
             <pose>1.0 7.5 -1.1 0 0 0</pose>
         </include>
+        <include>
+            <uri>model://Testing_grounds1</uri>
+            <name>Testing_grounds</name>
+            <pose>88.378403 -78.793503 -0.326418 0 0 0</pose>
+        </include>
     </world>
 </sdf>
