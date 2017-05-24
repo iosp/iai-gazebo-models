@@ -42,7 +42,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col2'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -51,7 +51,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -112,7 +112,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col2'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -121,7 +121,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -182,7 +182,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col2'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -191,7 +191,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -214,7 +214,7 @@
 </link>
 <joint name='left_wheel_3' type='revolute'>
 	<child>left_wheel_3</child>
-	<parent>suspension_left_3</parent>
+	<parent>suspension_back_3</parent>
 	<axis>
 		<xyz>0 1 0</xyz>
 	</axis>
@@ -252,7 +252,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col2'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -261,7 +261,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -284,7 +284,7 @@
 </link>
 <joint name='left_wheel_4' type='revolute'>
 	<child>left_wheel_4</child>
-	<parent>suspension_left_4</parent>
+	<parent>suspension_back_4</parent>
 	<axis>
 		<xyz>0 1 0</xyz>
 	</axis>
@@ -322,7 +322,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col2'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -331,7 +331,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -392,7 +392,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col2'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -401,7 +401,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -462,7 +462,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col2'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -471,7 +471,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -494,7 +494,7 @@
 </link>
 <joint name='right_wheel_3' type='revolute'>
 	<child>right_wheel_3</child>
-	<parent>suspension_right_3</parent>
+	<parent>suspension_back_3</parent>
 	<axis>
 		<xyz>0 1 0</xyz>
 	</axis>
@@ -532,7 +532,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col2'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -541,7 +541,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -564,7 +564,7 @@
 </link>
 <joint name='right_wheel_4' type='revolute'>
 	<child>right_wheel_4</child>
-	<parent>suspension_right_4</parent>
+	<parent>suspension_back_4</parent>
 	<axis>
 		<xyz>0 1 0</xyz>
 	</axis>

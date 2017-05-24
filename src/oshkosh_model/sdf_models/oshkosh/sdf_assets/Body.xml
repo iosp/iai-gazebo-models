@@ -3,19 +3,16 @@
 <sdf version='1.4'>
 	<model name='Oshkosh'>
 		<link name='body'>
-		<self_collide>0</self_collide>
+			<self_collide>0</self_collide>
 			<pose>0 0 1.27525 0 0 0</pose>
 			<gravity>1</gravity>
 			<self_collide>0</self_collide>
 			<inertial>
-				<pose>0.00 0.00 0 0 0 0</pose>
-				<mass>2000</mass>
+				<pose>0.15 0 0 0 0 0</pose>
+				<mass>5000</mass>
 				<inertia>
 					<ixx>3000</ixx>
-					<ixy>0.00</ixy>
-					<ixz>0.00</ixz>
 					<iyy>20000</iyy>
-					<iyz>0.00</iyz>
 					<izz>20000</izz>
 				</inertia>
 			</inertial>

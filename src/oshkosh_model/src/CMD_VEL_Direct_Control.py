@@ -12,9 +12,9 @@ rate = rospy.Rate(30)
 def callback(msg):
     Throttle = msg.linear.x
     Steer = msg.angular.z
-    rospy.loginfo(v_l)
-    publ.publish(Float64(v_l))
-    pubr.publish(Float64(-v_r))
+    rospy.loginfo(Throttle)
+    publ.publish(Float64(Throttle))
+    pubr.publish(Float64(-Steer))
 
 def listener():
     

@@ -33,6 +33,7 @@
 #define VehicleLength 6
 #define VehicleWidth 2
 #define WheelRadius 0.71
+
 //#define MY_GAZEBO_VER 5
 
 namespace gazebo
@@ -72,10 +73,10 @@ public:
     this->spring_right_1 = this->model->GetJoint("spring_right_1");
     this->spring_left_2 = this->model->GetJoint("spring_left_2");
     this->spring_right_2 = this->model->GetJoint("spring_right_2");
-    this->spring_left_3 = this->model->GetJoint("spring_left_3");
-    this->spring_right_3 = this->model->GetJoint("spring_right_3");
-    this->spring_left_4 = this->model->GetJoint("spring_left_4");
-    this->spring_right_4 = this->model->GetJoint("spring_right_4");
+    this->torsion_spring_back_3 = this->model->GetJoint("torsion_spring_back_3");
+    this->spring_back_3 = this->model->GetJoint("spring_back_3");
+    this->torsion_spring_back_4 = this->model->GetJoint("torsion_spring_back_4");
+    this->spring_back_4 = this->model->GetJoint("spring_back_4");
     // Starting Timers
     Throttle_command_timer.Start();
     Angular_command_timer.Start();
@@ -111,9 +112,15 @@ public:
     Steering_Speed = config.Steering;
     damping = config.Damping;
     power = config.Power;
-    suspenSpring = config.Spring;
+    SuspenSpring = config.Spring;
     SuspenDamp = config.Damper;
     SuspenTarget = config.Target;
+    SuspenSpring_back = config.Spring_back;
+    SuspenDamp_back = config.Damper_back;
+    SuspenTarget_back = config.Target_back;
+    SuspenSpring_torsion_back = config.Spring_torsion_back;
+    SuspenDamp_torsion_back = config.Damper_torsion_back;
+    SuspenTarget_torsion_back = config.Target_torsion_back;
   }
 
   // Called by the world update start event, This function is the event that will be called every update
@@ -271,18 +278,18 @@ public:
   }
   void ApplySuspension()
   {
-    Suspension(spring_left_1);
-    Suspension(spring_left_2);
-    Suspension(spring_right_1);
-    Suspension(spring_right_2);
-    Suspension(spring_left_3);
-    Suspension(spring_left_4);
-    Suspension(spring_right_3);
-    Suspension(spring_right_4);
+    Suspension(spring_left_1,SuspenSpring,SuspenDamp,SuspenTarget);
+    Suspension(spring_left_2,SuspenSpring,SuspenDamp,SuspenTarget);
+    Suspension(spring_right_1,SuspenSpring,SuspenDamp,SuspenTarget);
+    Suspension(spring_right_2,SuspenSpring,SuspenDamp,SuspenTarget);
+    Suspension(torsion_spring_back_3,SuspenSpring_torsion_back,SuspenDamp_torsion_back,SuspenTarget_torsion_back);
+    Suspension(torsion_spring_back_4,SuspenSpring_torsion_back,SuspenDamp_torsion_back,SuspenTarget_torsion_back);
+    Suspension(spring_back_3,SuspenSpring_back,SuspenDamp_back,SuspenTarget_back);
+    Suspension(spring_back_4,SuspenSpring_back,SuspenDamp_back,SuspenTarget_back);
   }
-  void Suspension(physics::JointPtr Suspension)
-  { //The function to control the suspension of the Vehicle
-    double SpringForce = -(Suspension->GetAngle(0).Radian() + SuspenTarget) * suspenSpring - Suspension->GetVelocity(0) * SuspenDamp;
+  void Suspension(physics::JointPtr Suspension,double s,double d,double t)
+  { //The function to control the Suspension of the Vehicle
+    double SpringForce = -(Suspension->GetAngle(0).Radian() + t) * s - Suspension->GetVelocity(0) * d;
     Suspension->SetForce(0, SpringForce);
   }
   // The subscriber callback , each time data is published to the subscriber this function is being called and recieves the data in pointer msg
@@ -380,10 +387,10 @@ public:
   physics::JointPtr spring_right_1;
   physics::JointPtr spring_left_2;
   physics::JointPtr spring_right_2;
-  physics::JointPtr spring_left_3;
-  physics::JointPtr spring_right_3;
-  physics::JointPtr spring_left_4;
-  physics::JointPtr spring_right_4;
+  physics::JointPtr torsion_spring_back_3;
+  physics::JointPtr spring_back_3;
+  physics::JointPtr torsion_spring_back_4;
+  physics::JointPtr spring_back_4;
   // Defining private Pointer to the update event connection
   event::ConnectionPtr updateConnection;
 
@@ -426,7 +433,9 @@ public:
   //Dynamic Configuration Definitions
   dynamic_reconfigure::Server<oshkosh_model::oshkosh_modelConfig> *model_reconfiguration_server;
     double control_P, control_I, control_D, Steering_Speed,
-      damping, power, TempDamping, suspenSpring, SuspenDamp, SuspenTarget;
+      damping, power, TempDamping, SuspenSpring, SuspenDamp, SuspenTarget,
+       SuspenSpring_back, SuspenDamp_back, SuspenTarget_back,
+        SuspenSpring_torsion_back, SuspenDamp_torsion_back, SuspenTarget_torsion_back;
 };
 
 // Tell Gazebo about this plugin, so that Gazebo can call Load on this plugin.
