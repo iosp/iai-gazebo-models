@@ -17,7 +17,7 @@
         <technique sid="common">
           <phong>
             <emission>
-              <color sid="emission">0 0 0 1</color>
+              <color sid="emission">0.09591871 0.07762887 0.04411168 1</color>
             </emission>
             <ambient>
               <color sid="ambient">0 0 0 1</color>
@@ -43,7 +43,7 @@
         <technique sid="common">
           <phong>
             <emission>
-              <color sid="emission">0 0 0 1</color>
+              <color sid="emission">0.0158369 0.0507091 0.00210755 1</color>
             </emission>
             <ambient>
               <color sid="ambient">0 0 0 1</color>

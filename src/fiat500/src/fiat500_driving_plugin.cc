@@ -32,7 +32,7 @@
 #define PI 3.14159265359
 #define VehicleLength 3.5932
 #define VehicleWidth 1.966
-#define WheelRadius 0.47
+#define WheelRadius 0.497
 #define HP 190 //190 HP @3400 rpm=142KW @3400 rpm & 515 NM @1300
 #define POWER 142
 #define TRANSMISSIONS 4
@@ -243,14 +243,16 @@ public:
   }
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
-    // std::cout << " getting angle"<< std::endl;
+        // std::cout << " getting angle"<< std::endl;
     double currentWheelAngle = steer_joint->GetAngle(0).Radian();
     double steeringOmega = steer_joint->GetVelocity(0);
     if (steer_joint == this->streer_joint_left_1)
     {
- if (fabs(Angle - DesiredAngle)<0.01)DesiredAngle=Angle;
+      DesiredAngle = DesiredAngle + steeringSpeed * deltaSimTime * (Angle - DesiredAngle);
+      if (fabs(Angle - DesiredAngle)<0.01)DesiredAngle=Angle;
       IerL+=DesiredAngleR - currentWheelAngle;
       double jointforce = control_P * (DesiredAngle - currentWheelAngle)+control_I*IerL - control_D * (steeringOmega);
+      steer_joint->SetForce(0, jointforce);
       //  std::cout << currentWheelAngle<< std::endl;
     }
     else

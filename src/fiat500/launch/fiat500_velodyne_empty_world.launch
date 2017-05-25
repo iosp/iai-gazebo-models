@@ -25,7 +25,4 @@
     <arg name="headless" value="$(arg headless)"/>
     <arg name="world_name" value="$(find fiat500)/worlds/fiat500_velodyne_empty.world"/>
   </include>
-
-
-  
 </launch>
