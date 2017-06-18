@@ -23,7 +23,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-		<collision name='wheel_col'>
+		<collision name='wheel_col2'>
 		<pose>0 -0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -32,7 +32,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 -0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -41,7 +41,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col4'>
 		<pose>0 -0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -91,7 +91,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-		<collision name='wheel_col'>
+		<collision name='wheel_col2'>
 		<pose>0 -0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -100,7 +100,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 -0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -109,7 +109,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col4'>
 		<pose>0 -0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -159,7 +159,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-		<collision name='wheel_col'>
+		<collision name='wheel_col2'>
 		<pose>0 0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -168,7 +168,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -177,7 +177,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col4'>
 		<pose>0 0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -227,7 +227,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-		<collision name='wheel_col'>
+		<collision name='wheel_col2'>
 		<pose>0 0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -236,7 +236,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col3'>
 		<pose>0 0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
@@ -245,7 +245,7 @@
 			</cylinder>
 		</geometry>
 	</collision>
-	<collision name='wheel_col'>
+	<collision name='wheel_col4'>
 		<pose>0 0.0571 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>

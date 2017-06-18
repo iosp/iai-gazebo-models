@@ -12,7 +12,7 @@
   <arg name="robot_models" default="$(find hmmwv)/sdf_models"/>
 
 <!-- setting gazebo path for platform and sensors models -->
-  <env name="GAZEBO_MODEL_PATH" value="$(arg robot_models)" />
+  <env name="GAZEBO_MODEL_PATH" value="$(arg robot_models):$(find gazebo_assets)/Models" />
 
   <!-- We resume the logic in empty_world.launch -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">

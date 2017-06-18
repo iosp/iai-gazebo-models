@@ -1,5 +1,4 @@
 // Written By : Yossi Cohen
-#define MY_GAZEBO_VER 5
 // If the plugin is not defined then define it
 #include <stdlib.h>
 #include <stdio.h>
@@ -33,11 +32,11 @@
 #define PI 3.14159265359
 #define VehicleLength 3.5932
 #define VehicleWidth 1.966
-#define WheelRadius 0.39
+#define WheelRadius 0.497
 #define HP 190 //190 HP @3400 rpm=142KW @3400 rpm & 515 NM @1300
 #define POWER 142
 #define TRANSMISSIONS 4
-//#define MY_GAZEBO_VER 5
+#define IDLE_RPM 550
 
 namespace gazebo
 {
@@ -167,28 +166,27 @@ public:
 
   void EngineCalculations()
   {
-    ThrottlePedal = ThrottlePedal + deltaSimTime * 5 * (Throttle_command - ThrottlePedal);
+    ThrottlePedal = ThrottlePedal + deltaSimTime * 5 * (Throttle_command - ThrottlePedal); //move the gas pedal smoothly
     if (Throttle_command < 0 && Speed > 5)
       ThrottlePedal = 0;
-    CurrentRPM = fabs(Speed) * GearRatio[CurrentGear] * 3.1 / (WheelRadius * 2 * PI / 60) + 550;
-    if (CurrentGear < TRANSMISSIONS && Speed * 3.6 > ShiftSpeed[CurrentGear])
+    CurrentRPM = fabs(Speed) * GearRatio[CurrentGear] * 3.1 / (WheelRadius * 2 * PI / 60) + IDLE_RPM; //Calculating RPM from wheel speed. 3.1 being the Final Drive Gear ratio.
+    if (CurrentGear < TRANSMISSIONS && Speed * 3.6 > ShiftSpeed[CurrentGear]) //simulating Torque drop in transmission
     {
       CurrentGear++;
       ShiftTime = simTime.Double() + 0.25;
     }
-    else if (CurrentGear > 1 && Speed * 3.6 < ShiftSpeed[CurrentGear - 1] - 10)
+    else if (CurrentGear > 1 && Speed * 3.6 < ShiftSpeed[CurrentGear - 1] - 10) //simulating Torque drop in transmission
     {
       CurrentGear--;
       ShiftTime = simTime.Double() + 0.25;
     }
-    // int indexRPM = ((int)CurrentRPM) / 600;
-    double interpolatedEngineTorque = 400 + 0.1620123 * CurrentRPM - 0.00005657748 * CurrentRPM * CurrentRPM;
-    // double interpolatedEngineTorque=(TorqueRPM600[indexRPM]+TorqueRPM600[indexRPM+1]*fmod(CurrentRPM,600)/600)/(1+fmod(CurrentRPM,600)/600);
+    int indexRPM = ((int)CurrentRPM) / 600;
+    double interpolatedEngineTorque = 400 + 0.1620123 * CurrentRPM - 0.00005657748 * CurrentRPM * CurrentRPM; //An extracted function from the TorqueRPM600 array
+    // double interpolatedEngineTorque=(TorqueRPM600[indexRPM]+TorqueRPM600[indexRPM+1]*fmod(CurrentRPM,600)/600)/(1+fmod(CurrentRPM,600)/600); Deprecated interpolation code
     Torque = ThrottlePedal * interpolatedEngineTorque * GearRatio[CurrentGear] * power;
-    if (simTime < ShiftTime)
+    if (simTime < ShiftTime)  //simulating Torque drop in transmission
       Torque *= 0.5;
     EngineLoad = Torque;
-    // std::cout << CurrentRPM << " RPM at Gear " << CurrentGear << " Speed " << Speed * 3.6 << " Engine Torque " << EngineLoad << std::endl;
   }
   void apply_efforts()
   {
@@ -223,14 +221,13 @@ public:
   {
     double ThetaAckerman = 0;
     double ThetaOuter = 0;
-    if (Steering_Request > 0)
+    if (Steering_Request > 0) //turning right
     {
-
       ThetaAckerman = atan(1 / ((1 / (tan(Steering_Request)) + (VehicleWidth / VehicleLength))));
       steer_controller(this->streer_joint_left_1, Steering_Request);
       steer_controller(this->streer_joint_right_1, ThetaAckerman);
     }
-    else if (Steering_Request < 0)
+    else if (Steering_Request < 0) //turning left
     {
       ThetaAckerman = atan(1 / ((1 / (tan(-Steering_Request)) + (VehicleWidth / VehicleLength))));
       steer_controller(this->streer_joint_left_1, -ThetaAckerman);
@@ -242,24 +239,28 @@ public:
       steer_controller(this->streer_joint_right_1, 0);
     }
 
-    // std::cout << ThetaAckerman << std::endl;
+    //  std::cout << ThetaAckerman << std::endl;
   }
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
-    // std::cout << " getting angle"<< std::endl;
+        // std::cout << " getting angle"<< std::endl;
     double currentWheelAngle = steer_joint->GetAngle(0).Radian();
     double steeringOmega = steer_joint->GetVelocity(0);
     if (steer_joint == this->streer_joint_left_1)
     {
       DesiredAngle = DesiredAngle + steeringSpeed * deltaSimTime * (Angle - DesiredAngle);
-      double jointforce = control_P * (0.6 * DesiredAngle - currentWheelAngle) - control_D * (steeringOmega);
+      if (fabs(Angle - DesiredAngle)<0.01)DesiredAngle=Angle;
+      IerL+=DesiredAngleR - currentWheelAngle;
+      double jointforce = control_P * (DesiredAngle - currentWheelAngle)+control_I*IerL - control_D * (steeringOmega);
       steer_joint->SetForce(0, jointforce);
       //  std::cout << currentWheelAngle<< std::endl;
     }
     else
     {
       DesiredAngleR = DesiredAngleR + steeringSpeed * deltaSimTime * (Angle - DesiredAngleR);
-      double jointforce = control_P * (0.6 * DesiredAngleR - currentWheelAngle) - control_D * (steeringOmega);
+      if (fabs(Angle - DesiredAngleR)<0.01)DesiredAngleR=Angle;
+      IerR+=DesiredAngleR - currentWheelAngle;
+      double jointforce = control_P * (DesiredAngleR - currentWheelAngle)+control_I*IerR - control_D * (steeringOmega);
       steer_joint->SetForce(0, jointforce);
     }
     // std::cout << "efforting"<< std::endl;
@@ -434,6 +435,8 @@ public:
   float tempTime = 0;
   float Speed = 0;
   bool Breaks = false;
+  double IerL=0;
+  double IerR=0;
   double ShiftSpeed[TRANSMISSIONS] = {0, 20, 40, 65};
   double GearRatio[TRANSMISSIONS + 1] = {0, 3.2, 2.5, 1.5, 0.8};
   double TorqueRPM600[8] = {0, 350, 515, 500, 450, 300, 200, 200};
