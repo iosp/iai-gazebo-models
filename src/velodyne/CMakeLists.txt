@@ -40,8 +40,12 @@ include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE
 
 add_library(velodyne src/velodyne.cpp)
 target_link_libraries(velodyne ${GAZEBO_libraries} ${catkin_LIBRARIES} )
+add_dependencies(velodyne ${catkin_EXPORTED_TARGETS})
+
 add_library(velodyne_16 src/velodyne_16.cpp)
 target_link_libraries(velodyne_16 ${GAZEBO_libraries} ${catkin_LIBRARIES} )
-add_dependencies(velodyne ${catkin_EXPORTED_TARGETS})
+
+
+
 
 
