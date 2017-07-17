@@ -346,7 +346,7 @@ public:
     {
       Steering_Request = msg->data;
     }
-    Steering_Request = -Steering_Request;
+    //Steering_Request = -Steering_Request;
 
 // Reseting timer every time LLC publishes message
 #if GAZEBO_MAJOR_VERSION >= 5
