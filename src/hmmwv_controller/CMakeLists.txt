@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(hmmwv_vel_controller)
+project(hmmwv_controller)
 
 SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
