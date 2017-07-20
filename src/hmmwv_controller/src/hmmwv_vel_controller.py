@@ -16,6 +16,7 @@ vehicle_name = "hmmwv"
 
 P_lin = 1
 P_ang = 2.5
+commad_time_limit = 0.1
 
 
 def model_states_callback(msg):
@@ -49,7 +50,7 @@ def throttel_and_steering_time_callback(event):
 	global P_lin, P_ang, linear_vel_command, angular_vel_command, vehicle_linear_vel, vehicle_angular_vel, command_timer  
 	global pub_throttel_cmd, pub_steering_cmd, pub_break_cmd
 
-	if (rospy.get_rostime() - command_timer) > rospy.Duration(0.1, 0): 
+	if (rospy.get_rostime() - command_timer) > rospy.Duration(commad_time_limit, 0): 
 		linear_vel_command = 0;
 		angular_vel_command = 0;
 

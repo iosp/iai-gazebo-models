@@ -22,10 +22,10 @@ P_lin = 0.1
 P_ang = 1
 min_lin_vel = 3 
 goal_radius = 3
-
+commad_time_limit = 0.5
 
 def model_states_callback(msg):
-	global vehicle_pose, vehicle_RPY, yaw_i
+	global vehicle_pose, vehicle_RPY
 
 	if not (vehicle_name in msg.name) :
 		rospy.loginfo("Error : No vehicle named ' %s ' in the scen", vehicle_name) 	 	
@@ -38,14 +38,6 @@ def model_states_callback(msg):
 		quaternion = (msg.pose[model_index].orientation.x, msg.pose[model_index].orientation.y, msg.pose[model_index].orientation.z, msg.pose[model_index].orientation.w)
 		(roll,pitch,yaw) = tf.transformations.euler_from_quaternion(quaternion)
 			
-		prev_yaw = vehicle_RPY.z
-
-		if ( (yaw - prev_yaw) > PI ):
-			yaw_i = yaw_i + 1
-
-		elif ( (yaw - prev_yaw) < -PI ):		
-			yaw_i = yaw_i - 1
-		
 		vehicle_RPY = Point(roll,pitch,yaw)
 		
     
@@ -59,10 +51,10 @@ def goal_wp_callback(msg):
 
 
 def velocity_time_callback(event):
-	global goal_wp, goal_timer, vehicle_pose, vehicle_RPY, yaw_i
+	global goal_wp, goal_timer, vehicle_pose, vehicle_RPY
 	global pub_vel_cmd
 
-	if (rospy.get_rostime() - goal_timer) > rospy.Duration(1, 0): 
+	if (rospy.get_rostime() - goal_timer) > rospy.Duration(commad_time_limit, 0): 
 		goal_wp = vehicle_pose
 
 
@@ -72,17 +64,22 @@ def velocity_time_callback(event):
  
 
 	goal_azi = math.atan2(goal_dy, goal_dx) 
-	vehi_azi = vehicle_RPY.z - yaw_i * 2*PI
+	vehi_azi = vehicle_RPY.z 
+
 	azi_e = (goal_azi - vehi_azi)
-	
+	if ( azi_e > PI):
+		azi_e = azi_e - 2*PI
+	elif ( azi_e < -PI):
+		azi_e = azi_e + 2*PI		
+
+	vel_ang_cmd = P_ang * azi_e	
+
+
 	if (dis_e <= goal_radius):
 		vel_lin_cmd = 0
 	else:
 		vel_lin_cmd = min_lin_vel + P_lin * dis_e
         
-	
-	vel_ang_cmd = P_ang * azi_e
-
 
 	vel_cmd = Twist()
 	vel_cmd.linear.x = vel_lin_cmd
@@ -90,19 +87,18 @@ def velocity_time_callback(event):
 	pub_vel_cmd.publish(vel_cmd)
 
 
-	rospy.loginfo("vehi_x = %f  ,  vehi_y = %f      	, vehi_azi = %f ,  yaw_i = %f " , vehicle_pose.x,  vehicle_pose.y, vehicle_RPY.z, yaw_i)
+	rospy.loginfo("vehi_x = %f  ,  vehi_y = %f      	, vehi_azi = %f" , vehicle_pose.x,  vehicle_pose.y, vehicle_RPY.z)
 	rospy.loginfo("goal_x = %f  ,  goal_y = %f      	, goal_azi = %f " , goal_wp.x ,goal_wp.y, goal_azi)
         rospy.loginfo("dis_e = %f                      		, azi_e =%f" , dis_e, azi_e)	
 	rospy.loginfo("lin_cmd = %f                   	  	, ang_cmd =%f" , vel_lin_cmd, vel_ang_cmd)
 
 
 def init_vars():
-	global goal_wp, goal_timer, vehicle_pose, vehicle_RPY, yaw_i
+	global goal_wp, goal_timer, vehicle_pose, vehicle_RPY
 
 	vehicle_pose = Point(0,0,0)
 
 	vehicle_RPY = Point(0,0,0)
-	yaw_i = 0
 
         goal_wp = Point(0,0,0)
 	goal_timer = rospy.get_rostime() 
