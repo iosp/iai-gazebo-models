@@ -1,22 +1,24 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(hmmwv_controller)
+project(convoy)
 
 SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
 
 find_package(catkin REQUIRED COMPONENTS
+  gazebo_plugins
   gazebo_ros
   roscpp
   std_msgs
   geometry_msgs
+  dynamic_reconfigure
 )
-
 find_package(Boost REQUIRED COMPONENTS 
    thread 
    system 
 )
 
 find_package(gazebo REQUIRED)
+
 
 
 link_directories(${GAZEBO_LIBRARY_DIRS})

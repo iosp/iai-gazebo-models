@@ -54,10 +54,13 @@ public:
   /// \param[in] _model A pointer to the model that this plugin is attached to.
   /// \param[in] _sdf A pointer to the plugin's SDF element.
 public:
-  void Load(physics::ModelPtr _model, sdf::ElementPtr /*_sdf*/) // we are not using the pointer to the sdf file so its commanted as an option
+  void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) // we are not using the pointer to the sdf file so its commanted as an option
   {
     std::cout << "My major GAZEBO VER = [" << GAZEBO_MAJOR_VERSION << "]" << std::endl;
+ 
     this->model = _model;
+    vehicle_name = model->GetName(); 
+
     // Store the pointers to the joints
     this->left_wheel_1 = this->model->GetJoint("left_wheel_1");
     this->left_wheel_2 = this->model->GetJoint("left_wheel_2");
@@ -77,9 +80,9 @@ public:
     this->Ros_nh = new ros::NodeHandle("hmmwvDrivingPlugin_node");
 
     // Subscribe to the topic, and register a callback
-    Steering_rate_sub = this->Ros_nh->subscribe("/hmmwv/Driving/Steering", 60, &hmmwvDrivingPlugin::On_Steering_command, this);
-    Velocity_rate_sub = this->Ros_nh->subscribe("/hmmwv/Driving/Throttle", 60, &hmmwvDrivingPlugin::On_Throttle_command, this);
-    Breaking_sub = this->Ros_nh->subscribe("/hmmwv/Driving/Break", 60, &hmmwvDrivingPlugin::On_Break_command, this);
+    Steering_rate_sub = this->Ros_nh->subscribe("/"+vehicle_name+"/Driving/Steering", 60, &hmmwvDrivingPlugin::On_Steering_command, this);
+    Velocity_rate_sub = this->Ros_nh->subscribe("/"+vehicle_name+"/Driving/Throttle", 60, &hmmwvDrivingPlugin::On_Throttle_command, this);
+    Breaking_sub = this->Ros_nh->subscribe("/"+vehicle_name+"/Driving/Break", 60, &hmmwvDrivingPlugin::On_Break_command, this);
 
     platform_hb_pub_ = this->Ros_nh->advertise<std_msgs::Bool>("/HMMWV/ConnctionStatus", 60);
     platform_Speedometer_pub = this->Ros_nh->advertise<std_msgs::Float64>("/HMMWV/Speedometer", 60);
@@ -377,6 +380,8 @@ public:
   // Defining private Pointer to model
   physics::ModelPtr model;
 
+  std::string vehicle_name;
+	
   // Defining private Pointer to joints
 
   physics::JointPtr right_wheel_1;

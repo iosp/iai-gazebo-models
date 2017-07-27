@@ -68,6 +68,14 @@
                 <name>hmmwv</name>
                 <pose>0 0 0.6 0 0 0</pose>
             </include>
+
+
+            <include>
+                <uri>model://hmmwv</uri>
+                <name>hmmwv1</name>
+                <pose>-10 0 0.6 0 0 0</pose>
+            </include>
+
             <!--<include>
                 <uri>model://Testing_grounds1</uri>   
                 <name>Testing_grounds1</name>        
