@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  
+    <!-- actor -->
+    <actor name="shahid">
+      <pose>0 0 1 0 0 0</pose>
+      <link>dumy</link>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="shahid_plugin" filename="libshahid_plugin.so">
+          <shahid_name>musa</shahid_name>
+      </plugin>
+    </actor>
+      
+</sdf>

@@ -2,8 +2,23 @@
 <sdf version="1.4">
     <world name="shahid_world">
     
+<!--
+<include>
+    <uri>model://shahid</uri>
+    <name>shahid1</name>
+    <pose>-10 -10 1 0 0 0</pose>
+</include>
+
+<include>
+    <uri>model://shahid</uri>
+    <name>shahid2</name>
+    <pose>-10 10 1 0 0 0</pose>
+</include>
+-->
+
+
 <!-- actor -->
-    <actor name="shahid">
+    <actor name="musa">
       <pose>-10 -10 1.0 0 0 0</pose>
       <skin>
         <filename>walk.dae</filename>
@@ -17,20 +32,6 @@
       <plugin name="shahid_plugin" filename="libshahid_plugin.so">
           <shahid_name>musa</shahid_name>
       </plugin>
-      <!--
-      <script>
-        <trajectory id="0" type="walking">
-          <waypoint>
-            <time>0</time>
-            <pose>10 -10 0 0 0 1.57</pose>
-          </waypoint>
-          <waypoint>
-            <time>30</time>
-            <pose>10 10 0 0 0 1.57</pose>
-          </waypoint>  
-        </trajectory>
-      </script> 
-      -->
     </actor>
 
 

@@ -36,7 +36,7 @@ namespace gazebo
       this->Ros_nh = new ros::NodeHandle("shahid_actor_node");
       
       // Subscribe to the topic, and register a callback
-      target_sub = this->Ros_nh->subscribe("/"+actor_name+"/target", 60, &shahidPlugin::NewTarget, this);
+      target_pose_sub = this->Ros_nh->subscribe("/"+actor_name+"/target_pose", 60, &shahidPlugin::Newtarget_pose, this);
          
 
       // Listen to the update event. This event is broadcast every simulation iteration.
@@ -50,7 +50,9 @@ namespace gazebo
       this->velocity = 1.0;
       this->lastUpdate = 0;
 
-      this->target = ignition::math::Vector3d(10, 10, 1.0);
+     
+      this->target_pose = ignition::math::Vector3d(this->actor->GetWorldPose().pos.Ign());
+      
 
       auto skelAnims = this->actor->SkeletonAnimations();
       if (skelAnims.find(WALKING_ANIMATION) == skelAnims.end())
@@ -69,10 +71,10 @@ namespace gazebo
     }
 
 /////////////////////////////////////////////////
-    void NewTarget(const geometry_msgs::PointPtr &msg)
+    void Newtarget_pose(const geometry_msgs::PointPtr &msg)
     {
-      this->target.X(msg->x);
-      this->target.Y(msg->y);
+      this->target_pose.X(msg->x);
+      this->target_pose.Y(msg->y);
       this->velocity = msg->z;
     }
 
@@ -85,7 +87,7 @@ namespace gazebo
       double dt = (_info.simTime - this->lastUpdate).Double();
   
       ignition::math::Pose3d pose = this->actor->WorldPose();
-      ignition::math::Vector3d pos = this->target - pose.Pos();
+      ignition::math::Vector3d pos = this->target_pose - pose.Pos();
       ignition::math::Vector3d rpy = pose.Rot().Euler();
       
       double distance = pos.Length();
@@ -122,7 +124,7 @@ namespace gazebo
 
       
     private: ros::NodeHandle *Ros_nh;  // Defining private Ros Node Handle
-    private: ros::Subscriber target_sub; // Defining private Ros Subscribers
+    private: ros::Subscriber target_pose_sub; // Defining private Ros Subscribers
     
     private: std::string actor_name;   
 
@@ -132,7 +134,7 @@ namespace gazebo
     private: physics::ActorPtr actor;
     private: physics::WorldPtr world;
     private: sdf::ElementPtr sdf;
-    private: ignition::math::Vector3d target;
+    private: ignition::math::Vector3d target_pose;
 
     private: common::Time lastUpdate;
     private: ignition::math::Vector3d velocity; // Velocity of the actor
