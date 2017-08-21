@@ -23,6 +23,6 @@
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="headless" value="$(arg headless)"/>
-    <arg name="world_name" value="$(find convoy)/worlds/oshkosh_and_hmmwv_empty.world"/>
+    <arg name="world_name" value="$(find convoy)/worlds/convoy_empty.world"/>
   </include>
 </launch>

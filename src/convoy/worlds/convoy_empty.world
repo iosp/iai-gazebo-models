@@ -61,11 +61,25 @@
                 </constraints>
             </bullet>
         </physics>-->
+
+
+<!--        
         <include>
             <uri>model://ground_plane</uri>
             <name>ground_plane</name>
             <pose>0 0 0 0 0 0</pose>
         </include>
+-->        
+
+        <include>
+            <uri>model://1km_squared</uri>
+            <name>1km_squared_ground</name>
+            <pose>0 0 -30 0 0 0</pose>
+        </include>
+
+
+
+<!-- -->
         <include>
             <uri>model://hmmwv</uri>
             <name>hmmwv</name>
@@ -74,8 +88,62 @@
 
         <include>
             <uri>model://oshkosh</uri>
-            <name>oshkosh</name>
-            <pose>-20 0 2 0 0 0</pose>
+            <name>oshkosh1</name>
+            <pose>-40 0 2 0 0 0</pose>
         </include>
+
+
+
+
+        <include>
+            <uri>model://oshkosh</uri>
+            <name>oshkosh2</name>
+            <pose>-80 0 2 0 0 0</pose>
+        </include>
+<!--
+        <include>
+            <uri>model://oshkosh</uri>
+            <name>oshkosh3</name>
+            <pose>-120 0 2 0 0 0</pose>
+        </include>
+
+        <include>
+            <uri>model://oshkosh</uri>
+            <name>oshkosh4</name>
+            <pose>-160 0 2 0 0 0</pose>
+        </include> 
+-->
+
+<!-- actor 
+    <actor name="actor">
+      <skin>
+        <filename>walk.dae</filename>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+     <!-- <script>
+        <trajectory id="0" type="walking">
+          <waypoint>
+            <time>0</time>
+            <pose>50 -50 0 0 0 1.57</pose>
+          </waypoint>
+
+
+          <waypoint>
+            <time>30</time>
+            <pose>50 50 0 0 0 1.57</pose>
+          </waypoint>  
+ 
+        </trajectory>
+      </script> 
+    </actor>
+-->
+
+
+
+
+
     </world>
 </sdf>

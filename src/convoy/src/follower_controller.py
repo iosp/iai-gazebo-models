@@ -25,7 +25,7 @@ wp_radius = 3
 def model_states_callback(msg):
 	global follower_name, follower_pose
 	global leader_name, leader_pose
-
+ 
 	if not (follower_name in msg.name) :
 		rospy.loginfo("Error : No vehicle named ' %s ' in the scen", follower_name) 	 	
 	else:    	
@@ -55,9 +55,9 @@ def wp_time_callback(event):
 	wp_path.poses.append(wp)
 	pub_path_cmd.publish(wp_path)	
 
-	rospy.loginfo("added_wp_x = %.0f , added_wp_y = %.0f , added_wp_vel = %.0f " , leader_pose.x , leader_pose.y ,wp.pose.position.z ) 
+	#rospy.loginfo("added_wp_x = %.0f , added_wp_y = %.0f , added_wp_vel = %.0f " , leader_pose.x , leader_pose.y ,wp.pose.position.z ) 
 
-
+ 
 
 def init_vars():
 	global follower_pose
@@ -86,7 +86,6 @@ def listener():
 
 
 if __name__ == '__main__':
-	global follower_name , leader_name
 	if (len(sys.argv) < 2 ):
 		follower_name = "oshkosh"
 		leader_name = "hmmwv"

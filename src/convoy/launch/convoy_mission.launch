@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+
+  <include file="$(find hmmwv)/launch/hmmwv_controller.launch">
+  	<arg name="vehicle_name" value="hmmwv"/>
+  </include>
+
+<!-- oshkosh1 -->
+  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  	<arg name="vehicle_name" value="oshkosh1"/>
+  </include>
+
+  <node name="follower_controller1"  type="follower_controller.py"  pkg="convoy"  output="screen" respawn="true"
+        args="oshkosh1 hmmwv"/>
+
+
+<!-- oshkosh2 -->
+  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  	<arg name="vehicle_name" value="oshkosh2"/>
+  </include>
+
+  <node name="follower_controller2"  type="follower_controller.py"  pkg="convoy"  output="screen" respawn="true"
+        args="oshkosh2 oshkosh1"/>
+
+
+<!-- oshkosh3       
+  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  	<arg name="vehicle_name" value="oshkosh3"/>
+  </include>
+
+  <node name="follower_controller3"  type="follower_controller.py"  pkg="convoy"  output="screen" respawn="true"
+        args="oshkosh3 oshkosh2"/>  
+-->  
+
+<!-- oshkosh4 
+  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  	<arg name="vehicle_name" value="oshkosh4"/>
+  </include>
+
+  <node name="follower_controller4"  type="follower_controller.py"  pkg="convoy"  output="screen" respawn="true"
+        args="oshkosh4 oshkosh3"/>      
+-->
+
+  <node name="leader_path_pub"      type="convoy_path_pub.py"      pkg="convoy"  output="screen" respawn="true" 
+        args="hmmwv
+               100   0   10
+               100  100  10
+              -100  100  15
+              -100 -100  15
+               100 -100  10
+               
+               100   0   10
+               100  100  10
+              -100  100  15
+              -100 -100  15
+               100 -100  10
+               
+               100   0   10
+               100  100  10
+              -100  100  15
+              -100 -100  15
+               100 -100  10
+              "/>
+
+</launch>

@@ -2,11 +2,11 @@
 		
   	<arg name="vehicle_name" default="hmmwv"/>
 
-        <node name="$(arg vehicle_name)_vel_controller"  type="hmmwv_vel_controller.py"  pkg="hmmwv" args="$(arg vehicle_name)" output="screen" respawn="true"/>
+    <node name="$(arg vehicle_name)_vel_controller"  type="hmmwv_vel_controller.py"  pkg="hmmwv" args="$(arg vehicle_name)" output="screen" respawn="true"/>
 
-        <node name="$(arg vehicle_name)_wp_controller"   type="hmmwv_wp_controller.py"   pkg="hmmwv" args="$(arg vehicle_name)" output="screen" respawn="true"/>
+    <node name="$(arg vehicle_name)_wp_controller"   type="hmmwv_wp_controller.py"   pkg="hmmwv" args="$(arg vehicle_name)" output="screen" respawn="true"/>
 
-        <node name="$(arg vehicle_name)_path_controller" type="hmmwv_path_controller.py" pkg="hmmwv" args="$(arg vehicle_name)" output="screen" respawn="true"/>
+    <node name="$(arg vehicle_name)_path_controller" type="hmmwv_path_controller.py" pkg="hmmwv" args="$(arg vehicle_name)" output="screen" respawn="true"/>
 
 
 </launch>        

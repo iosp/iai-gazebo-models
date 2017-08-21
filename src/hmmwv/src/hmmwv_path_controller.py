@@ -138,16 +138,18 @@ def wp_time_callback(event):
 	pub_vel_cmd.publish(goal_vel)
 
 
-	rospy.loginfo("wp_i/path = %d/%d , wp_dis/wp_rad=%.2f/%.2f,    path_curv[deg]=%.0f,      pose_x/wp_x = % 3.1f/% 3.1f , pose_x/wp_y = % 3.1f/% 3.1f , vel/wp_vel = % 3.1f/% 3.1f" , wp_i+1, len(path_wp.poses),  wp_dis , path_wp_radius ,path_curv_deg , vehicle_pose.x ,next_wp.target_pose.pose.position.x, vehicle_pose.y, next_wp.target_pose.pose.position.y, vehicle_vel ,goal_vel.linear.x)
+	#rospy.loginfo("wp_i/path = %d/%d , wp_dis/wp_rad=%.2f/%.2f,    path_curv[deg]=%.0f,      pose_x/wp_x = % 3.1f/% 3.1f , pose_x/wp_y = % 3.1f/% 3.1f , vel/wp_vel = % 3.1f/% 3.1f" , wp_i+1, len(path_wp.poses),  wp_dis , path_wp_radius ,path_curv_deg , vehicle_pose.x ,next_wp.target_pose.pose.position.x, vehicle_pose.y, next_wp.target_pose.pose.position.y, vehicle_vel ,goal_vel.linear.x)
 
 
 def init_vars():
-	global vehicle_pose, vehicle_RPY
+	global vehicle_pose, vehicle_RPY, vehicle_vel
 	global path_wp, wp_i, command_timer
 
 	vehicle_pose = Point(0,0,0)
 
 	vehicle_RPY = Point(0,0,0)
+
+	vehicle_vel = 0
 	
 	path_wp = Path()
 	init_wp = PoseStamped()

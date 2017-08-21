@@ -9,10 +9,12 @@
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
-  <arg name="robot_models" default="$(find hmmwv)/sdf_models"/>
+
+  <arg name="shahid" default="$(find shahid)/sdf_models"/>
+
 
 <!-- setting gazebo path for platform and sensors models -->
-  <env name="GAZEBO_MODEL_PATH" value="$(arg robot_models):$(find gazebo_assets)/Models" />
+  <env name="GAZEBO_MODEL_PATH" value="$(arg shahid):$(find gazebo_assets)/Models" />
 
   <!-- We resume the logic in empty_world.launch -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -22,9 +24,6 @@
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="headless" value="$(arg headless)"/>
-    <arg name="world_name" value="$(find hmmwv)/worlds/hmmwv_empty.world"/>
+    <arg name="world_name" value="$(find shahid)/worlds/shahid_empty.world"/>
   </include>
-
-
-  
 </launch>
