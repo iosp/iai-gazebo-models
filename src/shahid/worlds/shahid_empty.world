@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<sdf version="1.4">
+<sdf version="1.6">
     <world name="shahid_world">
     
 <!--
@@ -8,10 +8,12 @@
     <name>shahid1</name>
     <pose>-10 -10 1 0 0 0</pose>
 </include>
+-->
 
+<!--
 <include>
-    <uri>model://shahid</uri>
     <name>shahid2</name>
+    <uri>model://shahid</uri>
     <pose>-10 10 1 0 0 0</pose>
 </include>
 -->

@@ -42,6 +42,7 @@ namespace gazebo
       // Listen to the update event. This event is broadcast every simulation iteration.
       this->updateConnection = event::Events::ConnectWorldUpdateBegin(
           boost::bind(&shahidPlugin::OnUpdate, this, _1));
+
     }
 
 /////////////////////////////////////////////////
@@ -49,9 +50,14 @@ namespace gazebo
     {
       this->velocity = 1.0;
       this->lastUpdate = 0;
-
      
-      this->target_pose = ignition::math::Vector3d(this->actor->GetWorldPose().pos.Ign());
+      this->target_pose = ignition::math::Vector3d(this->actor->WorldPose().Pos());
+      
+
+      ignition::math::Pose3d actorPose = this->actor->WorldPose();
+      ignition::math::Vector3d actorRPY = actorPose.Rot().Euler();
+      actorPose.Rot() = ignition::math::Quaterniond(1.5707, 0, actorRPY.Z());
+      this->actor->SetWorldPose(actorPose, false, false);
       
 
       auto skelAnims = this->actor->SkeletonAnimations();
@@ -82,42 +88,43 @@ namespace gazebo
 /////////////////////////////////////////////////
     public: void OnUpdate(const common::UpdateInfo & _info)
     {
-
       // Time delta
       double dt = (_info.simTime - this->lastUpdate).Double();
-  
-      ignition::math::Pose3d pose = this->actor->WorldPose();
-      ignition::math::Vector3d pos = this->target_pose - pose.Pos();
-      ignition::math::Vector3d rpy = pose.Rot().Euler();
+      this->lastUpdate = _info.simTime;
       
-      double distance = pos.Length();
-      
-      pos = pos.Normalize(); 
+      ignition::math::Pose3d actorPose = this->actor->WorldPose();
+      ignition::math::Vector3d actorRPY = actorPose.Rot().Euler();
+      ignition::math::Vector3d targetDiss = this->target_pose - actorPose.Pos();
 
-      ignition::math::Angle yaw = atan2(pos.Y(), pos.X()) + 1.5707 - rpy.Z();
+      if (targetDiss.Length() < 0.5)
+      {   
+        return;
+      }
+
+      ignition::math::Vector3d targetDirection = targetDiss.Normalize(); 
+      ignition::math::Angle yaw = atan2(targetDirection.Y(), targetDirection.X()) + 1.5707 - actorRPY.Z();
       yaw.Normalize();
+
+      ignition::math::Pose3d actorNextPose = actorPose;
+      actorNextPose.Rot() = ignition::math::Quaterniond(1.5707, 0, actorRPY.Z() + yaw.Radian());
+      double disTraveled = 0;
+
 
       // Rotate in place, instead of jumping.
       if (std::abs(yaw.Radian()) > IGN_DTOR(10))
-      {
-        pose.Rot() = ignition::math::Quaterniond(1.5707, 0, rpy.Z()+
-            yaw.Radian()*0.001);
-      }
+          {
+            actorNextPose.Rot() = ignition::math::Quaterniond(1.5707, 0, actorRPY.Z() + yaw.Radian()*0.01);
+          }
       else
-      {
-        pose.Pos() += pos * this->velocity * dt;
-        pose.Rot() = ignition::math::Quaterniond(1.5707, 0, rpy.Z()+yaw.Radian());
-      }
-
+          {
+            actorNextPose.Pos() = actorPose.Pos() + targetDirection * this->velocity * dt;
+            disTraveled = (this->velocity * dt).Length();
+          }
 
       // Distance traveled is used to coordinate motion with the walking animation
-      double distanceTraveled = (pose.Pos() - this->actor->WorldPose().Pos()).Length();
-
-      this->actor->SetWorldPose(pose, false, false);
+      this->actor->SetWorldPose(actorNextPose, false, false);
+      this->actor->SetScriptTime(this->actor->ScriptTime() + (disTraveled * this->animationFactor));
       
-      this->actor->SetScriptTime(this->actor->ScriptTime() +
-                     (distanceTraveled * this->animationFactor));
-      this->lastUpdate = _info.simTime;
 
     }
 

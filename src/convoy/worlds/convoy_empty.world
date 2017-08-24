@@ -42,41 +42,23 @@
                 <pose>80 -60 60 0 0.5 2</pose>
             </camera>
         </gui>
-        <!--<physics type="bullet">
-            <gravity>0 0 -9.81</gravity>
-            <max_step_size>0.001</max_step_size>
-            <real_time_factor>1</real_time_factor>
-            <real_time_update_rate>1000</real_time_update_rate>
-            <bullet>
-                <solver>
-                    <type>sequencial_impulse</type>
-                    <iters>150</iters>
-                    <sor>1.3</sor>
-                </solver>
-                <constraints>
-                    <cfm>0.0000</cfm>
-                    <erp>0.2</erp>
-                    <contact_max_correcting_vel>0</contact_max_correcting_vel>
-                    <contact_surface_layer>0.001</contact_surface_layer>
-                </constraints>
-            </bullet>
-        </physics>-->
 
 
-<!--        
+        
         <include>
             <uri>model://ground_plane</uri>
             <name>ground_plane</name>
             <pose>0 0 0 0 0 0</pose>
         </include>
--->        
+    
 
+<!--
         <include>
             <uri>model://1km_squared</uri>
             <name>1km_squared_ground</name>
             <pose>0 0 -30 0 0 0</pose>
         </include>
-
+-->
 
 
 <!-- -->
@@ -142,6 +124,22 @@
 -->
 
 
+<!-- actor -->
+    <actor name="musa">
+      <pose>50 -15 1.0 0 0 0</pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="shahid_plugin" filename="libshahid_plugin.so">
+          <shahid_name>musa</shahid_name>
+      </plugin>
+    </actor>
 
 
 
