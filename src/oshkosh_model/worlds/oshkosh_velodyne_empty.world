@@ -66,10 +66,12 @@
             <name>ground_plane</name>
             <pose>0 0 0 0 0 0</pose>
         </include>
+        <!---->
         <include>
             <uri>model://oshkosh_velodyne_16</uri>
-            <name>Sahar</name>
+            <name>oshkosh_velodyne_16</name>
             <pose>0 0 2 0 0 0</pose>
         </include>
+        
     </world>
 </sdf>

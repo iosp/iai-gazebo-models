@@ -1,12 +1,18 @@
 #ifndef _velodyne_16_PLUGIN_HH_
 #define _velodyne_16_PLUGIN_HH_
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #include <gazebo/gazebo.hh>
 #include "gazebo/sensors/sensors.hh"
 
 #include "gazebo/common/Plugin.hh"
 #include "gazebo/sensors/SensorTypes.hh"
+
 #include "gazebo/sensors/RaySensor.hh"
+//#include "gazebo/sensors/GpuRaySensor.hh"
+
 #include "gazebo/sensors/sensors.hh"
 #include "gazebo/gazebo.hh"
 #include "gazebo/physics/physics.hh"
@@ -65,7 +71,7 @@ public:
     RVIZ_Publisher(rangesArray, t);
     //				lastUpdateTime = newRosTime;
     // TF publish
-    TF_Broadcast(tf_x, tf_y, tf_z, tf_roll, tf_pitch, tf_yaw, model->GetParentModel()->GetName(), "velodyne_16", t);
+    TF_Broadcast(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, model_name, model_name+"_velodyne_16", t);
     //			}
     //		}
   }
@@ -95,8 +101,11 @@ public:
       string nameOfRay = "velodyne_16_ray_" + std::to_string(i);
 #if GAZEBO_MAJOR_VERSION > 6
       myRays.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
+      //myRays.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
+      
 #elif GAZEBO_MAJOR_VERSION < 7
       myRays.push_back(boost::dynamic_pointer_cast<sensors::RaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
+      //myRays.push_back(boost::dynamic_pointer_cast<sensors::GpuRaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
 #endif
       if (!myRays[i])
       {
@@ -163,6 +172,12 @@ public:
     // Store the model pointer for convenience.
     this->model = _model;
 
+    this->model_name = model->GetName(); 
+    std::cout << "Loading " << model_name << " Plugin" << std::endl;
+    this->parent_name = model->GetParentModel()->GetName();
+    std::cout << "parent_name = " << parent_name << std::endl;
+    
+
     // Get the joint.
     std::string jointName = "velodyne_16::velodyne_16_joint";
     if (_sdf->HasElement("jointName"))
@@ -222,12 +237,8 @@ public:
     this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), velocity);
 
     //set the topic
-    std::string topic = "/SENSORS/velodyne_16";
-    if (_sdf->HasElement("topic"))
-    {
-      _sdf->GetElement("topic")->GetValue()->Get<std::string>(topic);
-    }
-    _pointCloud_pub = _nodeHandle.advertise<sensor_msgs::PointCloud>(topic, 10);
+    std::string topic_name = model_name+"/velodyne_16";
+    _pointCloud_pub = _nodeHandle.advertise<sensor_msgs::PointCloud>(topic_name, 10);
 
     //init sensors
     initSensors(_model->GetName());
@@ -278,16 +289,19 @@ public:
         }
       }
       points.header.stamp = time; //ros::Time();
-      points.header.frame_id = "velodyne_16";
+      points.header.frame_id = parent_name+"_velodyne_16"; 
 
       _pointCloud_pub.publish(points);
   }
 
   physics::ModelPtr model;
   physics::JointPtr joint;
+  std::string model_name;
+  std::string parent_name;
   common::PID pid;
 
-  vector<gazebo::sensors::RaySensorPtr> myRays;
+  vector<gazebo::sensors::RaySensorPtr> myRays;  
+  //vector<gazebo::sensors::GpuRaySensorPtr> myRays;
 
   event::ConnectionPtr _updateConnection; // Pointer to the update event connection
   common::Time sim_Time;

@@ -11,13 +11,6 @@
        <verticalAngleResolution>1.33333</verticalAngleResolution> <!-- deg -->  <!-- for validation and RVIZ publish calculate -->
        <verticalAngelMin>-10</verticalAngelMin> <!-- deg -->
        <!--<RVIZPublishRate>10.0</RVIZPublishRate>   HZ -->
-       <topic>/SENSORS/VELODYNE_16</topic>
-       <tf_x>0</tf_x>
-       <tf_y>0</tf_y>
-       <tf_z>0</tf_z>
-       <tf_roll>0</tf_roll>
-       <tf_pitch>0</tf_pitch>
-       <tf_yaw>0</tf_yaw>
  </plugin> 
 
  
@@ -46,7 +39,7 @@
         <pose>0 0 -0.029335 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://velodyne_16/meshes/velodyne_top.dae</uri>
+            <uri>model://velodyne_16/meshes/velodyne_base.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -884,13 +877,7 @@
       <child>top</child>
       <axis>
         <xyz>0 0 1</xyz>
-        <limit>
-          <lower>-10000000000000000</lower>
-          <upper>10000000000000000</upper>
-        </limit>
       </axis>
     </joint>
-  
-    
   </model>
 </sdf>

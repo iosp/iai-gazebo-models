@@ -11,9 +11,11 @@
   <arg name="debug" default="false"/>
   <arg name="oshkosh_model" default="$(find oshkosh_model)/sdf_models"/>
   <arg name="hmmwv_model" default="$(find hmmwv)/sdf_models"/>
+  <arg name="velodyne_model" default="$(find velodyne)/models"/>
+
 
 <!-- setting gazebo path for platform and sensors models -->
-  <env name="GAZEBO_MODEL_PATH" value="$(arg oshkosh_model):$(arg hmmwv_model):$(find gazebo_assets)/Models" />
+  <env name="GAZEBO_MODEL_PATH" value="$(arg oshkosh_model):$(arg hmmwv_model):$(arg velodyne_model):$(find gazebo_assets)/Models" />
 
   <!-- We resume the logic in empty_world.launch -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
