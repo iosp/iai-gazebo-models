@@ -1,5 +1,5 @@
-#ifndef _velodyne_16_PLUGIN_HH_
-#define _velodyne_16_PLUGIN_HH_
+#ifndef _velodyne16_PLUGIN_HH_
+#define _velodyne16_PLUGIN_HH_
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,12 +36,12 @@ using namespace std;
 
 namespace gazebo
 {
-/// \brief A plugin to control a velodyne_16 sensor.
-class velodyne_16 : public ModelPlugin
+/// \brief A plugin to control a velodyne16 sensor.
+class velodyne16 : public ModelPlugin
 {
   /// \brief Constructor
 public:
-  velodyne_16() {}
+  velodyne16() {}
 
   tf::Transform transformBuilder(float x, float y, float z, float Roll, float Pitch, float Yaw)
   {
@@ -74,7 +74,7 @@ public:
     RVIZ_Publisher(rangesArray, t);
     //				lastUpdateTime = newRosTime;
     // TF publish
-    TF_Broadcast(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, model_name, model_name+"_velodyne_16", t);
+    TF_Broadcast(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, model_name, model_name+"_velodyne16", t);
     //			}
     //		}
   }
@@ -100,7 +100,7 @@ public:
       lastDegree = dgree;
       getRanges(dgree);
 
-      boost::thread(&velodyne_16::thread_RVIZ, this, rangesArray, _info.simTime);
+      boost::thread(&velodyne16::thread_RVIZ, this, rangesArray, _info.simTime);
     }
   }
 
@@ -164,7 +164,7 @@ public:
     // Safety check
     if (_model->GetJointCount() == 0)
     {
-      std::cerr << "Invalid joint count, Velodyne_16 plugin not loaded\n";
+      std::cerr << "Invalid joint count, velodyne16 plugin not loaded\n";
       return;
     }
 
@@ -178,7 +178,7 @@ public:
     
 
     // Get the joint.
-    std::string jointName = "velodyne_16::velodyne_16_joint";
+    std::string jointName = "velodyne16::velodyne16_joint";
     if (_sdf->HasElement("jointName"))
     {
       _sdf->GetElement("jointName")->GetValue()->Get<std::string>(jointName);
@@ -208,13 +208,13 @@ public:
     if (_sdf->HasElement("verticalAngleResolution"))
       verticalAngleResolutionFromSDF = _sdf->Get<double>("verticalAngleResolution");
     else
-      ROS_WARN("velodyne_16: there is no 'verticalAngleResolution' parameter in the SDF (validation parameter)");
+      ROS_WARN("velodyne16: there is no 'verticalAngleResolution' parameter in the SDF (validation parameter)");
 
     
     if (_sdf->HasElement("verticalAngelMin"))
       verticalAngelMin = _sdf->Get<double>("verticalAngelMin");
     else
-      ROS_WARN("velodyne_16: there is no 'verticalAngelMin' parameter in the SDF");
+      ROS_WARN("velodyne16: there is no 'verticalAngelMin' parameter in the SDF");
 
 
     // Default to 1HZ velocity
@@ -233,14 +233,14 @@ public:
     this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), velocity);
 
     //set the topic
-    std::string topic_name = model_name+"/velodyne_16";
+    std::string topic_name = model_name+"/velodyne16";
     _pointCloud_pub = _nodeHandle.advertise<sensor_msgs::PointCloud>(topic_name, 10);
 
     //init sensors
     initSensors(_model->GetName());
 
     lastDegree = -1;
-    this->_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne_16::OnUpdate, this, _1));
+    this->_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne16::OnUpdate, this, _1));
 
   }
 
@@ -264,7 +264,7 @@ public:
         }
       }
       points.header.stamp = time; //ros::Time();
-      points.header.frame_id = parent_name+"_velodyne_16"; 
+      points.header.frame_id = parent_name+"_velodyne16"; 
 
       _pointCloud_pub.publish(points);
   }
@@ -305,6 +305,6 @@ public:
 };
 
 // Tell Gazebo about this plugin, so that Gazebo can call Load on this plugin.
-GZ_REGISTER_MODEL_PLUGIN(velodyne_16)
+GZ_REGISTER_MODEL_PLUGIN(velodyne16)
 }
 #endif

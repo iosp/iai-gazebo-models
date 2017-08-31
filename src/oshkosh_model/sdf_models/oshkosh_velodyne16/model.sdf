@@ -2,7 +2,7 @@
 <!-- -*- mode: XML -*- -->
 <sdf version='1.4'>
 
-  <model name="Oshkosh_Velodyne_16">
+  <model name="Oshkosh_velodyne16">
 
      <include>
         <name>oshkosh</name>
@@ -12,15 +12,15 @@
 
 
      <include>
-         <name>velodyne_16</name>
-         <uri>model://velodyne_16</uri>
+         <name>velodyne16</name>
+         <uri>model://velodyne16</uri>
          <pose>4 0 3 0 0 0</pose>
      </include>
 
     
-    <joint name='oshkosh_to_velodyne_16_joint' type='revolute'>
+    <joint name='oshkosh_to_velodyne16_joint' type='revolute'>
       <parent>oshkosh::body</parent>
-      <child>velodyne_16::base</child>
+      <child>velodyne16::base</child>
       <axis>
         <xyz>0 0 0</xyz>
         <limit>

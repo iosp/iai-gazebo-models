@@ -42,8 +42,8 @@ add_library(velodyne src/velodyne.cpp)
 target_link_libraries(velodyne ${GAZEBO_libraries} ${catkin_LIBRARIES} )
 add_dependencies(velodyne ${catkin_EXPORTED_TARGETS})
 
-add_library(velodyne_16 src/velodyne_16.cpp)
-target_link_libraries(velodyne_16 ${GAZEBO_libraries} ${catkin_LIBRARIES} )
+add_library(velodyne16 src/velodyne16.cpp)
+target_link_libraries(velodyne16 ${GAZEBO_libraries} ${catkin_LIBRARIES} )
 
 
 

@@ -69,33 +69,32 @@
         </include>
 
         <include>
-            <uri>model://oshkosh_velodyne_16</uri>
+            <uri>model://oshkosh_velodyne16</uri>
             <name>oshkosh1</name>
             <pose>-40 0 2 0 0 0</pose>
         </include>
 
-
-
+<!--
         <include>
-            <uri>model://oshkosh_velodyne_16</uri>
+            <uri>model://oshkosh_velodyne16</uri>
             <name>oshkosh2</name>
             <pose>-80 0 2 0 0 0</pose>
         </include>
-<!--
+
         <include>
-            <uri>model://oshkosh</uri>
+            <uri>model://oshkosh_velodyne16</uri>
             <name>oshkosh3</name>
             <pose>-120 0 2 0 0 0</pose>
         </include>
 
         <include>
-            <uri>model://oshkosh</uri>
+            <uri>model://oshkosh_velodyne16</uri>
             <name>oshkosh4</name>
             <pose>-160 0 2 0 0 0</pose>
         </include> 
 -->
 
-<!-- actor 
+<!-- actor -->
     <actor name="actor">
       <skin>
         <filename>walk.dae</filename>
@@ -104,7 +103,7 @@
         <filename>walk.dae</filename>
         <interpolate_x>true</interpolate_x>
       </animation>
-     <!-- <script>
+      <script>
         <trajectory id="0" type="walking">
           <waypoint>
             <time>0</time>
@@ -120,7 +119,7 @@
         </trajectory>
       </script> 
     </actor>
--->
+
 
 
 <!-- actor

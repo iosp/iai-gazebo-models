@@ -12,10 +12,10 @@
 
     <!-- A testing model that includes the Velodyne sensor model -->
 
-    <model name="velodyne_16_sensor">  <!-- this name must be diffrent from the model name for the FT publisher to work-->
+    <model name="velodyne16_sensor">  <!-- this name must be diffrent from the model name for the FT publisher to work-->
       <include>
         <pose>0 0 0 0 0 0</pose>
-        <uri>model://velodyne_16</uri>
+        <uri>model://velodyne16</uri>
       </include>
     </model>
     

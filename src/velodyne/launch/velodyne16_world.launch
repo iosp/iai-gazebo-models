@@ -6,7 +6,7 @@
 
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find velodyne)/worlds/velodyne_16.world"/>
+    <arg name="world_name" value="$(find velodyne)/worlds/velodyne16.world"/>
     <!-- more default parameters can be changed here -->    
   </include>
 </launch>
