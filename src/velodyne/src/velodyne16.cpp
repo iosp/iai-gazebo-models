@@ -26,10 +26,12 @@
 
 #include <math.h>
 
+#define NUM_OF_RAY_SENSORS 36 // 36 - CPU, 16 - GPU 
+#define CPUvsGPU 1 // CPU = 1 , GPU = 2
+
 #define NUM_OF_PLANES 16
-#define NUM_OF_RAY_SENSORS 36
 #define ANGULAR_STEPS 1800 // 360 * 5 (resulution of 0.2deg)
-#define CPUvsGPU CPU // GPU
+ 
 
 
 using namespace std;
@@ -104,7 +106,7 @@ public:
     }
   }
 
-  void initSensors(string modelName)
+  void initSensors()
   {
     sensors::Sensor_V v_sensor = gazebo::sensors::SensorManager::Instance()->GetSensors();
 
@@ -114,9 +116,11 @@ public:
           std::string p_name = (*sensor_it)->ParentName();
           if (p_name.compare(0, parent_name.length(), parent_name) == 0 )
             {
-              #if CPUvsGPU == CPU
+              #if CPUvsGPU == 1
+                std::cout << " casting in to CPU ray sensor " << senCount << std::endl; 
                 myRays.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(*sensor_it));
-              #elif CPUvsGPU == GPU
+              #elif CPUvsGPU == 2
+                std::cout << " casting in to GPU ray sensor " << senCount << std::endl;               
                 myRays.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(*sensor_it));
               #endif
               senCount++;
@@ -124,7 +128,7 @@ public:
         }
     
     if (senCount != NUM_OF_RAY_SENSORS )
-    ROS_DEBUG("velodyne: NUM_OF_RAY_SENSORS do not equal the actual number of ray sesors in the sdf ");
+    ROS_WARN("velodyne: NUM_OF_RAY_SENSORS do not equal the actual number of ray sesors in the sdf ");
   }
 
   //getRanges
@@ -177,32 +181,18 @@ public:
     std::cout << "parent_name = " << parent_name << std::endl;
     
 
-    // Get the joint.
-    std::string jointName = "velodyne16::velodyne16_joint";
-    if (_sdf->HasElement("jointName"))
-    {
-      _sdf->GetElement("jointName")->GetValue()->Get<std::string>(jointName);
-    }
-    this->joint = _model->GetJoint(jointName);
 
-    // Setup a P-controller, with a gain of 0.1.
-    this->pid = common::PID(0.1, 0, 0);
-
-    // Apply the P-controller to the joint.
-    this->model->GetJointController()->SetVelocityPID(this->joint->GetScopedName(), this->pid);
 
 
     // set the angle resolution, default is 0.2 deg
-    angleRes = 0.2;
+    angleRes = 0.2;  // Default is 0.2deg
     if (_sdf->HasElement("angleRes"))
       angleRes = _sdf->Get<double>("angleRes");
+    else
+      ROS_WARN("velodyne16: there is no 'angleRes' parameter in the SDF seting to defult of 0.2deg");
+   
 
-    //RVIZ Publish Rate, default is 1HZ
-    //RVIZPublishRate = 1.0;
-    //if (_sdf->HasElement("RVIZPublishRate"))
-    //	  RVIZPublishRate = _sdf->Get<double>("RVIZPublishRate");
-
-    // get the 'verticalAngleResolutionFromSDF' parameter
+    // geting the verticalAngleResolutionFromSDF from sdf
     // using for validate the user, compare this veriable and real vertical angle (VerticalAngelResolutionReal[])
     verticalAngleResolutionFromSDF = 0;
     if (_sdf->HasElement("verticalAngleResolution"))
@@ -211,33 +201,44 @@ public:
       ROS_WARN("velodyne16: there is no 'verticalAngleResolution' parameter in the SDF (validation parameter)");
 
     
+    // geting the verticalAngelMin from sdf
+    verticalAngelMin = 0; // Default is 0 deg
     if (_sdf->HasElement("verticalAngelMin"))
       verticalAngelMin = _sdf->Get<double>("verticalAngelMin");
     else
-      ROS_WARN("velodyne16: there is no 'verticalAngelMin' parameter in the SDF");
+      ROS_WARN("velodyne16: there is no 'verticalAngelMin' parameter in the SDF seting to defult of 0");
 
 
-    // Default to 1HZ velocity
-    rate = 1.0;
-    // Check that the velocity element exists, then read the value
-    if (_sdf->HasElement("rate"))
-    {
-      rate = _sdf->Get<double>("rate");
-    }
+    
+    // geting the rotRate from sdf
+    double rotRate = 1.0; // Default is 1HZ velocity
+    if (_sdf->HasElement("rotRate"))
+      rotRate = _sdf->Get<double>("rotRate");
+    else 
+      ROS_WARN("velodyne16: there is no 'rotRate' parameter in the SDF seting to defult of 1Hz");
+    
+      
+    //RVIZ Publish Rate, default is 1HZ
+    //RVIZPublishRate = 1.0;   // Default is 0Hz
+    //if (_sdf->HasElement("RVIZPublishRate"))
+    //   RVIZPublishRate = _sdf->Get<double>("RVIZPublishRate");
+    //else
+    //   ROS_WARN("velodyne16: there is no 'RVIZPublishRate' parameter in the SDF seting to defult of 1Hz");
+         
 
-    //set the velocity
-    velocity = (rate / NUM_OF_RAY_SENSORS) * 2 * M_PI; //depend on rate
-
-    // Set the joint's target velocity. This target velocity is just
-    // for demonstration purposes.
-    this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), velocity);
+    // sets tte rotation
+    double rotVel = (rotRate / NUM_OF_RAY_SENSORS) * 2 * M_PI; 
+    this->joint = _model->GetJoint("velodyne16::velodyne16_joint");    
+    this->pid = common::PID(0.1, 0, 0); // Setup a P-controller, with a gain of 0.1.       
+    this->model->GetJointController()->SetVelocityPID(this->joint->GetScopedName(), this->pid); // Apply the P-controller to the joint.
+    this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), rotVel);    // Set the joint's target velocity. 
 
     //set the topic
     std::string topic_name = model_name+"/velodyne16";
     _pointCloud_pub = _nodeHandle.advertise<sensor_msgs::PointCloud>(topic_name, 10);
 
-    //init sensors
-    initSensors(_model->GetName());
+    //init the ray sensors
+    initSensors();
 
     lastDegree = -1;
     this->_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne16::OnUpdate, this, _1));
@@ -269,6 +270,8 @@ public:
       _pointCloud_pub.publish(points);
   }
 
+
+
   physics::ModelPtr model;
   physics::JointPtr joint;
   std::string model_name;
@@ -277,9 +280,9 @@ public:
 
 
 
-  #if CPUvsGPU == CPU
+  #if CPUvsGPU == 1
     vector<gazebo::sensors::RaySensorPtr> myRays;  
-  #elif CPUvsGPU == GPU
+  #elif CPUvsGPU == 2
     vector<gazebo::sensors::GpuRaySensorPtr> myRays;
   #endif
 
@@ -289,8 +292,6 @@ public:
 
   double lastDegree;
   double angleRes;
-  double velocity;
-  double rate;
   double rangesArray[ANGULAR_STEPS][NUM_OF_PLANES];
   //   double RVIZPublishRate;
   double verticalAngleResolutionFromSDF;

@@ -6,7 +6,7 @@
     
 
  <plugin name="velodyne16_control" filename="libvelodyne16.so"> 
-       <rate>10</rate>       <!-- HZ -->
+       <rotRate>10</rotRate>       <!-- HZ -->
        <angleRes>0.2</angleRes> <!-- horiz resolution, deg -->
        <verticalAngleResolution>1.33333</verticalAngleResolution> <!-- deg -->  <!-- for validation and RVIZ publish calculate -->
        <verticalAngelMin>-10</verticalAngelMin> <!-- deg -->
