@@ -14,14 +14,22 @@
      <include>
          <name>velodyne_16</name>
          <uri>model://velodyne_16</uri>
-         <pose>5 0 3 0 0 0</pose>
+         <pose>4 0 3 0 0 0</pose>
      </include>
 
-    <joint name="oshkosh_to_velodyne_16_joint" type="fixed">
+    
+    <joint name='oshkosh_to_velodyne_16_joint' type='revolute'>
       <parent>oshkosh::body</parent>
       <child>velodyne_16::base</child>
+      <axis>
+        <xyz>0 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <dynamics/>
+      </axis>
     </joint>
-
 
 
   </model> 

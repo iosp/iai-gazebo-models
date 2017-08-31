@@ -11,7 +11,7 @@
 #include "gazebo/sensors/SensorTypes.hh"
 
 #include "gazebo/sensors/RaySensor.hh"
-//#include "gazebo/sensors/GpuRaySensor.hh"
+#include "gazebo/sensors/GpuRaySensor.hh"
 
 #include "gazebo/sensors/sensors.hh"
 #include "gazebo/gazebo.hh"
@@ -28,7 +28,10 @@
 
 #define NUM_OF_PLANES 16
 #define NUM_OF_RAY_SENSORS 36
-#define ANGULAR_STEPS 1800 // 360 * 5
+#define ANGULAR_STEPS 1800 // 360 * 5 (resulution of 0.2deg)
+#define CPUvsGPU CPU // GPU
+
+
 using namespace std;
 
 namespace gazebo
@@ -78,7 +81,14 @@ public:
 
   void OnUpdate(const common::UpdateInfo &_info)
   {
-    double dgree = fmod(joint->GetAngle(0).Degree(), 360.0);
+
+    #if GAZEBO_MAJOR_VERSION >= 8
+      double dgree = fmod(joint->Position(0)*180/M_PI, 360.0);
+    #elif GAZEBO_MAJOR_VERSION < 8
+      double dgree = fmod(joint->GetAngle(0).Degree(), 360.0);
+    #endif
+
+
 
     double diff = dgree - lastDegree;
     if (diff < 0)
@@ -96,64 +106,53 @@ public:
 
   void initSensors(string modelName)
   {
-    for (int i = 0; i < NUM_OF_RAY_SENSORS; i++)
-    {
-      string nameOfRay = "velodyne_16_ray_" + std::to_string(i);
-#if GAZEBO_MAJOR_VERSION > 6
-      myRays.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
-      //myRays.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
-      
-#elif GAZEBO_MAJOR_VERSION < 7
-      myRays.push_back(boost::dynamic_pointer_cast<sensors::RaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
-      //myRays.push_back(boost::dynamic_pointer_cast<sensors::GpuRaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
-#endif
-      if (!myRays[i])
-      {
-        std::string error = "velodyne_16 Sensor Model \"" + modelName + "\" failed to locate his sub-sensor.\n(Do the names in the .sdf match the names in the .cpp?)\n";
-        gzthrow(error);
-        return;
-      }
+    sensors::Sensor_V v_sensor = gazebo::sensors::SensorManager::Instance()->GetSensors();
 
-#if GAZEBO_MAJOR_VERSION > 6
-      VerticalAngelResolutionReal[i] = (myRays[i]->AngleResolution() * 180 / M_PI);
-#elif GAZEBO_MAJOR_VERSION < 7
-      VerticalAngelResolutionReal[i] = (myRays[i]->GetAngleResolution() * 180 / M_PI);
-#endif
-      if ((int)(VerticalAngelResolutionReal[i] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-	ROS_WARN("velodyne_16: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_%d", i);
-    }
+    int senCount = 0;
+    for (auto sensor_it = v_sensor.begin(); sensor_it != v_sensor.end(); ++sensor_it) 
+        {
+          std::string p_name = (*sensor_it)->ParentName();
+          if (p_name.compare(0, parent_name.length(), parent_name) == 0 )
+            {
+              #if CPUvsGPU == CPU
+                myRays.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(*sensor_it));
+              #elif CPUvsGPU == GPU
+                myRays.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(*sensor_it));
+              #endif
+              senCount++;
+            }
+        }
+    
+    if (senCount != NUM_OF_RAY_SENSORS )
+    ROS_DEBUG("velodyne: NUM_OF_RAY_SENSORS do not equal the actual number of ray sesors in the sdf ");
   }
 
   //getRanges
   void getRanges(double dgree)
   {
-    //    	std::vector<std::vector<double>> ranges;
-
+    // 	std::vector<std::vector<double>> ranges;
     double tick = dgree * (ANGULAR_STEPS / 360);
 
     for (int i = 0; i < NUM_OF_RAY_SENSORS; i++)
-    {
-      std::vector<double> newVector;
-//    		ranges.push_back(newVector);
-
-#if GAZEBO_MAJOR_VERSION > 6
-      myRays[i]->Ranges(newVector);
-#elif GAZEBO_MAJOR_VERSION <= 6
-      myRays[i]->GetRanges(newVector);
-#endif
-
-      if (newVector.size() == NUM_OF_PLANES)
       {
-	// int j = fmod(tick + i*(360/NUM_OF_RAY_SENSORS),360);
-	int j = fmod(tick + i * (ANGULAR_STEPS / NUM_OF_RAY_SENSORS), ANGULAR_STEPS);
+        std::vector<double> newVector;
+        //ranges.push_back(newVector);
 
-	for (int k = 0; k < NUM_OF_PLANES; k++)
-	{
-	  rangesArray[j][k] = newVector[k];
-	}
+        myRays[i]->Ranges(newVector);
+
+
+        if (newVector.size() == NUM_OF_PLANES)
+        {
+        //int j = fmod(tick + i*(360/NUM_OF_RAY_SENSORS),360);
+          int j = fmod(tick + i * (ANGULAR_STEPS / NUM_OF_RAY_SENSORS), ANGULAR_STEPS);
+
+          for (int k = 0; k < NUM_OF_PLANES; k++)
+          {
+            rangesArray[j][k] = newVector[k];
+          }
+        }
       }
     }
-  }
 
   /// \brief The load function is called by Gazebo when the plugin is
   /// inserted into simulation
@@ -192,9 +191,6 @@ public:
     // Apply the P-controller to the joint.
     this->model->GetJointController()->SetVelocityPID(this->joint->GetScopedName(), this->pid);
 
-    // Set the joint's target velocity. This target velocity is just
-    // for demonstration purposes.
-    this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), 100.0);
 
     // set the angle resolution, default is 0.2 deg
     angleRes = 0.2;
@@ -244,29 +240,8 @@ public:
     initSensors(_model->GetName());
 
     lastDegree = -1;
-    //_threadRVIZ=boost::thread(&velodyne_16::thread_RVIZ,this);
     this->_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne_16::OnUpdate, this, _1));
 
-    if (_sdf->HasElement("tf_x") && _sdf->HasElement("tf_y") && _sdf->HasElement("tf_z") && _sdf->HasElement("tf_roll") && _sdf->HasElement("tf_pitch") && _sdf->HasElement("tf_yaw"))
-    {
-      tf_x = _sdf->Get<double>("tf_x");
-      tf_y = _sdf->Get<double>("tf_y");
-      tf_z = _sdf->Get<double>("tf_z");
-      tf_roll = _sdf->Get<double>("tf_roll");
-      tf_pitch = _sdf->Get<double>("tf_pitch");
-      tf_yaw = _sdf->Get<double>("tf_yaw");
-    }
-    else
-    {
-      tf_x = 0;
-      tf_y = 0;
-      tf_z = 0;
-      tf_roll = 0;
-      tf_pitch = 0;
-      tf_yaw = 0;
-
-      ROS_DEBUG("velodyne: ERROR in reading tf_x, tf_y, tf_z, tf_r, tf_p, tf_y parameters");
-    }
   }
 
   void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time)
@@ -300,8 +275,14 @@ public:
   std::string parent_name;
   common::PID pid;
 
-  vector<gazebo::sensors::RaySensorPtr> myRays;  
-  //vector<gazebo::sensors::GpuRaySensorPtr> myRays;
+
+
+  #if CPUvsGPU == CPU
+    vector<gazebo::sensors::RaySensorPtr> myRays;  
+  #elif CPUvsGPU == GPU
+    vector<gazebo::sensors::GpuRaySensorPtr> myRays;
+  #endif
+
 
   event::ConnectionPtr _updateConnection; // Pointer to the update event connection
   common::Time sim_Time;
@@ -321,8 +302,6 @@ public:
   boost::thread _threadRVIZ;
 
   ros::NodeHandle n;
-  tf::Transform _laser_TF_point_of_origin;
-  double tf_x, tf_y, tf_z, tf_roll, tf_pitch, tf_yaw;
 };
 
 // Tell Gazebo about this plugin, so that Gazebo can call Load on this plugin.
