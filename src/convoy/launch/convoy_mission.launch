@@ -64,4 +64,11 @@
                100 -100  10
               "/>
 
+
+  <node name="shahid_controller"      type="shahid_controller.py"      pkg="shahid"  output="screen" respawn="true" 
+        args="hmmwv musa"/>              
+
 </launch>
+
+
+

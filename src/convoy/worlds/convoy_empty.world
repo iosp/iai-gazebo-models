@@ -1,20 +1,14 @@
 <?xml version="1.0" ?>
 <sdf version="1.4">
     <world name="default">
-    <light name='sun' type='directional'>
-      <cast_shadows>1</cast_shadows>
-      <pose>0 0 10 -0.766790 -0.514022 0.304701</pose>
-      <diffuse>0.9 0.9 0.9 1</diffuse>
-      <specular>0.4 0.4 0.4 1</specular>
-      <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <direction>-0.5 0.1 -0.9</direction>
-      </light>
-        <scene>
+
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+
+       <scene>
             <sky>
                 <time>10</time>
                 <clouds>
@@ -37,6 +31,8 @@
 				</solver>
 			</ode>
 		</physics>
+
+
         <gui>
             <camera name="camera_pose">
                 <pose>80 -60 60 0 0.5 2</pose>
@@ -80,6 +76,7 @@
             <name>oshkosh2</name>
             <pose>-80 0 2 0 0 0</pose>
         </include>
+        
 
         <include>
             <uri>model://oshkosh_velodyne16</uri>
@@ -95,36 +92,8 @@
 -->
 
 <!-- actor -->
-    <actor name="actor">
-      <skin>
-        <filename>walk.dae</filename>
-      </skin>
-      <animation name="walking">
-        <filename>walk.dae</filename>
-        <interpolate_x>true</interpolate_x>
-      </animation>
-      <script>
-        <trajectory id="0" type="walking">
-          <waypoint>
-            <time>0</time>
-            <pose>50 -50 0 0 0 1.57</pose>
-          </waypoint>
-
-
-          <waypoint>
-            <time>30</time>
-            <pose>50 50 0 0 0 1.57</pose>
-          </waypoint>  
- 
-        </trajectory>
-      </script> 
-    </actor>
-
-
-
-<!-- actor
     <actor name="musa">
-      <pose>110 10 1.0 0 0 0</pose>
+      <pose>70 -10 1 0 0 0</pose>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -134,11 +103,25 @@
         <scale>1.0</scale>
         <interpolate_x>true</interpolate_x>
       </animation>
+     
       <plugin name="shahid_plugin" filename="libshahid_plugin.so">
           <shahid_name>musa</shahid_name>
       </plugin>
     </actor>
- -->
+    <model name="musa_cylinder_model">  
+        <pose>70 -10 0.9 0 0 0</pose>
+        <static>true</static>
+        <link name="musa_cylinder_link">
+            <collision name="collision">
+                <geometry>
+                    <cylinder>
+                        <radius>.3</radius>
+                        <length>1.8</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+    </model>
 
 
     </world>

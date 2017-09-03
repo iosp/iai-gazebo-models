@@ -2,26 +2,38 @@
 <sdf version="1.6">
     <world name="shahid_world">
     
-<!--
-<include>
-    <uri>model://shahid</uri>
-    <name>shahid1</name>
-    <pose>-10 -10 1 0 0 0</pose>
-</include>
--->
+    <include>
+      <uri>model://sun</uri>
+    </include>
 
-<!--
-<include>
-    <name>shahid2</name>
-    <uri>model://shahid</uri>
-    <pose>-10 10 1 0 0 0</pose>
-</include>
--->
+    <include>
+        <uri>model://ground_plane</uri>
+        <name>ground_plane</name>
+        <pose>0 0 0 0 0 0</pose>
+    </include>
+
 
 
 <!-- actor -->
+
+    <model name="musa_cylinder_model">  
+        <pose>0 0 0.9 0 0 0</pose>
+        <static>true</static>
+        <link name="musa_cylinder_link">
+            <collision name="collision">
+                <geometry>
+                    <cylinder>
+                        <radius>.3</radius>
+                        <length>1.8</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+    </model>
+
+
     <actor name="musa">
-      <pose>-10 -10 1.0 0 0 0</pose>
+      <pose>0 0 1 0 0 0</pose>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -31,9 +43,11 @@
         <scale>1.0</scale>
         <interpolate_x>true</interpolate_x>
       </animation>
+     
       <plugin name="shahid_plugin" filename="libshahid_plugin.so">
           <shahid_name>musa</shahid_name>
       </plugin>
+      
     </actor>
 
 
