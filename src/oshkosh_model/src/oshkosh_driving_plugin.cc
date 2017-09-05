@@ -57,27 +57,36 @@ public:
     this->model = _model;
     vehicle_name = model->GetName(); 
 
+    
+ 
+    // Test for whether the model is nested and a prefix is needed to find the joint
+    std::string pref = "";
+    if( ! this->model->GetJoint("left_wheel_1") )
+        pref = "oshkosh::";
+      
+
     // Store the pointers to the joints
-    this->left_wheel_1 = this->model->GetJoint("oshkosh::left_wheel_1");
-    this->left_wheel_2 = this->model->GetJoint("oshkosh::left_wheel_2");
-    this->left_wheel_3 = this->model->GetJoint("oshkosh::left_wheel_3");
-    this->left_wheel_4 = this->model->GetJoint("oshkosh::left_wheel_4");
-    this->right_wheel_1 = this->model->GetJoint("oshkosh::right_wheel_1");
-    this->right_wheel_2 = this->model->GetJoint("oshkosh::right_wheel_2");
-    this->right_wheel_3 = this->model->GetJoint("oshkosh::right_wheel_3");
-    this->right_wheel_4 = this->model->GetJoint("oshkosh::right_wheel_4");
-    this->streer_joint_left_1 = this->model->GetJoint("oshkosh::steering_joint_left_1");
-    this->streer_joint_left_2 = this->model->GetJoint("oshkosh::steering_joint_left_2");
-    this->streer_joint_right_1 = this->model->GetJoint("oshkosh::steering_joint_right_1");
-    this->streer_joint_right_2 = this->model->GetJoint("oshkosh::steering_joint_right_2");
-    this->spring_left_1 = this->model->GetJoint("oshkosh::spring_left_1");
-    this->spring_right_1 = this->model->GetJoint("oshkosh::spring_right_1");
-    this->spring_left_2 = this->model->GetJoint("oshkosh::spring_left_2");
-    this->spring_right_2 = this->model->GetJoint("oshkosh::spring_right_2");
-    this->torsion_spring_back_3 = this->model->GetJoint("oshkosh::torsion_spring_back_3");
-    this->spring_back_3 = this->model->GetJoint("oshkosh::spring_back_3");
-    this->torsion_spring_back_4 = this->model->GetJoint("oshkosh::torsion_spring_back_4");
-    this->spring_back_4 = this->model->GetJoint("oshkosh::spring_back_4");
+    this->left_wheel_1 = this->model->GetJoint(pref+"left_wheel_1");
+    this->left_wheel_2 = this->model->GetJoint(pref+"left_wheel_2");
+    this->left_wheel_3 = this->model->GetJoint(pref+"left_wheel_3");
+    this->left_wheel_4 = this->model->GetJoint(pref+"left_wheel_4");
+    this->right_wheel_1 = this->model->GetJoint(pref+"right_wheel_1");
+    this->right_wheel_2 = this->model->GetJoint(pref+"right_wheel_2");
+    this->right_wheel_3 = this->model->GetJoint(pref+"right_wheel_3");
+    this->right_wheel_4 = this->model->GetJoint(pref+"right_wheel_4");
+    this->streer_joint_left_1 = this->model->GetJoint(pref+"steering_joint_left_1");
+    this->streer_joint_left_2 = this->model->GetJoint(pref+"steering_joint_left_2");
+    this->streer_joint_right_1 = this->model->GetJoint(pref+"steering_joint_right_1");
+    this->streer_joint_right_2 = this->model->GetJoint(pref+"steering_joint_right_2");
+    this->spring_left_1 = this->model->GetJoint(pref+"spring_left_1");
+    this->spring_right_1 = this->model->GetJoint(pref+"spring_right_1");
+    this->spring_left_2 = this->model->GetJoint(pref+"spring_left_2");
+    this->spring_right_2 = this->model->GetJoint(pref+"spring_right_2");
+    this->torsion_spring_back_3 = this->model->GetJoint(pref+"torsion_spring_back_3");
+    this->spring_back_3 = this->model->GetJoint(pref+"spring_back_3");
+    this->torsion_spring_back_4 = this->model->GetJoint(pref+"torsion_spring_back_4");
+    this->spring_back_4 = this->model->GetJoint(pref+"spring_back_4");
+
     // Starting Timers
     Throttle_command_timer.Start();
     Angular_command_timer.Start();
