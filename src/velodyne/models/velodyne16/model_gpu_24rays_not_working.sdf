@@ -603,6 +603,7 @@
           </range>
         </ray>
       </sensor>
+
     </link>
 
     <joint type="revolute" name="velodyne16_joint">
