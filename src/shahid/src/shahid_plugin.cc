@@ -1,14 +1,16 @@
-#include <boost/bind.hpp>
-#include <gazebo/gazebo.hh>
+#include <stdio.h>
 
-#include <ignition/math.hh>
+#include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/common.hh>
-#include <stdio.h>
+#include <ignition/math.hh>
+
+#include <boost/bind.hpp>
 
 // ROS Communication
 #include "ros/ros.h"
 #include "geometry_msgs/Point.h"
+
 
 #define WALKING_ANIMATION "walking"
 
@@ -24,6 +26,13 @@ namespace gazebo
       this->actor = boost::dynamic_pointer_cast<physics::Actor>(_model);
       this->world = this->actor->GetWorld();
 
+
+
+      physics::ModelPtr model = this->world->GetModel("worldHightmap");
+      physics::CollisionPtr collision = model->GetLink("link")->GetCollision("collision");
+      this->heightmap = boost::dynamic_pointer_cast<physics::HeightmapShape>(collision->GetShape());
+
+
       this->Reset();
       
       //Read in the shahid_name from the sdf file
@@ -37,6 +46,12 @@ namespace gazebo
         this->animationFrameRate = _sdf->Get<double>("animationFrameRate");
       else
         this->animationFrameRate = 30.0;
+
+      //Read in the carectorHight from the sdf file
+      if (_sdf->HasElement("carectorHight"))
+        this->carectorHight = _sdf->Get<double>("carectorHight");
+      else
+        this->carectorHight = 2.0;
 
 
       // conecting to the BoundingCylinder   
@@ -59,6 +74,22 @@ namespace gazebo
     }
 
 /////////////////////////////////////////////////
+    double HightMapZ(double x, double y)
+    {
+    // The HeightmapShape does not work with the same coordinate system, so get some data:
+    math::Vector3 size = this->heightmap->GetSize(); 
+    math::Vector2i vc = this->heightmap->GetVertexCount();
+
+
+    // And finally get your z from your x and y:
+    int index_x = (  ( (x + size.x/2)/size.x ) * vc.x - 1 ) ;
+    int index_y = (  ( (-y + size.y/2)/size.y ) * vc.y - 1 ) ;
+    double z =  this->heightmap->GetHeight( index_x , index_y ) ; 
+
+    return z;
+    }
+
+/////////////////////////////////////////////////
     void Reset()
     {
       this->actor_TargetVel = 1.0;
@@ -70,9 +101,10 @@ namespace gazebo
       ignition::math::Pose3d actorPose = this->actor->WorldPose();
       ignition::math::Vector3d actorRPY = actorPose.Rot().Euler();
       actorPose.Rot() = ignition::math::Quaterniond(1.5707, 0, actorRPY.Z());
+      actorPose.Pos().Z() = this->HightMapZ( actorPose.Pos().X(), actorPose.Pos().Y()) + carectorHight/2 ; 
       this->actor->SetWorldPose(actorPose, false, false);
-      
-
+       
+ 
       auto skelAnims = this->actor->SkeletonAnimations();
       if (skelAnims.find(WALKING_ANIMATION) == skelAnims.end())
       {
@@ -94,6 +126,7 @@ namespace gazebo
     {
       this->actor_TargetPose.X(msg->x);
       this->actor_TargetPose.Y(msg->y);
+      this->actor_TargetPose.Z(this->HightMapZ( msg->x, msg->y) + carectorHight/2);
       this->actor_TargetVel = msg->z;     
     }
 
@@ -101,6 +134,7 @@ namespace gazebo
 /////////////////////////////////////////////////
     public: void OnUpdate(const common::UpdateInfo & _info)
     {
+
       // Time delta
       double dtAnimation = (_info.simTime - this->lastUpdateAnimation).Double();
       if (dtAnimation >= 1/animationFrameRate )
@@ -109,7 +143,7 @@ namespace gazebo
           this->lastUpdateAnimation = _info.simTime;
 
           ignition::math::Pose3d actorPose = this->actor->WorldPose();
-
+          
           ignition::math::Vector3d actorRPY = actorPose.Rot().Euler();
           ignition::math::Vector3d targetDiss = this->actor_TargetPose - actorPose.Pos();
 
@@ -139,6 +173,7 @@ namespace gazebo
                 disTraveled = (this->actor_TargetVel * dtAnimation).Length();
               }
               
+              actorNextPose.Pos().Z() = this->HightMapZ( actorNextPose.Pos().X(), actorNextPose.Pos().Y()) + carectorHight/2;    
               
           // Distance traveled is used to coordinate motion with the walking animation
           this->actor->SetWorldPose(actorNextPose, false, false);
@@ -158,7 +193,8 @@ namespace gazebo
     private: ros::NodeHandle *Ros_nh;  // Defining private Ros Node Handle
     private: ros::Subscriber actorTargetPose_sub; // Defining private Ros Subscribers
     
-    private: std::string actor_Name;   
+    private: std::string actor_Name; 
+    private: double carectorHight;  
 
     private: physics::ModelPtr actor_BoundingCylinder;
     private: std::string actor_BoundingCylinder_ModelName;
@@ -168,6 +204,7 @@ namespace gazebo
 
     private: physics::ActorPtr actor;
     private: physics::WorldPtr world;
+    private: physics::HeightmapShapePtr heightmap;
     private: sdf::ElementPtr sdf;
 
     private: ignition::math::Vector3d actor_TargetPose;
