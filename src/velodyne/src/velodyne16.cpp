@@ -26,8 +26,8 @@
 
 #include <math.h>
 
-#define NUM_OF_RAY_SENSORS 36 // 36 - CPU, 16 - GPU 
-#define CPUvsGPU 1 // CPU = 1 , GPU = 2
+#define NUM_OF_RAY_SENSORS 16 // 36 - CPU, 16 - GPU 
+#define CPUvsGPU 2 // CPU = 1 , GPU = 2
 
 #define NUM_OF_PLANES 16
 #define ANGULAR_STEPS 1800 // 360 * 5 (resulution of 0.2deg)
