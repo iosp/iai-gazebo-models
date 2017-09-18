@@ -26,11 +26,10 @@
 
 #include <math.h>
 
-#define NUM_OF_RAY_SENSORS 16 // 36 - CPU, 16 - GPU 
+#define MAX_NUM_OF_RAY_SENSORS 50 // 32 - CPU, 16 - GPU 
 #define CPUvsGPU 2 // CPU = 1 , GPU = 2
 
 #define NUM_OF_PLANES 16
-#define ANGULAR_STEPS 1800 // 360 * 5 (resulution of 0.2deg)
  
 
 
@@ -63,47 +62,60 @@ public:
     br.sendTransform(st);
   }
 
-  void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], common::Time time)
+  void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], math::Angle sensorAngle ,common::Time time)
   {
-    //		ros::Time lastUpdateTime = ros::Time::now();
+    //		ros::Time RVIZlastUpdateTime = ros::Time::now();
     //		while(true)
     //		{
     //			ros::Time newRosTime = ros::Time::now();
-    //			double diff = (newRosTime.toSec() - lastUpdateTime.toSec()) - (1/RVIZPublishRate);
+    //			double diff = (newRosTime.toSec() - RVIZlastUpdateTime.toSec()) - (1/RVIZPublishRate);
     //			if(diff > 0.0001)
     //			{
     ros::Time t(time.sec, time.nsec);
-    RVIZ_Publisher(rangesArray, t);
-    //				lastUpdateTime = newRosTime;
+    RVIZ_Publisher(rangesArray, t ,sensorAngle);
+    //				RVIZlastUpdateTime = newRosTime;
     // TF publish
-    TF_Broadcast(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, model_name, model_name+"_velodyne16", t);
+    TF_Broadcast(0.0, 0.0, 0.0, 0.0, 0.0, sensorAngle.Radian(), model_name, model_name+"_velodyne16", t);
     //			}
     //		}
   }
 
   void OnUpdate(const common::UpdateInfo &_info)
   {
+    double dTime = (_info.simTime - this->lastUpdateTime).Double();
+    
+    math::Angle dAngle =  dTime * 2*M_PI*this->rotRate;
 
-    #if GAZEBO_MAJOR_VERSION >= 8
-      double dgree = fmod(joint->Position(0)*180/M_PI, 360.0);
-    #elif GAZEBO_MAJOR_VERSION < 8
-      double dgree = fmod(joint->GetAngle(0).Degree(), 360.0);
-    #endif
+    //std::cout << " dTime = " << dTime <<  " dAngle = " << dAngle.Degree() << " Step = "  << this->angleRes * numOfRaySensors << std::endl;
+
+    math::Angle AnglStep =  M_PI/180*(this->angleRes*this->numOfRaySensors);
+
+    if (dAngle.Degree() < AnglStep.Degree() )
+      return;
+
+    if (dAngle.Degree() > 2*AnglStep.Degree() ) {
+      gzerr << " Step resolution of " << this->angleRes << " cannot be reached !! \n"; 
+      return; 
+          }
+
+    this->lastUpdateTime = _info.simTime;
 
 
+    getRanges();
 
-    double diff = dgree - lastDegree;
-    if (diff < 0)
-      diff = diff + 360.0; //
+    
 
-    if ((diff - angleRes) > 0.000001)
-    {
-      //double tick = dgree;
-      lastDegree = dgree;
-      getRanges(dgree);
+    math::Angle jointAngle =  this->joint->Position(0);
+    
+    math::Angle jointNextAngle = jointAngle +  dAngle; // AnglStep; //
+    
+    this->joint->SetPosition(0,jointNextAngle.Radian()); 
 
-      boost::thread(&velodyne16::thread_RVIZ, this, rangesArray, _info.simTime);
-    }
+   // std::cout << " dTime = " << dTime <<  " dAngle = " << dAngle.Degree() <<  "  jointNextAngle.Degree() = " << jointNextAngle.Degree() << std::endl;
+    
+
+    boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, jointAngle ,_info.simTime);
+
   }
 
   void initSensors()
@@ -118,45 +130,45 @@ public:
             {
               #if CPUvsGPU == 1
                 std::cout << " casting in to CPU ray sensor " << senCount << std::endl; 
-                myRays.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(*sensor_it));
+                raySensors.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(*sensor_it));
               #elif CPUvsGPU == 2
                 std::cout << " casting in to GPU ray sensor " << senCount << std::endl;               
-                myRays.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(*sensor_it));
+                raySensors.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(*sensor_it));
               #endif
               senCount++;
             }
         }
     
-    if (senCount != NUM_OF_RAY_SENSORS )
-    ROS_WARN("velodyne: NUM_OF_RAY_SENSORS do not equal the actual number of ray sesors in the sdf ");
+    this->numOfRaySensors = senCount;    
   }
 
   //getRanges
-  void getRanges(double dgree)
+  void getRanges()
   {
-    // 	std::vector<std::vector<double>> ranges;
-    double tick = dgree * (ANGULAR_STEPS / 360);
+    if(this->raySensors.size() != this->numOfRaySensors) {
+      gzerr << " this->raySensors.size() != this->numOfRaySensors  \n"; 
+      return; 
+         }
 
-    for (int i = 0; i < NUM_OF_RAY_SENSORS; i++)
+    for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
       {
-        std::vector<double> newVector;
-        //ranges.push_back(newVector);
+        std::vector<double> rayMeasuresVec;
 
-        myRays[i]->Ranges(newVector);
+        this->raySensors[sensor_i]->Ranges(rayMeasuresVec);
 
-
-        if (newVector.size() == NUM_OF_PLANES)
-        {
-        //int j = fmod(tick + i*(360/NUM_OF_RAY_SENSORS),360);
-          int j = fmod(tick + i * (ANGULAR_STEPS / NUM_OF_RAY_SENSORS), ANGULAR_STEPS);
-
-          for (int k = 0; k < NUM_OF_PLANES; k++)
-          {
-            rangesArray[j][k] = newVector[k];
-          }
+      if (rayMeasuresVec.size() != NUM_OF_PLANES) {
+        gzerr << " rayMeasuresVec.size() != NUM_OF_PLANES  \n"; 
+        return;
         }
+
+      for (int plain_i = 0; plain_i < NUM_OF_PLANES; plain_i++)
+         {
+           this->rangesArray[sensor_i][plain_i] = rayMeasuresVec[plain_i];
+         }
       }
-    }
+  }
+
+
 
   /// \brief The load function is called by Gazebo when the plugin is
   /// inserted into simulation
@@ -182,12 +194,10 @@ public:
     
 
 
-
-
     // set the angle resolution, default is 0.2 deg
-    angleRes = 0.2;  // Default is 0.2deg
+    this->angleRes = 0.2;  // Default is 0.2deg
     if (_sdf->HasElement("angleRes"))
-      angleRes = _sdf->Get<double>("angleRes");
+    this->angleRes = _sdf->Get<double>("angleRes");
     else
       ROS_WARN("velodyne16: there is no 'angleRes' parameter in the SDF seting to defult of 0.2deg");
    
@@ -211,9 +221,9 @@ public:
 
     
     // geting the rotRate from sdf
-    double rotRate = 1.0; // Default is 1HZ velocity
+    this->rotRate = 1.0; // Default is 1HZ velocity
     if (_sdf->HasElement("rotRate"))
-      rotRate = _sdf->Get<double>("rotRate");
+      this->rotRate = _sdf->Get<double>("rotRate");
     else 
       ROS_WARN("velodyne16: there is no 'rotRate' parameter in the SDF seting to defult of 1Hz");
     
@@ -226,12 +236,11 @@ public:
     //   ROS_WARN("velodyne16: there is no 'RVIZPublishRate' parameter in the SDF seting to defult of 1Hz");
          
 
-    // sets tte rotation
-    double rotVel = (rotRate / NUM_OF_RAY_SENSORS) * 2 * M_PI; 
+
+    this->TopLink = _model->GetLink("velodyne16::top");
+
     this->joint = _model->GetJoint("velodyne16::velodyne16_joint");    
-    this->pid = common::PID(0.1, 0, 0); // Setup a P-controller, with a gain of 0.1.       
-    this->model->GetJointController()->SetVelocityPID(this->joint->GetScopedName(), this->pid); // Apply the P-controller to the joint.
-    this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), rotVel);    // Set the joint's target velocity. 
+
 
     //set the topic
     std::string topic_name = model_name+"/velodyne16";
@@ -241,26 +250,24 @@ public:
     initSensors();
 
     lastDegree = -1;
+    this->sensorDegree = 0;
     this->_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne16::OnUpdate, this, _1));
-
+ 
   }
 
-  void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time)
+  void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time, math::Angle sensorAngle)
   {
       sensor_msgs::PointCloud points;
-      for (int tick = 0; tick < ANGULAR_STEPS; tick++)
+      for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
       {
-        for (int j = 0; j < NUM_OF_PLANES; j++)
+        for (int plan_i = 0; plan_i < NUM_OF_PLANES; plan_i++)
         {
-          if (rangesArray[tick][j] > 69)
-            continue;
           geometry_msgs::Point32 point;
-          double yaw_ang = tick * (2 * M_PI / ANGULAR_STEPS); //* (3.14159 /180);
-          double pitch_ang = (verticalAngelMin + j * verticalAngleResolutionFromSDF) * (M_PI / 180);
-          point.x = rangesArray[tick][j] * cos(pitch_ang) * cos(yaw_ang);
-          point.y = rangesArray[tick][j] * cos(pitch_ang) * sin(yaw_ang);
-          point.z = rangesArray[tick][j] * sin(pitch_ang);
-          //points.points.insert(points.points.begin(), point);
+          double yaw_ang = sensor_i * this->angleRes * (M_PI/180); 
+          double pitch_ang = (this->verticalAngelMin + plan_i * verticalAngleResolutionFromSDF) * (M_PI/180);
+          point.x = rangesArray[sensor_i][plan_i]  * cos(pitch_ang) * cos(yaw_ang);
+          point.y = rangesArray[sensor_i][plan_i]  * cos(pitch_ang) * sin(yaw_ang);
+          point.z = rangesArray[sensor_i][plan_i]  * sin(pitch_ang);
           points.points.push_back(point);
         }
       }
@@ -268,12 +275,21 @@ public:
       points.header.frame_id = parent_name+"_velodyne16"; 
 
       _pointCloud_pub.publish(points);
+
+     // if(sensorAngle - this->test_prev_sensorAngle != M_PI/180*(this->angleRes*this->numOfRaySensors) )
+     //       std::cout << " Time = " << time << " diff =  " << sensorAngle.Degree() - this->test_prev_sensorAngle.Degree() << std::endl;            
+     // test_prev_sensorAngle =  sensorAngle;   
   }
 
-
+ // math::Angle test_prev_sensorAngle;
+  
 
   physics::ModelPtr model;
+
   physics::JointPtr joint;
+  physics::LinkPtr TopLink;
+  physics::LinkPtr TopLinkAcncore;
+
   std::string model_name;
   std::string parent_name;
   common::PID pid;
@@ -281,21 +297,29 @@ public:
 
 
   #if CPUvsGPU == 1
-    vector<gazebo::sensors::RaySensorPtr> myRays;  
+    vector<gazebo::sensors::RaySensorPtr> raySensors;  
   #elif CPUvsGPU == 2
-    vector<gazebo::sensors::GpuRaySensorPtr> myRays;
+    vector<gazebo::sensors::GpuRaySensorPtr> raySensors;
   #endif
 
 
   event::ConnectionPtr _updateConnection; // Pointer to the update event connection
-  common::Time sim_Time;
+  
+  private: common::Time lastUpdateTime;
+  
 
   double lastDegree;
   double angleRes;
-  double rangesArray[ANGULAR_STEPS][NUM_OF_PLANES];
+  double sensorDegree;
+  double rotRate;
+
+
+  int numOfRaySensors;
+
+  double rangesArray[MAX_NUM_OF_RAY_SENSORS][NUM_OF_PLANES];
   //   double RVIZPublishRate;
   double verticalAngleResolutionFromSDF;
-  double VerticalAngelResolutionReal[NUM_OF_RAY_SENSORS];
+  double VerticalAngelResolutionReal[MAX_NUM_OF_RAY_SENSORS];
   double verticalAngelMin;
   ros::Publisher _pointCloud_pub;
   ros::NodeHandle _nodeHandle;

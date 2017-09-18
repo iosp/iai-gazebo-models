@@ -2,6 +2,9 @@
 
 <launch>
 
+<param name="use_sim_time" value="true" />
+
+
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
   <arg name="paused" default="false"/>
   <arg name="physics" default="ode"/>
