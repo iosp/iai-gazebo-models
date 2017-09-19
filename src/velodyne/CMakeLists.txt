@@ -38,9 +38,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS})
 
-add_library(velodyne src/velodyne.cpp)
-target_link_libraries(velodyne ${GAZEBO_libraries} ${catkin_LIBRARIES} )
-add_dependencies(velodyne ${catkin_EXPORTED_TARGETS})
 
 add_library(velodyne16 src/velodyne16.cpp)
 target_link_libraries(velodyne16 ${GAZEBO_libraries} ${catkin_LIBRARIES} )
