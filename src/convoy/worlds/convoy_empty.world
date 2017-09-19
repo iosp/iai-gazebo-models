@@ -18,6 +18,9 @@
                 </clouds>
             </sky>
         </scene>
+
+
+<!--     -->  
        <physics type="ode">
 			<gravity>0 0 -9.81</gravity>
 			<max_step_size>0.001</max_step_size>
@@ -31,6 +34,152 @@
 				</solver>
 			</ode>
 		</physics>
+ 
+
+
+ <!-- <physics type="ode" name="default" default="true" /> -->
+
+    <physics type="ode" name="unthrottled">
+      <real_time_update_rate>0.0</real_time_update_rate>
+    </physics>
+
+
+    <physics type="ode" name="unthrottled0">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <island_threads>0</island_threads>
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor>
+        </solver>
+      </ode>
+    </physics>
+
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor> 
+    <physics type="ode" name="unthrottled1">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <island_threads>1</island_threads>
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor> 
+        </solver>
+      </ode>
+    </physics>
+
+
+    <physics type="ode" name="unthrottled2">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <island_threads>2</island_threads>
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor>          
+        </solver>
+      </ode>
+    </physics>
+
+
+    <physics type="ode" name="unthrottled3">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <island_threads>3</island_threads>
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor>           
+        </solver>
+      </ode>
+    </physics>
+
+
+    <physics type="ode" name="unthrottled4">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <island_threads>4</island_threads>
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor>           
+        </solver>
+      </ode>
+    </physics>
+
+
+    <physics type="ode" name="split_unthrottled0">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <thread_position_correction>1</thread_position_correction>
+          <island_threads>0</island_threads>
+          <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor>
+        </solver>
+      </ode>
+    </physics>
+
+
+    <physics type="ode" name="split_unthrottled1">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <thread_position_correction>1</thread_position_correction>
+          <island_threads>1</island_threads>
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor> 
+        </solver>
+      </ode>
+    </physics>
+
+
+    <physics type="ode" name="split_unthrottled2">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <thread_position_correction>1</thread_position_correction>
+          <island_threads>2</island_threads>
+          <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor>
+        </solver>
+      </ode>
+    </physics>
+
+
+    <physics type="ode" name="split_unthrottled3">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <thread_position_correction>1</thread_position_correction>
+          <island_threads>3</island_threads>
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor>           
+        </solver>
+      </ode>
+    </physics>
+
+
+    <physics type="ode" name="split_unthrottled4">
+      <real_time_update_rate>0.0</real_time_update_rate>
+      <ode>
+        <solver>
+          <thread_position_correction>1</thread_position_correction>
+          <island_threads>4</island_threads>
+		  <type>quick</type>
+		  <iters>150</iters>
+		  <sor>1.4</sor>           
+        </solver>
+      </ode>
+    </physics>
+
 
 
         <gui>
@@ -40,14 +189,14 @@
         </gui>
 
 
-        <!--
+<!-- 
         <include>
             <uri>model://ground_plane</uri>
             <name>ground_plane</name>
             <pose>0 0 0 0 0 0</pose>
         </include>
 -->
-
+<!---->
         <include>
             <uri>model://worldHightmap</uri>
             <name>worldHightmap</name>
@@ -64,14 +213,29 @@
 --> 
 
 
-<!---->
+<!-- -->
         <include>
             <uri>model://hmmwv</uri>
             <name>hmmwv</name>
             <pose>0 0 7 0 0 0</pose>
         </include>
+
+
+<!-- 
+        <include>
+            <uri>model://hmmwv</uri>
+            <name>hmmwv1</name>
+            <pose>-20 0 7 0 0 0</pose>
+        </include>
+-->
+
  
- <!---->
+
+
+
+
+ 
+ <!-- -->
         <include>
             <uri>model://oshkosh_velodyne16</uri> 
             <name>oshkosh1</name>
@@ -81,7 +245,7 @@
 
 <!--
         <include>
-            <uri>model://oshkosh_velodyne16</uri>
+            <uri>model://oshkosh</uri>
             <name>oshkosh2</name>
             <pose>-80 0 2 0 0 0</pose>
         </include>

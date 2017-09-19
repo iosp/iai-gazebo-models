@@ -7,6 +7,17 @@
   	<arg name="vehicle_name" value="hmmwv"/>
   </include>
 
+
+
+ <!-- hmmwv1 
+  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  	<arg name="vehicle_name" value="hmmwv1"/>
+  </include>
+
+  <node name="follower_controller1"  type="follower_controller.py"  pkg="convoy"  output="screen" respawn="true"
+        args="hmmwv1 hmmwv"/>
+ -->
+
 <!-- oshkosh1 -->
   <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
   	<arg name="vehicle_name" value="oshkosh1"/>
@@ -47,24 +58,24 @@
         args="hmmwv
                100   0   7
                100  100  7
-              -100  100  10
+              -100  50  10
               -100 -100  7
                100 -100  7
                
                100   0   7
                100  100  7
-              -100  100  7
+              -100  50  7
               -100 -100  7
                100 -100  10
                
                100   0   7
                100  100  7
-              -100  100  7
+              -100  50  7
               -100 -100  7
                100 -100  10
               "/>
 
-
+<!-- -->
   <node name="shahid_controller"      type="shahid_controller.py"      pkg="shahid"  output="screen" respawn="true" 
         args="hmmwv musa"/>              
 
