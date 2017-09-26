@@ -82,11 +82,13 @@ public:
 
   void OnUpdate(const common::UpdateInfo &_info)
   {
+    common::Time sensorsUpdateTime = getRanges(_info.simTime);
+    
     double dTime = (_info.simTime - this->lastUpdateTime).Double();
     
     math::Angle dAngle =  dTime * 2*M_PI*this->rotRate;
 
-    //std::cout << " dTime = " << dTime <<  " dAngle = " << dAngle.Degree() << " Step = "  << this->angleRes * numOfRaySensors << std::endl;
+    std::cout << " dTime = " << dTime <<  " dAngle = " << dAngle.Degree() << " Step = "  << this->angleRes * numOfRaySensors << std::endl;
 
     math::Angle AnglStep =  M_PI/180*(this->angleRes*this->numOfRaySensors);
 
@@ -98,23 +100,21 @@ public:
       return; 
           }
 
-    this->lastUpdateTime = _info.simTime;
 
 
-    getRanges();
 
+    //common::Time sensorsUpdateTime = getRanges(_info.simTime);
     
-
     math::Angle jointAngle =  this->joint->Position(0);
+        
+    if (std::abs(sensorsUpdateTime.Double() - _info.simTime.Double()) <= 0.005 ) 
+       boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, jointAngle ,this->lastUpdateTime);
+   
     
-    math::Angle jointNextAngle = jointAngle +  dAngle; // AnglStep; //
-    
-    this->joint->SetPosition(0,jointNextAngle.Radian()); 
+     math::Angle jointNextAngle = jointAngle +  dAngle; 
+     this->joint->SetPosition(0,jointNextAngle.Radian()); 
 
-   // std::cout << " dTime = " << dTime <<  " dAngle = " << dAngle.Degree() <<  "  jointNextAngle.Degree() = " << jointNextAngle.Degree() << std::endl;
-    
-
-    boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, jointAngle ,_info.simTime);
+    this->lastUpdateTime = _info.simTime;
 
   }
 
@@ -126,13 +126,14 @@ public:
     for (auto sensor_it = v_sensor.begin(); sensor_it != v_sensor.end(); ++sensor_it) 
         {
           std::string p_name = (*sensor_it)->ParentName();
-          if (p_name.compare(0, parent_name.length(), parent_name) == 0 )
+          std::string s_name = this->parent_name + "::velodyne16";
+          if  (p_name.compare(0, s_name.length(), s_name) == 0 )
             {
               #if CPUvsGPU == 1
-                std::cout << " casting in to CPU ray sensor " << senCount << std::endl; 
+                std::cout << " casting in to CPU ray sensor "  << senCount << " parent_name = " << parent_name <<  "   p_name = " << p_name << std::endl; 
                 raySensors.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(*sensor_it));
               #elif CPUvsGPU == 2
-                std::cout << " casting in to GPU ray sensor " << senCount << std::endl;               
+                std::cout << " casting in to GPU ray sensor " << senCount << " parent_name = " << parent_name <<  "   p_name = " << p_name << std::endl; 
                 raySensors.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(*sensor_it));
               #endif
               senCount++;
@@ -143,29 +144,65 @@ public:
   }
 
   //getRanges
-  void getRanges()
+  common::Time getRanges(common::Time OnUpdateTime)
   {
-    if(this->raySensors.size() != this->numOfRaySensors) {
-      gzerr << " this->raySensors.size() != this->numOfRaySensors  \n"; 
-      return; 
-         }
+    // if(this->raySensors.size() != this->numOfRaySensors) {
+    //   gzerr << " this->raySensors.size() != this->numOfRaySensors  \n"; 
+    //   return; 
+    //      }
 
+    double currentTime = OnUpdateTime.Double();
+    common::Time mTime = this->raySensors[0]->LastMeasurementTime();
+    double minTime = mTime.Double();
+    double maxTime = mTime.Double();       
+    
+    std::cout << " currentTime  = " << currentTime << std::endl;
+    
     for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
       {
         std::vector<double> rayMeasuresVec;
 
+
+
+       // gazebo::sensors::SensorManager::Instance()->Update(true);   // Not working cousing core dumpe
+       // this->raySensors[sensor_i]->UpdateImpl(true);   // Have no influence 
+       // this->raySensors[sensor_i]->SetActive(true);    // Have no influence 
         this->raySensors[sensor_i]->Ranges(rayMeasuresVec);
+
+       // this->raySensors[sensor_i]->SetActive(false);  // Have no influence 
+        
+
+        double sensorLastMeasurementTime = this->raySensors[sensor_i]->LastMeasurementTime().Double();
+        double sensorLastUpdateTime = this->raySensors[sensor_i]->LastUpdateTime().Double();
+        if (sensorLastMeasurementTime > maxTime ) 
+           maxTime = sensorLastMeasurementTime;
+        if (sensorLastMeasurementTime < minTime ) 
+           minTime = sensorLastMeasurementTime;  
+
+        std::cout << " sensor #" << sensor_i << " mesure time = " << sensorLastMeasurementTime << std::endl;
+        //std::cout << " sensor #" << sensor_i << " update time = " << sensorLastUpdateTime << std::endl;
+        
 
       if (rayMeasuresVec.size() != NUM_OF_PLANES) {
         gzerr << " rayMeasuresVec.size() != NUM_OF_PLANES  \n"; 
-        return;
+        return(mTime);
         }
 
+      //if (sensorLastMeasurementTime != mTime.Double())
+      //  std::cout << " sensorLastMeasurementTime != mTime throwing mesurment" << std::endl;
+        
       for (int plain_i = 0; plain_i < NUM_OF_PLANES; plain_i++)
          {
+          //if (sensorLastMeasurementTime == mTime.Double())   
            this->rangesArray[sensor_i][plain_i] = rayMeasuresVec[plain_i];
+          //else 
+          //  this->rangesArray[sensor_i][plain_i] = 0; 
          }
       }
+
+      //std::cout << " max time diff  = " << maxTime - minTime << std::endl;
+
+     return(mTime);
   }
 
 
@@ -187,10 +224,17 @@ public:
     // Store the model pointer for convenience.
     this->model = _model;
 
-    this->model_name = model->GetName(); 
+    this->model_name = _model->GetName(); 
     std::cout << "Loading " << model_name << " Plugin" << std::endl;
-    this->parent_name = model->GetParentModel()->GetName();
+    this->parent_name = _model->GetParentModel()->GetName();
     std::cout << "parent_name = " << parent_name << std::endl;
+    
+    
+    // std::cout << "_model->GetName() = " <<  _model->GetName()  << std::endl;  
+    // std::cout << "_model->GetParentModel()->GetName() = " <<  _model->GetParentModel()->GetName() << std::endl;        
+    // std::cout << "_model->GetParentModel()->GetParentModel()->GetName() = " <<  _model->GetParentModel()->GetParentModel()->GetName() << std::endl;    
+    // std::cout << "_model->GetPluginCount() = " << _model->GetPluginCount() << std::endl;
+    // std::cout << "_model->GetScopedName() = " <<   _model->GetScopedName() << std::endl;
     
 
 
@@ -237,11 +281,20 @@ public:
          
 
 
-    this->TopLink = _model->GetLink("velodyne16::top");
-
-    this->joint = _model->GetJoint("velodyne16::velodyne16_joint");    
+    // Test for whether the model is nested and a prefix is needed to find the joint
 
 
+    
+
+    std::string pref = _model->GetName();
+    if( ! this->model->GetJoint(pref+"::velodyne16_joint") )
+        pref = "velodyne16";
+
+    this->joint = this->model->GetJoint(pref+"::velodyne16_joint");    
+
+
+
+ 
     //set the topic
     std::string topic_name = model_name+"/velodyne16";
     _pointCloud_pub = _nodeHandle.advertise<sensor_msgs::PointCloud>(topic_name, 10);
@@ -249,8 +302,6 @@ public:
     //init the ray sensors
     initSensors();
 
-    lastDegree = -1;
-    this->sensorDegree = 0;
     this->_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne16::OnUpdate, this, _1));
  
   }
@@ -287,8 +338,6 @@ public:
   physics::ModelPtr model;
 
   physics::JointPtr joint;
-  physics::LinkPtr TopLink;
-  physics::LinkPtr TopLinkAcncore;
 
   std::string model_name;
   std::string parent_name;
@@ -308,9 +357,7 @@ public:
   private: common::Time lastUpdateTime;
   
 
-  double lastDegree;
-  double angleRes;
-  double sensorDegree;
+  double angleRes; 
   double rotRate;
 
 
