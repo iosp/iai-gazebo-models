@@ -24,7 +24,8 @@
 #include <string>
 #include <tf/transform_broadcaster.h>
 
-#include <math.h>
+
+#include <ignition/math/Angle.hh>
 
 #define MAX_NUM_OF_RAY_SENSORS 50 // 32 - CPU, 16 - GPU 
 #define CPUvsGPU 2 // CPU = 1 , GPU = 2
@@ -62,7 +63,7 @@ public:
     br.sendTransform(st);
   }
 
-  void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], math::Angle sensorAngle ,common::Time time)
+  void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], ignition::math::Angle sensorAngle ,common::Time time)
   {
     //		ros::Time RVIZlastUpdateTime = ros::Time::now();
     //		while(true)
@@ -82,15 +83,12 @@ public:
 
   void OnUpdate(const common::UpdateInfo &_info)
   {
-    common::Time sensorsUpdateTime = getRanges(_info.simTime);
-    
-    double dTime = (_info.simTime - this->lastUpdateTime).Double();
-    
-    math::Angle dAngle =  dTime * 2*M_PI*this->rotRate;
+    common::Time currentUpdateTime = _info.simTime;  
 
-    std::cout << " dTime = " << dTime <<  " dAngle = " << dAngle.Degree() << " Step = "  << this->angleRes * numOfRaySensors << std::endl;
-
-    math::Angle AnglStep =  M_PI/180*(this->angleRes*this->numOfRaySensors);
+    double dTime = (currentUpdateTime - this->lastUpdateTime).Double();
+    
+    ignition::math::Angle dAngle =  dTime * 2*M_PI*this->rotRate;
+    ignition::math::Angle AnglStep =  M_PI/180*(this->angleRes*this->numOfRaySensors);
 
     if (dAngle.Degree() < AnglStep.Degree() )
       return;
@@ -101,20 +99,23 @@ public:
           }
 
 
-
-
-    //common::Time sensorsUpdateTime = getRanges(_info.simTime);
-    
-    math::Angle jointAngle =  this->joint->Position(0);
+    common::Time sensorsUpdateTime = getRanges(_info.simTime);
         
-    if (std::abs(sensorsUpdateTime.Double() - _info.simTime.Double()) <= 0.005 ) 
-       boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, jointAngle ,this->lastUpdateTime);
-   
-    
-     math::Angle jointNextAngle = jointAngle +  dAngle; 
+    ignition::math::Angle currentJointAngle =  this->joint->Position(0);
+    double sensorDellay = currentUpdateTime.Double() - sensorsUpdateTime.Double();
+    if ( sensorDellay >= 0 )
+    {
+     ignition::math::Angle sensorDellayAngle =  sensorDellay * 2*M_PI*this->rotRate;
+     ignition::math::Angle AngleCorectionToSensorDellay =  ( std::floor( ( sensorDellayAngle.Radian() - 0.5*AnglStep.Radian() ) / AnglStep.Radian() ) ) * AnglStep.Radian(); 
+     boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, currentJointAngle  - AngleCorectionToSensorDellay  ,this->lastUpdateTime);
+     //std::cout << " sensorDellay = " << sensorDellay <<  "     AngleCorectionToSensorDellay = "  << AngleCorectionToSensorDellay.Degree()  << std::endl;
+    }
+
+
+     ignition::math::Angle jointNextAngle = currentJointAngle +  dAngle; 
      this->joint->SetPosition(0,jointNextAngle.Radian()); 
 
-    this->lastUpdateTime = _info.simTime;
+    this->lastUpdateTime = currentUpdateTime;
 
   }
 
@@ -144,19 +145,21 @@ public:
   }
 
   //getRanges
-  common::Time getRanges(common::Time OnUpdateTime)
+  common::Time getRanges(common::Time c)
   {
     // if(this->raySensors.size() != this->numOfRaySensors) {
     //   gzerr << " this->raySensors.size() != this->numOfRaySensors  \n"; 
     //   return; 
     //      }
 
-    double currentTime = OnUpdateTime.Double();
-    common::Time mTime = this->raySensors[0]->LastMeasurementTime();
+    double currentTime = c.Double();
+    //common::Time mTime = this->raySensors[0]->LastMeasurementTime();
+    common::Time mTime = this->raySensors[0]->LastUpdateTime();
+    
     double minTime = mTime.Double();
     double maxTime = mTime.Double();       
     
-    std::cout << " currentTime  = " << currentTime << std::endl;
+   // std::cout << " currentTime  = " << currentTime << std::endl;
     
     for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
       {
@@ -172,35 +175,35 @@ public:
        // this->raySensors[sensor_i]->SetActive(false);  // Have no influence 
         
 
-        double sensorLastMeasurementTime = this->raySensors[sensor_i]->LastMeasurementTime().Double();
-        double sensorLastUpdateTime = this->raySensors[sensor_i]->LastUpdateTime().Double();
-        if (sensorLastMeasurementTime > maxTime ) 
-           maxTime = sensorLastMeasurementTime;
-        if (sensorLastMeasurementTime < minTime ) 
-           minTime = sensorLastMeasurementTime;  
+        //double sensorDataTime = this->raySensors[sensor_i]->LastMeasurementTime().Double();
+       double sensorDataTime = this->raySensors[sensor_i]->LastUpdateTime().Double();
+        if (sensorDataTime > maxTime ) 
+           maxTime = sensorDataTime;
+        if (sensorDataTime < minTime ) 
+           minTime = sensorDataTime;  
 
-        std::cout << " sensor #" << sensor_i << " mesure time = " << sensorLastMeasurementTime << std::endl;
-        //std::cout << " sensor #" << sensor_i << " update time = " << sensorLastUpdateTime << std::endl;
+       // std::cout << " sensor #" << sensor_i << " update time = " << sensorDataTime << std::endl;
         
 
       if (rayMeasuresVec.size() != NUM_OF_PLANES) {
         gzerr << " rayMeasuresVec.size() != NUM_OF_PLANES  \n"; 
         return(mTime);
-        }
-
-      //if (sensorLastMeasurementTime != mTime.Double())
-      //  std::cout << " sensorLastMeasurementTime != mTime throwing mesurment" << std::endl;
+        
+      }
+      //if (sensorDataTime != mTime.Double())
+      //  std::cout << " sensorDataTime != mTime throwing mesurment" << std::endl;
         
       for (int plain_i = 0; plain_i < NUM_OF_PLANES; plain_i++)
          {
-          //if (sensorLastMeasurementTime == mTime.Double())   
+          if (sensorDataTime == mTime.Double())   
            this->rangesArray[sensor_i][plain_i] = rayMeasuresVec[plain_i];
-          //else 
-          //  this->rangesArray[sensor_i][plain_i] = 0; 
+          else 
+            this->rangesArray[sensor_i][plain_i] = 0; 
          }
       }
 
-      //std::cout << " max time diff  = " << maxTime - minTime << std::endl;
+     // std::cout << " max time diff  = " << maxTime - minTime << std::endl;
+     // std::cout << " max OnUpdate diff " <<  currentTime - minTime << std::endl;
 
      return(mTime);
   }
@@ -306,7 +309,7 @@ public:
  
   }
 
-  void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time, math::Angle sensorAngle)
+  void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time, ignition::math::Angle sensorAngle)
   {
       sensor_msgs::PointCloud points;
       for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
@@ -332,7 +335,7 @@ public:
      // test_prev_sensorAngle =  sensorAngle;   
   }
 
- // math::Angle test_prev_sensorAngle;
+ // ignition::math::Angle test_prev_sensorAngle;
   
 
   physics::ModelPtr model;
