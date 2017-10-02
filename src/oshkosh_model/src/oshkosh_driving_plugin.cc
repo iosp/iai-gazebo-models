@@ -91,7 +91,7 @@ public:
     Throttle_command_timer.Start();
     Angular_command_timer.Start();
     Breaking_command_timer.Start();
-    this->Ros_nh = new ros::NodeHandle("oshkoshDrivingPlugin_node");
+    this->Ros_nh = new ros::NodeHandle(vehicle_name+"_oshkoshDrivingPlugin_node");
 
     // Subscribe to the topic, and register a callback
     Steering_rate_sub = this->Ros_nh->subscribe("/"+vehicle_name+"/Driving/Steering", 60, &oshkoshDrivingPlugin::On_Angular_command, this);
