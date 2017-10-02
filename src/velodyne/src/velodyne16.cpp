@@ -45,182 +45,16 @@ class velodyne16 : public ModelPlugin
 public:
   velodyne16() {}
 
-  tf::Transform transformBuilder(float x, float y, float z, float Roll, float Pitch, float Yaw)
-  {
-    tf::Transform transform;
-    transform.setOrigin(tf::Vector3(x, y, z));
 
-    tf::Quaternion q;
-    q.setRPY(Roll, Pitch, Yaw);
-    transform.setRotation(q);
-    return (transform);
-  }
-
-  void TF_Broadcast(double x, double y, double z, double Roll, double Pitch, double Yaw, std::string frame_id, std::string child_frame_id, ros::Time t)
-  {
-    static tf::TransformBroadcaster br;
-    tf::StampedTransform st(transformBuilder(x, y, z, Roll, Pitch, Yaw), t, frame_id, child_frame_id);
-    br.sendTransform(st);
-  }
-
-  void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], ignition::math::Angle sensorAngle ,common::Time time)
-  {
-    //		ros::Time RVIZlastUpdateTime = ros::Time::now();
-    //		while(true)
-    //		{
-    //			ros::Time newRosTime = ros::Time::now();
-    //			double diff = (newRosTime.toSec() - RVIZlastUpdateTime.toSec()) - (1/RVIZPublishRate);
-    //			if(diff > 0.0001)
-    //			{
-    ros::Time t(time.sec, time.nsec);
-    RVIZ_Publisher(rangesArray, t ,sensorAngle);
-    //				RVIZlastUpdateTime = newRosTime;
-    // TF publish
-    TF_Broadcast(0.0, 0.0, 0.0, 0.0, 0.0, sensorAngle.Radian(), model_name, model_name+"_velodyne16", t);
-    //			}
-    //		}
-  }
-
-  void OnUpdate(const common::UpdateInfo &_info)
-  {
-    common::Time currentUpdateTime = _info.simTime;  
-
-    double dTime = (currentUpdateTime - this->lastUpdateTime).Double();
-    
-    ignition::math::Angle dAngle =  dTime * 2*M_PI*this->rotRate;
-    ignition::math::Angle AnglStep =  M_PI/180*(this->angleRes*this->numOfRaySensors);
-
-    if (dAngle.Degree() < AnglStep.Degree() )
-      return;
-
-    if (dAngle.Degree() > 2*AnglStep.Degree() ) {
-      gzerr << " Step resolution of " << this->angleRes << " cannot be reached !! \n"; 
-      return; 
-          }
-
-
-    common::Time sensorsUpdateTime = getRanges(_info.simTime);
-        
-    ignition::math::Angle currentJointAngle =  this->joint->Position(0);
-    double sensorDellay = currentUpdateTime.Double() - sensorsUpdateTime.Double();
-    if ( sensorDellay >= 0 )
-    {
-     ignition::math::Angle sensorDellayAngle =  sensorDellay * 2*M_PI*this->rotRate;
-     ignition::math::Angle AngleCorectionToSensorDellay =  ( std::floor( ( sensorDellayAngle.Radian() - 0.5*AnglStep.Radian() ) / AnglStep.Radian() ) ) * AnglStep.Radian(); 
-     boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, currentJointAngle  - AngleCorectionToSensorDellay  ,this->lastUpdateTime);
-     //std::cout << " sensorDellay = " << sensorDellay <<  "     AngleCorectionToSensorDellay = "  << AngleCorectionToSensorDellay.Degree()  << std::endl;
-    }
-
-
-     ignition::math::Angle jointNextAngle = currentJointAngle +  dAngle; 
-     this->joint->SetPosition(0,jointNextAngle.Radian()); 
-
-    this->lastUpdateTime = currentUpdateTime;
-
-  }
-
-  void initSensors()
-  {
-    sensors::Sensor_V v_sensor = gazebo::sensors::SensorManager::Instance()->GetSensors();
-
-    int senCount = 0;
-    for (auto sensor_it = v_sensor.begin(); sensor_it != v_sensor.end(); ++sensor_it) 
-        {
-          std::string p_name = (*sensor_it)->ParentName();
-          std::string s_name = this->parent_name + "::velodyne16";
-          if  (p_name.compare(0, s_name.length(), s_name) == 0 )
-            {
-              #if CPUvsGPU == 1
-                std::cout << " casting in to CPU ray sensor "  << senCount << " parent_name = " << parent_name <<  "   p_name = " << p_name << std::endl; 
-                raySensors.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(*sensor_it));
-              #elif CPUvsGPU == 2
-                std::cout << " casting in to GPU ray sensor " << senCount << " parent_name = " << parent_name <<  "   p_name = " << p_name << std::endl; 
-                raySensors.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(*sensor_it));
-              #endif
-              senCount++;
-            }
-        }
-    
-    this->numOfRaySensors = senCount;    
-  }
-
-  //getRanges
-  common::Time getRanges(common::Time c)
-  {
-    // if(this->raySensors.size() != this->numOfRaySensors) {
-    //   gzerr << " this->raySensors.size() != this->numOfRaySensors  \n"; 
-    //   return; 
-    //      }
-
-    double currentTime = c.Double();
-    //common::Time mTime = this->raySensors[0]->LastMeasurementTime();
-    common::Time mTime = this->raySensors[0]->LastUpdateTime();
-    
-    double minTime = mTime.Double();
-    double maxTime = mTime.Double();       
-    
-   // std::cout << " currentTime  = " << currentTime << std::endl;
-    
-    for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
-      {
-        std::vector<double> rayMeasuresVec;
-
-
-
-       // gazebo::sensors::SensorManager::Instance()->Update(true);   // Not working cousing core dumpe
-       // this->raySensors[sensor_i]->UpdateImpl(true);   // Have no influence 
-       // this->raySensors[sensor_i]->SetActive(true);    // Have no influence 
-        this->raySensors[sensor_i]->Ranges(rayMeasuresVec);
-
-       // this->raySensors[sensor_i]->SetActive(false);  // Have no influence 
-        
-
-        //double sensorDataTime = this->raySensors[sensor_i]->LastMeasurementTime().Double();
-       double sensorDataTime = this->raySensors[sensor_i]->LastUpdateTime().Double();
-        if (sensorDataTime > maxTime ) 
-           maxTime = sensorDataTime;
-        if (sensorDataTime < minTime ) 
-           minTime = sensorDataTime;  
-
-       // std::cout << " sensor #" << sensor_i << " update time = " << sensorDataTime << std::endl;
-        
-
-      if (rayMeasuresVec.size() != NUM_OF_PLANES) {
-        gzerr << " rayMeasuresVec.size() != NUM_OF_PLANES  \n"; 
-        return(mTime);
-        
-      }
-      //if (sensorDataTime != mTime.Double())
-      //  std::cout << " sensorDataTime != mTime throwing mesurment" << std::endl;
-        
-      for (int plain_i = 0; plain_i < NUM_OF_PLANES; plain_i++)
-         {
-          if (sensorDataTime == mTime.Double())   
-           this->rangesArray[sensor_i][plain_i] = rayMeasuresVec[plain_i];
-          else 
-            this->rangesArray[sensor_i][plain_i] = 0; 
-         }
-      }
-
-     // std::cout << " max time diff  = " << maxTime - minTime << std::endl;
-     // std::cout << " max OnUpdate diff " <<  currentTime - minTime << std::endl;
-
-     return(mTime);
-  }
-
-
-
-  /// \brief The load function is called by Gazebo when the plugin is
-  /// inserted into simulation
-  /// \param[in] _model A pointer to the model that this plugin is
-  /// attached to.
+  /// \brief The load function is called by Gazebo when the plugin is inserted into simulation
+  /// \param[in] _model A pointer to the model that this plugin is attached to.
   /// \param[in] _sdf A pointer to the plugin's SDF element.
   virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   {
     // Safety check
     if (_model->GetJointCount() == 0)
     {
-      std::cerr << "Invalid joint count, velodyne16 plugin not loaded\n";
+      std::cerr <<this->model_name << ": Invalid joint count, velodyne16 plugin not loaded\n";
       return;
     }
 
@@ -233,13 +67,12 @@ public:
     std::cout << "parent_name = " << parent_name << std::endl;
     
     
-    // std::cout << "_model->GetName() = " <<  _model->GetName()  << std::endl;  
-    // std::cout << "_model->GetParentModel()->GetName() = " <<  _model->GetParentModel()->GetName() << std::endl;        
-    // std::cout << "_model->GetParentModel()->GetParentModel()->GetName() = " <<  _model->GetParentModel()->GetParentModel()->GetName() << std::endl;    
-    // std::cout << "_model->GetPluginCount() = " << _model->GetPluginCount() << std::endl;
-    // std::cout << "_model->GetScopedName() = " <<   _model->GetScopedName() << std::endl;
+    //  std::cout << "_model->GetName() = " <<  _model->GetName()  << std::endl;  
+    //  std::cout << "_model->GetParentModel()->GetName() = " <<  _model->GetParentModel()->GetName() << std::endl;        
+    //  std::cout << "_model->GetParentModel()->GetParentModel()->GetName() = " <<  _model->GetParentModel()->GetParentModel()->GetName() << std::endl;    
+    //  std::cout << "_model->GetPluginCount() = " << _model->GetPluginCount() << std::endl;
+    //  std::cout << "_model->GetScopedName() = " <<   _model->GetScopedName() << std::endl;
     
-
 
     // set the angle resolution, default is 0.2 deg
     this->angleRes = 0.2;  // Default is 0.2deg
@@ -249,11 +82,10 @@ public:
       ROS_WARN("velodyne16: there is no 'angleRes' parameter in the SDF seting to defult of 0.2deg");
    
 
-    // geting the verticalAngleResolutionFromSDF from sdf
-    // using for validate the user, compare this veriable and real vertical angle (VerticalAngelResolutionReal[])
-    verticalAngleResolutionFromSDF = 0;
+    // geting the verticalAngleResolution from sdf
+    verticalAngleResolution = 0;
     if (_sdf->HasElement("verticalAngleResolution"))
-      verticalAngleResolutionFromSDF = _sdf->Get<double>("verticalAngleResolution");
+      verticalAngleResolution = _sdf->Get<double>("verticalAngleResolution");
     else
       ROS_WARN("velodyne16: there is no 'verticalAngleResolution' parameter in the SDF (validation parameter)");
 
@@ -285,10 +117,6 @@ public:
 
 
     // Test for whether the model is nested and a prefix is needed to find the joint
-
-
-    
-
     std::string pref = _model->GetName();
     if( ! this->model->GetJoint(pref+"::velodyne16_joint") )
         pref = "velodyne16";
@@ -296,8 +124,6 @@ public:
     this->joint = this->model->GetJoint(pref+"::velodyne16_joint");    
 
 
-
- 
     //set the topic
     std::string topic_name = model_name+"/velodyne16";
     _pointCloud_pub = _nodeHandle.advertise<sensor_msgs::PointCloud>(topic_name, 10);
@@ -306,8 +132,133 @@ public:
     initSensors();
 
     this->_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne16::OnUpdate, this, _1));
- 
   }
+
+
+  void initSensors()
+  {
+    sensors::Sensor_V v_sensor = gazebo::sensors::SensorManager::Instance()->GetSensors();
+
+    int senCount = 0;
+    for (auto sensor_it = v_sensor.begin(); sensor_it != v_sensor.end(); ++sensor_it) 
+        {
+          std::string p_name = (*sensor_it)->ParentName();
+          std::string s_name = this->parent_name + "::velodyne16";
+          if  (p_name.compare(0, s_name.length(), s_name) == 0 )
+            {
+              #if CPUvsGPU == 1
+                std::cout << " casting in to CPU ray sensor "  << senCount << " parent_name = " << parent_name <<  "   p_name = " << p_name << std::endl; 
+                raySensors.push_back(std::dynamic_pointer_cast<sensors::RaySensor>(*sensor_it));
+              #elif CPUvsGPU == 2
+                std::cout << " casting in to GPU ray sensor " << senCount << " parent_name = " << parent_name <<  "   p_name = " << p_name << std::endl; 
+                raySensors.push_back(std::dynamic_pointer_cast<sensors::GpuRaySensor>(*sensor_it));
+              #endif
+              senCount++;
+            }
+        }
+    
+    this->numOfRaySensors = senCount;    
+  }
+
+
+  void OnUpdate(const common::UpdateInfo &_info)
+  {
+    common::Time currentUpdateTime = _info.simTime;  
+
+    double dTime = (currentUpdateTime - this->lastUpdateTime).Double();
+    
+    ignition::math::Angle dAngle =  dTime * 2*M_PI*this->rotRate;
+    ignition::math::Angle AnglStep =  M_PI/180*(this->angleRes*this->numOfRaySensors);
+
+    if (dAngle.Degree() < AnglStep.Degree() )
+      return;
+
+    if (dAngle.Degree() > 2*AnglStep.Degree() ) {
+      gzerr << this->model_name << ":  Step resolution of " << this->angleRes << " cannot be reached !! \n"; 
+      return; 
+          }
+
+    common::Time sensorsUpdateTime = getRanges();
+        
+    ignition::math::Angle currentJointAngle =  this->joint->Position(0);
+    double sensorDellay = currentUpdateTime.Double() - sensorsUpdateTime.Double();
+    if ( sensorDellay >= 0 )
+    {
+     ignition::math::Angle sensorDellayAngle =  sensorDellay * 2*M_PI*this->rotRate;
+     ignition::math::Angle AngleCorectionToSensorDellay =  ( std::floor( ( sensorDellayAngle.Radian() - 0.5*AnglStep.Radian() ) / AnglStep.Radian() ) ) * AnglStep.Radian(); 
+     boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, currentJointAngle  - AngleCorectionToSensorDellay  ,this->lastUpdateTime);
+     //std::cout << " sensorDellay = " << sensorDellay <<  "     AngleCorectionToSensorDellay = "  << AngleCorectionToSensorDellay.Degree()  << std::endl;
+    }
+
+
+    ignition::math::Angle jointNextAngle = currentJointAngle +  dAngle; 
+    this->joint->SetPosition(0,jointNextAngle.Radian()); 
+
+    this->lastUpdateTime = currentUpdateTime;
+
+  }
+
+
+  common::Time getRanges()
+  {
+    common::Time sensorDataTime = this->raySensors[0]->LastUpdateTime();
+    double minTime = sensorDataTime.Double();
+    double maxTime = sensorDataTime.Double();       
+    
+    
+    int unSyncRaysConter = 0;
+    for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
+      {
+       std::vector<double> rayMeasuresVec;
+       this->raySensors[sensor_i]->Ranges(rayMeasuresVec);
+         
+
+       if (rayMeasuresVec.size() != NUM_OF_PLANES) {
+             if ( rayMeasuresVec.size() >= 1)  // avoiding error prints before the sensors loaded 
+                 gzerr <<this->model_name << ": rayMeasuresVec.size() != NUM_OF_PLANES  \n"; 
+             return(sensorDataTime);  
+             }
+
+       double rayDataTime = this->raySensors[sensor_i]->LastUpdateTime().Double();
+       if (rayDataTime != sensorDataTime.Double()) {
+            std::fill(rayMeasuresVec.begin(), rayMeasuresVec.end(), 0);   // getting rid of the scans that are not in sync with sensor_i = 0 
+            unSyncRaysConter++;
+           // gzerr << this->model_name << " : velodyne rayDataTime unsync - throwing mesurment    ( rayDataTime = " <<  rayDataTime  << "   sensorDataTime = "  << sensorDataTime.Double() << " ) \n"; 
+            }
+
+       for (int plain_i = 0; plain_i < NUM_OF_PLANES; plain_i++)         
+           this->rangesArray[sensor_i][plain_i] = rayMeasuresVec[plain_i];
+      }
+
+      if (unSyncRaysConter >= 0.9*this->numOfRaySensors  ) {
+        gzerr << this->model_name << ":  The number of un-sync rays (that are thrown) is : " << unSyncRaysConter << "\n" ; 
+        return(sensorDataTime);  
+        }
+       
+     return(sensorDataTime);
+  }
+
+
+
+
+  void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], ignition::math::Angle sensorAngle ,common::Time time)
+  {
+    //		ros::Time RVIZlastUpdateTime = ros::Time::now();
+    //		while(true)
+    //		{
+    //			ros::Time newRosTime = ros::Time::now();
+    //			double diff = (newRosTime.toSec() - RVIZlastUpdateTime.toSec()) - (1/RVIZPublishRate);
+    //			if(diff > 0.0001)
+    //			{
+    ros::Time t(time.sec, time.nsec);
+    RVIZ_Publisher(rangesArray, t ,sensorAngle);
+    //				RVIZlastUpdateTime = newRosTime;
+    // TF publish
+    TF_Broadcast(0.0, 0.0, 0.0, 0.0, 0.0, sensorAngle.Radian(), model_name, model_name+"_velodyne16", t);
+    //			}
+    //		}
+  }
+
 
   void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time, ignition::math::Angle sensorAngle)
   {
@@ -318,7 +269,7 @@ public:
         {
           geometry_msgs::Point32 point;
           double yaw_ang = sensor_i * this->angleRes * (M_PI/180); 
-          double pitch_ang = (this->verticalAngelMin + plan_i * verticalAngleResolutionFromSDF) * (M_PI/180);
+          double pitch_ang = (this->verticalAngelMin + plan_i * verticalAngleResolution) * (M_PI/180);
           point.x = rangesArray[sensor_i][plan_i]  * cos(pitch_ang) * cos(yaw_ang);
           point.y = rangesArray[sensor_i][plan_i]  * cos(pitch_ang) * sin(yaw_ang);
           point.z = rangesArray[sensor_i][plan_i]  * sin(pitch_ang);
@@ -328,55 +279,63 @@ public:
       points.header.stamp = time; //ros::Time();
       points.header.frame_id = parent_name+"_velodyne16"; 
 
-      _pointCloud_pub.publish(points);
-
-     // if(sensorAngle - this->test_prev_sensorAngle != M_PI/180*(this->angleRes*this->numOfRaySensors) )
-     //       std::cout << " Time = " << time << " diff =  " << sensorAngle.Degree() - this->test_prev_sensorAngle.Degree() << std::endl;            
-     // test_prev_sensorAngle =  sensorAngle;   
+      _pointCloud_pub.publish(points);   
   }
 
- // ignition::math::Angle test_prev_sensorAngle;
   
+  void TF_Broadcast(double x, double y, double z, double Roll, double Pitch, double Yaw, std::string frame_id, std::string child_frame_id, ros::Time t)
+  {
+    static tf::TransformBroadcaster br;
+    tf::StampedTransform st(transformBuilder(x, y, z, Roll, Pitch, Yaw), t, frame_id, child_frame_id);
+    br.sendTransform(st);
+  }
+
+  tf::Transform transformBuilder(float x, float y, float z, float Roll, float Pitch, float Yaw)
+  {
+    tf::Transform transform;
+    transform.setOrigin(tf::Vector3(x, y, z));
+
+    tf::Quaternion q;
+    q.setRPY(Roll, Pitch, Yaw);
+    transform.setRotation(q);
+    return (transform);
+  }
+
+  
+  
+  
+  
+  double angleRes; 
+  double rotRate;
+  double verticalAngleResolution;
+  double verticalAngelMin;
+//double RVIZPublishRate;
 
   physics::ModelPtr model;
-
   physics::JointPtr joint;
+
 
   std::string model_name;
   std::string parent_name;
-  common::PID pid;
 
-
-
+  
   #if CPUvsGPU == 1
     vector<gazebo::sensors::RaySensorPtr> raySensors;  
   #elif CPUvsGPU == 2
     vector<gazebo::sensors::GpuRaySensorPtr> raySensors;
   #endif
-
-
-  event::ConnectionPtr _updateConnection; // Pointer to the update event connection
   
-  private: common::Time lastUpdateTime;
-  
-
-  double angleRes; 
-  double rotRate;
-
-
+  double rangesArray[MAX_NUM_OF_RAY_SENSORS][NUM_OF_PLANES];
   int numOfRaySensors;
 
-  double rangesArray[MAX_NUM_OF_RAY_SENSORS][NUM_OF_PLANES];
-  //   double RVIZPublishRate;
-  double verticalAngleResolutionFromSDF;
-  double VerticalAngelResolutionReal[MAX_NUM_OF_RAY_SENSORS];
-  double verticalAngelMin;
-  ros::Publisher _pointCloud_pub;
+  common::Time lastUpdateTime;
+
+  event::ConnectionPtr _updateConnection; // Pointer to the update event connection
+
+
   ros::NodeHandle _nodeHandle;
-
-  boost::thread _threadRVIZ;
-
-  ros::NodeHandle n;
+  ros::Publisher _pointCloud_pub;
+  //boost::thread _threadRVIZ;
 };
 
 // Tell Gazebo about this plugin, so that Gazebo can call Load on this plugin.
