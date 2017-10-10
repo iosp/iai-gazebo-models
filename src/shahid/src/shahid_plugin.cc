@@ -28,9 +28,13 @@ namespace gazebo
 
 
 
-      physics::ModelPtr model = this->world->GetModel("worldHightmap");
-      physics::CollisionPtr collision = model->GetLink("link")->GetCollision("collision");
-      this->heightmap = boost::dynamic_pointer_cast<physics::HeightmapShape>(collision->GetShape());
+      physics::ModelPtr hightmapModel = this->world->GetModel("worldHightmap");
+      if (hightmapModel != NULL) {
+        physics::CollisionPtr hightmapCollision = hightmapModel->GetLink("link")->GetCollision("collision");
+        this->heightmap = boost::dynamic_pointer_cast<physics::HeightmapShape>(hightmapCollision->GetShape());
+          }
+      else
+        this->heightmap = NULL;
 
 
       this->Reset();
@@ -76,6 +80,9 @@ namespace gazebo
 /////////////////////////////////////////////////
     double HightMapZ(double x, double y)
     {
+    if (! heightmap)
+     return(0);
+
     // The HeightmapShape does not work with the same coordinate system, so get some data:
     math::Vector3 size = this->heightmap->GetSize(); 
     math::Vector2i vc = this->heightmap->GetVertexCount();
