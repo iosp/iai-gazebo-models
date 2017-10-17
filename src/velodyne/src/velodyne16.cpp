@@ -181,13 +181,23 @@ public:
     common::Time sensorsUpdateTime = getRanges();
         
     ignition::math::Angle currentJointAngle =  this->joint->Position(0);
-    double sensorDellay = currentUpdateTime.Double() - sensorsUpdateTime.Double();
-    if ( sensorDellay >= 0 )
+    double sensorDelay = currentUpdateTime.Double() - sensorsUpdateTime.Double();
+    if (  ( sensorDelay >= 0 )  && (sensorDelay <= 0.007  ) )
     {
-     ignition::math::Angle sensorDellayAngle =  sensorDellay * 2*M_PI*this->rotRate;
-     ignition::math::Angle AngleCorectionToSensorDellay =  ( std::floor( ( sensorDellayAngle.Radian() - 0.5*AnglStep.Radian() ) / AnglStep.Radian() ) ) * AnglStep.Radian(); 
-     boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, currentJointAngle  - AngleCorectionToSensorDellay  ,this->lastUpdateTime);
-     //std::cout << " sensorDellay = " << sensorDellay <<  "     AngleCorectionToSensorDellay = "  << AngleCorectionToSensorDellay.Degree()  << std::endl;
+     ignition::math::Angle sensorDelayAngle =  sensorDelay * 2*M_PI*this->rotRate;
+
+     ignition::math::Angle AngleCorectionToSensorDelay = 0;
+     if( CPUvsGPU == 1) // CPU = 1 , GPU = 2
+         AngleCorectionToSensorDelay =  ( std::floor( sensorDelayAngle.Radian() / AnglStep.Radian() ) ) * AnglStep.Radian(); 
+     else if (CPUvsGPU == 2 )  
+         AngleCorectionToSensorDelay =  ( std::floor( (sensorDelayAngle.Radian() - 0.5*AnglStep.Radian() )/ AnglStep.Radian() ) ) * AnglStep.Radian(); 
+     
+     
+    float test = 0; // sensorDelay * 1000;
+
+
+     boost::thread(&velodyne16::thread_RVIZ, this,  this->rangesArray, currentJointAngle - AngleCorectionToSensorDelay  ,this->lastUpdateTime , test );
+     //std::cout << " sensorDelay = " << sensorDelay <<  "     AngleCorectionToSensorDelay = "  << AngleCorectionToSensorDelay.Degree()  << std::endl;
     }
 
 
@@ -201,35 +211,36 @@ public:
 
   common::Time getRanges()
   {
-    common::Time sensorDataTime = this->raySensors[0]->LastUpdateTime();
+    common::Time sensorDataTime = this->raySensors[0]->LastUpdateTime(); 
     double minTime = sensorDataTime.Double();
     double maxTime = sensorDataTime.Double();       
     
     
     int unSyncRaysConter = 0;
     for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
-      {
-       std::vector<double> rayMeasuresVec;
-       this->raySensors[sensor_i]->Ranges(rayMeasuresVec);
-         
-
-       if (rayMeasuresVec.size() != NUM_OF_PLANES) {
-             if ( rayMeasuresVec.size() >= 1)  // avoiding error prints before the sensors loaded 
-                 gzerr <<this->model_name << ": rayMeasuresVec.size() != NUM_OF_PLANES  \n"; 
-             return(sensorDataTime);  
-             }
-
-       double rayDataTime = this->raySensors[sensor_i]->LastUpdateTime().Double();
-       if (rayDataTime != sensorDataTime.Double()) {
-            std::fill(rayMeasuresVec.begin(), rayMeasuresVec.end(), 0);   // getting rid of the scans that are not in sync with sensor_i = 0 
-            unSyncRaysConter++;
-           // gzerr << this->model_name << " : velodyne rayDataTime unsync - throwing mesurment    ( rayDataTime = " <<  rayDataTime  << "   sensorDataTime = "  << sensorDataTime.Double() << " ) \n"; 
-            }
-
-       for (int plain_i = 0; plain_i < NUM_OF_PLANES; plain_i++)         
-           this->rangesArray[sensor_i][plain_i] = rayMeasuresVec[plain_i];
+    {
+      std::vector<double> rayMeasuresVec;
+      this->raySensors[sensor_i]->Ranges(rayMeasuresVec);
+      
+      
+      if (rayMeasuresVec.size() != NUM_OF_PLANES) {
+        if ( rayMeasuresVec.size() >= 1)  // avoiding error prints before the sensors loaded 
+        gzerr <<this->model_name << ": rayMeasuresVec.size() != NUM_OF_PLANES  \n"; 
+        return(sensorDataTime);  
       }
-
+      
+      common::Time rayDataTime = this->raySensors[sensor_i]->LastUpdateTime();
+      
+      if ( rayDataTime.Double() - sensorDataTime.Double() > 0.000  ) { 
+        std::fill(rayMeasuresVec.begin(), rayMeasuresVec.end(), 0);   // getting rid of the scans that are not in sync with sensor_i = 0 ,  more relevant for the GPU
+        unSyncRaysConter++;
+        gzerr << this->model_name << " : velodyne rayDataTime unsync - throwing mesurment    ( sensor_i = " << sensor_i <<  " rayDataTime = " <<  rayDataTime.Double()  << "   sensorDataTime = "  << sensorDataTime.Double() << " ) \n"; 
+      }
+      
+      for (int plain_i = 0; plain_i < NUM_OF_PLANES; plain_i++)         
+      this->rangesArray[sensor_i][plain_i] = rayMeasuresVec[plain_i];
+    }
+    
       if (unSyncRaysConter >= 0.9*this->numOfRaySensors  ) {
         gzerr << this->model_name << ":  The number of un-sync rays (that are thrown) is : " << unSyncRaysConter << "\n" ; 
         return(sensorDataTime);  
@@ -240,8 +251,7 @@ public:
 
 
 
-
-  void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], ignition::math::Angle sensorAngle ,common::Time time)
+  void thread_RVIZ(double rangesArray[][NUM_OF_PLANES], ignition::math::Angle sensorAngle ,common::Time time, float test)
   {
     //		ros::Time RVIZlastUpdateTime = ros::Time::now();
     //		while(true)
@@ -251,7 +261,7 @@ public:
     //			if(diff > 0.0001)
     //			{
     ros::Time t(time.sec, time.nsec);
-    RVIZ_Publisher(rangesArray, t ,sensorAngle);
+    RVIZ_Publisher(rangesArray, t ,sensorAngle, test);
     //				RVIZlastUpdateTime = newRosTime;
     // TF publish
     TF_Broadcast(0.0, 0.0, 0.0, 0.0, 0.0, sensorAngle.Radian(), model_name, model_name+"_velodyne16", t);
@@ -260,7 +270,7 @@ public:
   }
 
 
-  void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time, ignition::math::Angle sensorAngle)
+  void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANES], ros::Time time, ignition::math::Angle sensorAngle, float test)
   {
       sensor_msgs::PointCloud points;
       for (int sensor_i = 0; sensor_i < this->numOfRaySensors; sensor_i++)
@@ -272,7 +282,7 @@ public:
           double pitch_ang = (this->verticalAngelMin + plan_i * verticalAngleResolution) * (M_PI/180);
           point.x = rangesArray[sensor_i][plan_i]  * cos(pitch_ang) * cos(yaw_ang);
           point.y = rangesArray[sensor_i][plan_i]  * cos(pitch_ang) * sin(yaw_ang);
-          point.z = rangesArray[sensor_i][plan_i]  * sin(pitch_ang);
+          point.z = test + rangesArray[sensor_i][plan_i]  * sin(pitch_ang);
           points.points.push_back(point);
         }
       }
