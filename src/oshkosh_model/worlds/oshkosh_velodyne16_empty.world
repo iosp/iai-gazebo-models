@@ -72,6 +72,13 @@
             <name>oshkosh_velodyne16</name>
             <pose>0 0 2 0 0 0</pose>
         </include>
-        
+
+ <!---
+        <include>
+            <uri>model://oshkosh_velodyne16</uri>
+            <name>oshkosh_velodyne16_2</name>
+            <pose>-20 0 2 0 0 0</pose>
+        </include>
+    -->
     </world>
 </sdf>

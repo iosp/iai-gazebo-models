@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="velodyne16">
+    <pose>0 0 0.5 0 0 0</pose>
+    
+    
+
+ <plugin name="velodyne16_control" filename="libvelodyne16.so"> 
+       <rotRate>10</rotRate>      <!-- HZ -->
+       <angleRes>0.400</angleRes> <!-- horiz resolution, deg -->
+       <verticalAngleResolution>1.33333</verticalAngleResolution> <!-- deg -->  <!-- for validation and RVIZ publish calculate -->
+       <verticalAngelMin>-10</verticalAngelMin> <!-- deg -->
+       <!--<RVIZPublishRate>10.0</RVIZPublishRate>   HZ -->
+ </plugin> 
+
+ 
+    <link name="base">
+      <pose>0 0 0.029335 0 0 0</pose>
+      <inertial>
+        <mass>1.2</mass>
+        <inertia>
+          <ixx>0.001087473</ixx>
+          <iyy>0.001087473</iyy>
+          <izz>0.001092437</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>
+      
+      <collision name="base_collision">
+        <geometry>
+          <cylinder>
+            <radius>.04267</radius>
+            <length>.05867</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <visual name="base_visual">
+        <pose>0 0 -0.029335 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://velodyne16/meshes/velodyne_base.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+
+    <link name="top">
+      <pose>0 0 0.095455 0 0 0</pose>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.000090623</ixx>
+          <iyy>0.000090623</iyy>
+          <izz>0.000091036</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="top_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.04267</radius>
+            <length>0.07357</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="top_visual">
+        <pose>0 0 -0.0376785 0 0 1.5707</pose>
+        <geometry>
+          <mesh>
+            <uri>model://velodyne16/meshes/velodyne_top.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+
+      <sensor type="gpu_ray" name="ray_0">
+        <pose>0 0 -0.004645 1.5707 0 0.00</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+
+      <!---->
+      <sensor type="gpu_ray" name="ray_1">
+        <pose>0 0 -0.004645 1.5707 0 0.00698</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+      <!---->
+  
+      <sensor type="gpu_ray" name="ray_2">
+        <pose>0 0 -0.004645 1.5707 0 0.01396</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+
+    
+      <sensor type="gpu_ray" name="ray_3">
+        <pose>0 0 -0.004645 1.5707 0 0.02094</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+
+ <sensor type="gpu_ray" name="ray_4">
+        <pose>0 0 -0.004645 1.5707 0 0.02793</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+
+      <!---->
+      <sensor type="gpu_ray" name="ray_5">
+        <pose>0 0 -0.004645 1.5707 0 0.03491</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+      <!---->
+     
+      <sensor type="gpu_ray" name="ray_6">
+        <pose>0 0 -0.004645 1.5707 0 0.04189</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+    
+      <sensor type="gpu_ray" name="ray_7">
+        <pose>0 0 -0.004645 1.5707 0 0.04887</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+    
+      <sensor type="gpu_ray" name="ray_8">
+        <pose>0 0 -0.004645 1.5707 0 0.05585</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+    
+    
+      <sensor type="gpu_ray" name="ray_9">
+        <pose>0 0 -0.004645 1.5707 0 0.06283</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+    
+    
+      <sensor type="gpu_ray" name="ray_10">
+        <pose>0 0 -0.004645 1.5707 0 0.06981</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+
+    
+      <sensor type="gpu_ray" name="ray_11">
+        <pose>0 0 -0.004645 1.5707 0 0.07679</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+    
+
+
+    
+      <sensor type="gpu_ray" name="ray_12">
+        <pose>0 0 -0.004645 1.5707 0 0.08378</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+    
+
+    
+      <sensor type="gpu_ray" name="ray_13">
+        <pose>0 0 -0.004645 1.5707 0 0.09076</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+
+    
+      <sensor type="gpu_ray" name="ray_14">
+        <pose>0 0 -0.004645 1.5707 0 0.09774</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+
+
+    
+      <sensor type="gpu_ray" name="ray_15">
+        <pose>0 0 -0.004645 1.5707 0 0.10472</pose>
+        <visualize>true</visualize>
+        <update_rate>1000</update_rate>
+        <ray>
+
+          <scan>
+            <horizontal>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.17453</min_angle>
+              <max_angle>0.17453</max_angle>
+            </horizontal>
+          </scan>
+
+          <range>
+            <min>0.1</min>
+            <max>70</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+      </sensor>
+
+    </link>
+
+
+
+
+    <joint type="revolute" name="velodyne16_joint">
+      <pose>0 0 -0.036785 0 0 0</pose>
+      <parent>base</parent>
+      <child>top</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+  </model>
+
+
+</sdf>

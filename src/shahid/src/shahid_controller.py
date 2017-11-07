@@ -6,8 +6,9 @@ import sys
 import roslib
 import rospy
 
-from geometry_msgs.msg import Point
+from geometry_msgs.msg import Point, Vector3
 from gazebo_msgs.srv import GetModelState
+
 
 
 roslib.load_manifest('shahid')
@@ -31,13 +32,26 @@ def target_pose_check(event):
 		return
 
 	target_pose = modelState.pose.position
+	target_vel = modelState.twist.linear
+
 	target_dis = math.sqrt(math.pow((target_pose.x-SHAHID_POSE.x), 2) + \
 						   math.pow((target_pose.y-SHAHID_POSE.y), 2))
 
 	if ((target_dis < ACTIVATION_RADIUS) and (not TARGET_LOCK_FLAG)):
-		print " target_dis = " + str(target_dis)
-		target_pose.z = SHAHID_SPEED
-		SHAHID_TARGET_CMD.publish(target_pose)
+		#print " target_dis = " + str(target_dis)
+
+		target_vel_abs = math.sqrt(math.pow(target_vel.x,2) + math.pow(target_vel.y,2)) 
+		norm_target_vel = Vector3(target_vel.x/target_vel_abs,target_vel.y/target_vel_abs,0)	
+		
+		intersect_target = Point(0, 0, 0)
+		itersection_diss = target_dis/math.sqrt(2)  # 90deg trianngel calculatio
+		intersect_target.x = target_pose.x + norm_target_vel.x * itersection_diss
+		intersect_target.y = target_pose.y + norm_target_vel.y * itersection_diss
+		
+		sper_diss = 10 #distan traveled by the target vehical affter intersection
+		intersect_target.z = target_vel_abs * ( itersection_diss/(itersection_diss + sper_diss) )
+		
+		SHAHID_TARGET_CMD.publish(intersect_target)
 		TARGET_LOCK_FLAG = True
 
 

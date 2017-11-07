@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.5">
-  <model name="velodyne_16">
+  <model name="velodyne16">
     <pose>0 0 0.5 0 0 0</pose>
     
     
 
- <plugin name="velodyne_16_control" filename="libvelodyne_16.so"> 
-       <rate>10</rate>       <!-- HZ -->
-       <angleRes>0.2</angleRes> <!-- horiz resolution, deg -->
+ <plugin name="velodyne16_control" filename="libvelodyne16.so"> 
+       <rotRate>10</rotRate>      <!-- HZ -->
+       <angleRes>0.200</angleRes> <!-- horiz resolution, deg -->
        <verticalAngleResolution>1.33333</verticalAngleResolution> <!-- deg -->  <!-- for validation and RVIZ publish calculate -->
        <verticalAngelMin>-10</verticalAngelMin> <!-- deg -->
        <!--<RVIZPublishRate>10.0</RVIZPublishRate>   HZ -->
@@ -27,6 +27,7 @@
           <iyz>0</iyz>
         </inertia>
       </inertial>
+      
       <collision name="base_collision">
         <geometry>
           <cylinder>
@@ -35,15 +36,17 @@
           </cylinder>
         </geometry>
       </collision>
+
       <visual name="base_visual">
         <pose>0 0 -0.029335 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://velodyne_16/meshes/velodyne_base.dae</uri>
+            <uri>model://velodyne16/meshes/velodyne_base.dae</uri>
           </mesh>
         </geometry>
       </visual>
     </link>
+
 
     <link name="top">
       <pose>0 0 0.095455 0 0 0</pose>
@@ -70,15 +73,15 @@
         <pose>0 0 -0.0376785 0 0 1.5707</pose>
         <geometry>
           <mesh>
-            <uri>model://velodyne_16/meshes/velodyne_top.dae</uri>
+            <uri>model://velodyne16/meshes/velodyne_top.dae</uri>
           </mesh>
         </geometry>
       </visual>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_0">
-        <pose>0 0 -0.004645 1.5707 0 0</pose>
+      <sensor type="ray" name="ray_0">
+        <pose>0 0 -0.004645 1.5707 0 0.00</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
 
           <scan>
@@ -98,11 +101,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_1">
-        <pose>0 0 -0.004645 1.5707 0 0.1745329252</pose>
+<!---->
+      <sensor type="ray" name="ray_1">
+        <pose>0 0 -0.004645 1.5707 0 0.00349</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -120,11 +125,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_2">
-        <pose>0 0 -0.004645 1.5707 0 0.3490658504</pose>
+      <!---->
+      <sensor type="ray" name="ray_2">
+        <pose>0 0 -0.004645 1.5707 0 0.00698</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -142,11 +149,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_3">
-        <pose>0 0 -0.004645 1.5707 0 0.5235987756</pose>
+      <!---->
+      <sensor type="ray" name="ray_3">
+        <pose>0 0 -0.004645 1.5707 0 0.01047</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -164,11 +173,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_4">
-        <pose>0 0 -0.004645 1.5707 0 0.6981317008</pose>
+     
+      <sensor type="ray" name="ray_4">
+        <pose>0 0 -0.004645 1.5707 0 0.01396</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -186,11 +197,12 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_5">
-        <pose>0 0 -0.004645 1.5707 0 0.872664626</pose>
+      <sensor type="ray" name="ray_5">
+        <pose>0 0 -0.004645 1.5707 0 0.01745</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -208,11 +220,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_6">
-        <pose>0 0 -0.004645 1.5707 0 1.0471975512</pose>
+    
+      <sensor type="ray" name="ray_6">
+        <pose>0 0 -0.004645 1.5707 0 0.02094</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -230,11 +244,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_7">
-        <pose>0 0 -0.004645 1.5707 0 1.2217304764</pose>
+    
+      <sensor type="ray" name="ray_7">
+        <pose>0 0 -0.004645 1.5707 0 0.02443</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -252,11 +268,12 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_8">
-        <pose>0 0 -0.004645 1.5707 0 1.3962634016</pose>
+ <sensor type="ray" name="ray_8">
+        <pose>0 0 -0.004645 1.5707 0 0.02793</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -274,11 +291,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_9">
-        <pose>0 0 -0.004645 1.5707 0 1.5707963268</pose>
+<!---->
+      <sensor type="ray" name="ray_9">
+        <pose>0 0 -0.004645 1.5707 0 0.03142</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -296,11 +315,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_10">
-        <pose>0 0 -0.004645 1.5707 0 1.745329252</pose>
+      <!---->
+      <sensor type="ray" name="ray_10">
+        <pose>0 0 -0.004645 1.5707 0 0.03491</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -318,11 +339,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_11">
-        <pose>0 0 -0.004645 1.5707 0 1.9198621772</pose>
+      <!---->
+      <sensor type="ray" name="ray_11">
+        <pose>0 0 -0.004645 1.5707 0 0.03840</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -340,11 +363,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_12">
-        <pose>0 0 -0.004645 1.5707 0 2.0943951024</pose>
+     
+      <sensor type="ray" name="ray_12">
+        <pose>0 0 -0.004645 1.5707 0 0.04189</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -362,11 +387,12 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_13">
-        <pose>0 0 -0.004645 1.5707 0 2.2689280276</pose>
+      <sensor type="ray" name="ray_13">
+        <pose>0 0 -0.004645 1.5707 0 0.04538</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -384,12 +410,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_14">
-        <pose>0 0 -0.004645 1.5707 0 2.4434609528
-</pose>
+    
+      <sensor type="ray" name="ray_14">
+        <pose>0 0 -0.004645 1.5707 0 0.04887</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -407,11 +434,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_15">
-        <pose>0 0 -0.004645 1.5707 0 2.617993878</pose>
+    
+      <sensor type="ray" name="ray_15">
+        <pose>0 0 -0.004645 1.5707 0 0.05236</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -429,11 +458,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_16">
-        <pose>0 0 -0.004645 1.5707 0 2.7925268032</pose>
+    
+      <sensor type="ray" name="ray_16">
+        <pose>0 0 -0.004645 1.5707 0 0.05585</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -451,11 +482,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_17">
-        <pose>0 0 -0.004645 1.5707 0 2.9670597284</pose>
+    
+      <sensor type="ray" name="ray_17">
+        <pose>0 0 -0.004645 1.5707 0 0.05934</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -473,11 +506,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_18">
-        <pose>0 0 -0.004645 1.5707 0 3.1415926536</pose>
+    
+      <sensor type="ray" name="ray_18">
+        <pose>0 0 -0.004645 1.5707 0 0.06283</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -495,11 +530,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_19">
-        <pose>0 0 -0.004645 1.5707 0 3.3161255788</pose>
+    
+      <sensor type="ray" name="ray_19">
+        <pose>0 0 -0.004645 1.5707 0 0.06632</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -517,11 +554,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_20">
-        <pose>0 0 -0.004645 1.5707 0 3.490658504</pose>
+    
+      <sensor type="ray" name="ray_20">
+        <pose>0 0 -0.004645 1.5707 0 0.06981</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -539,11 +578,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_21">
-        <pose>0 0 -0.004645 1.5707 0 3.6651914292</pose>
+    
+      <sensor type="ray" name="ray_21">
+        <pose>0 0 -0.004645 1.5707 0 0.07330</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -561,11 +602,14 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_22">
-        <pose>0 0 -0.004645 1.5707 0 3.8397243544</pose>
+
+    
+      <sensor type="ray" name="ray_22">
+        <pose>0 0 -0.004645 1.5707 0 0.07679</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -583,11 +627,14 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_23">
-        <pose>0 0 -0.004645 1.5707 0 4.0142572796</pose>
+
+    
+      <sensor type="ray" name="ray_23">
+        <pose>0 0 -0.004645 1.5707 0 0.08029</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -605,11 +652,14 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_24">
-        <pose>0 0 -0.004645 1.5707 0 4.1887902048</pose>
+
+    
+      <sensor type="ray" name="ray_24">
+        <pose>0 0 -0.004645 1.5707 0 0.08378</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -627,11 +677,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_25">
-        <pose>0 0 -0.004645 1.5707 0 4.36332313</pose>
+    
+      <sensor type="ray" name="ray_25">
+        <pose>0 0 -0.004645 1.5707 0 0.08727</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -649,11 +701,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_26">
-        <pose>0 0 -0.004645 1.5707 0 4.5378560552</pose>
+    
+      <sensor type="ray" name="ray_26">
+        <pose>0 0 -0.004645 1.5707 0 0.09076</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -671,11 +725,14 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_27">
-        <pose>0 0 -0.004645 1.5707 0 4.7123889804</pose>
+
+    
+      <sensor type="ray" name="ray_27">
+        <pose>0 0 -0.004645 1.5707 0 0.09425</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -693,11 +750,13 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_28">
-        <pose>0 0 -0.004645 1.5707 0 4.8869219056</pose>
+    
+      <sensor type="ray" name="ray_28">
+        <pose>0 0 -0.004645 1.5707 0 0.09774</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -715,11 +774,14 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_29">
-        <pose>0 0 -0.004645 1.5707 0 5.0614548308</pose>
+
+    
+      <sensor type="ray" name="ray_29">
+        <pose>0 0 -0.004645 1.5707 0 0.10123</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -737,11 +799,14 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_30">
-        <pose>0 0 -0.004645 1.5707 0 5.235987756</pose>
+
+    
+      <sensor type="ray" name="ray_30">
+        <pose>0 0 -0.004645 1.5707 0 0.10472</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
+
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -759,99 +824,14 @@
         </ray>
       </sensor>
 
-      <sensor type="gpu_ray" name="velodyne_16_ray_31">
-        <pose>0 0 -0.004645 1.5707 0 5.4105206812</pose>
+
+    
+      <sensor type="ray" name="ray_31">
+        <pose>0 0 -0.004645 1.5707 0 0.10821</pose>
         <visualize>true</visualize>
-        <update_rate>300</update_rate>
+        <update_rate>1000</update_rate>
         <ray>
-          <scan>
-            <horizontal>
-              <samples>16</samples>
-              <resolution>1</resolution>
-              <min_angle>-0.17453</min_angle>
-              <max_angle>0.17453</max_angle>
-            </horizontal>
-          </scan>
 
-          <range>
-            <min>0.1</min>
-            <max>70</max>
-            <resolution>0.01</resolution>
-          </range>
-        </ray>
-      </sensor>
-
-      <sensor type="gpu_ray" name="velodyne_16_ray_32">
-        <pose>0 0 -0.004645 1.5707 0 5.5850536064</pose>
-        <visualize>true</visualize>
-        <update_rate>300</update_rate>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>16</samples>
-              <resolution>1</resolution>
-              <min_angle>-0.17453</min_angle>
-              <max_angle>0.17453</max_angle>
-            </horizontal>
-          </scan>
-
-          <range>
-            <min>0.1</min>
-            <max>70</max>
-            <resolution>0.01</resolution>
-          </range>
-        </ray>
-      </sensor>
-
-      <sensor type="gpu_ray" name="velodyne_16_ray_33">
-        <pose>0 0 -0.004645 1.5707 0 5.7595865316</pose>
-        <visualize>true</visualize>
-        <update_rate>300</update_rate>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>16</samples>
-              <resolution>1</resolution>
-              <min_angle>-0.17453</min_angle>
-              <max_angle>0.17453</max_angle>
-            </horizontal>
-          </scan>
-
-          <range>
-            <min>0.1</min>
-            <max>70</max>
-            <resolution>0.01</resolution>
-          </range>
-        </ray>
-      </sensor>
-
-      <sensor type="gpu_ray" name="velodyne_16_ray_34">
-        <pose>0 0 -0.004645 1.5707 0 5.9341194568</pose>
-        <visualize>true</visualize>
-        <update_rate>300</update_rate>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>16</samples>
-              <resolution>1</resolution>
-              <min_angle>-0.17453</min_angle>
-              <max_angle>0.17453</max_angle>
-            </horizontal>
-          </scan>
-
-          <range>
-            <min>0.1</min>
-            <max>70</max>
-            <resolution>0.01</resolution>
-          </range>
-        </ray>
-      </sensor>
-
-      <sensor type="gpu_ray" name="velodyne_16_ray_35">
-        <pose>0 0 -0.004645 1.5707 0 6.108652382</pose>
-        <visualize>true</visualize>
-        <update_rate>300</update_rate>
-        <ray>
           <scan>
             <horizontal>
               <samples>16</samples>
@@ -871,7 +851,10 @@
 
     </link>
 
-    <joint type="revolute" name="velodyne_16_joint">
+
+
+
+    <joint type="revolute" name="velodyne16_joint">
       <pose>0 0 -0.036785 0 0 0</pose>
       <parent>base</parent>
       <child>top</child>
@@ -880,4 +863,6 @@
       </axis>
     </joint>
   </model>
+
+
 </sdf>

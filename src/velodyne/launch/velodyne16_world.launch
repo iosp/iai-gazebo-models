@@ -1,12 +1,16 @@
 <!-- -*- mode: XML -*- -->
 <launch>
 
+<param name="use_sim_time" value="true" />
+
 <!-- setting gazebo path for scenario platform and sensors models -->
    	<env name="GAZEBO_MODEL_PATH" value="$(find velodyne)/models"/>
 
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find velodyne)/worlds/velodyne16.world"/>
+    <arg name="verbose" value="true"/>
+    <arg name="gui" value="true"/>
     <!-- more default parameters can be changed here -->    
   </include>
 </launch>
