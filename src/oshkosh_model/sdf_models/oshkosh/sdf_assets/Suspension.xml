@@ -2,7 +2,7 @@
 <!-------------------------->
 <!--Suspension setup-->
 <link name="suspension_left_1">
-  <pose>2.61707 0 0.72 0 0 0</pose>
+  <pose>3.1725 0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.951</ixx>
@@ -35,7 +35,7 @@
   </axis>
 </joint>
 <link name="suspension_left_2">
-  <pose>1.00737 0 0.72 0 0 0</pose>
+  <pose>1.6475 0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.951</ixx>
@@ -67,7 +67,7 @@
   </axis>
 </joint>
 <link name="suspension_right_1">
-  <pose>2.61707 -0 0.72 0 0 0</pose>
+  <pose>3.1725 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.951</ixx>
@@ -99,7 +99,7 @@
   </axis>
 </joint>
 <link name="suspension_right_2">
-  <pose>1.00737 -0 0.72 0 0 0</pose>
+  <pose>1.6475 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.951</ixx>
@@ -132,7 +132,7 @@
 </joint>
 <!--BACK SUSPENSION-->
 <link name="suspension_back_3">
-  <pose>-2.67222 -0 0.72 0 0 0</pose>
+  <pose>-1.6475 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>20</ixx>
@@ -152,7 +152,7 @@
   </visual>
 </link>
 <link name="suspension_back_piston_3">
-  <pose>-2.67222 -0 0.72 0 0 0</pose>
+  <pose>-1.6475 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>5.1</ixx>
@@ -187,7 +187,7 @@
   </axis>
 </joint>
 <link name="suspension_back_4">
-  <pose>-4.28192 -0 0.72 0 0 0</pose>
+  <pose>-3.1725 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>20</ixx>
@@ -207,7 +207,7 @@
   </visual>
 </link>
 <link name="suspension_back_piston_4">
-  <pose>-4.28192 -0 0.72 0 0 0</pose>
+  <pose>-3.1725 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>5.1</ixx>

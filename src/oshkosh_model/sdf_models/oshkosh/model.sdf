@@ -4,11 +4,11 @@
 	<model name='Oshkosh'>
 		<link name='body'>
 			<self_collide>0</self_collide>
-			<pose>0 0 1.27525 0 0 0</pose>
+			<pose>0 0 0 0 0 0</pose>
 			<gravity>1</gravity>
 			<self_collide>0</self_collide>
 			<inertial>
-				<pose>0.15 0 0 0 0 0</pose>
+				<pose>0 0 2 0 0 0</pose>
 				<mass>5000</mass>
 				<inertia>
 					<ixx>3000</ixx>
@@ -17,39 +17,39 @@
 				</inertia>
 			</inertial>
 			<collision name='body_collision_base_bottom'>
-				<pose>-2 0 0.2 0 0 0</pose>
+				<pose>-1.71 0 1.5509 0 0 0</pose>
 				<geometry>
 					<box>
-						<size>6 1.187 1.154</size>
+						<size>5 2.44 1</size>
 					</box>
 				</geometry>
 			</collision>
 			<collision name='body_collision_front'>
-				<pose>2.25 0 1.00 0 0 0</pose>
+				<pose>2.924 0 2 0 0 0</pose>
 				<geometry>
 					<box>
-						<size>3.77 3.207 1.412</size>
+						<size>3.77 2.438 1.412</size>
 					</box>
 				</geometry>
 			</collision>
-			<collision name='body_collision_uppper_slope'>
+			<!-- <collision name='body_collision_uppper_slope'>
 				<pose>3.88 0.022 0.73 0 -0.471 0</pose>
 				<geometry>
 					<box>
 						<size>1.162 2.898 1.436</size>
 					</box>
 				</geometry>
-			</collision>
+			</collision> -->
 			<collision name='body_collision_lower_slope'>
-				<pose>3.9 0.03 0.493 0 2.35 0</pose>
+				<pose>4.531 0 1.576 0 2.35 0</pose>
 				<geometry>
 					<box>
-						<size>1.161 2.9 1</size>
+						<size>1.161 2.438 1</size>
 					</box>
 				</geometry>
 			</collision>
 			<visual name='body_visual'>
-				<pose>0 0 -1.27525 0 0 0</pose>
+				<pose>0 0 0 0 0 0</pose>
 				<geometry>
 					<mesh>
 						<scale>1 1 1</scale>
@@ -61,7 +61,7 @@
 <!-------------------------->
 <!--Suspension setup-->
 <link name="suspension_left_1">
-  <pose>2.61707 0 0.72 0 0 0</pose>
+  <pose>3.1725 0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.951</ixx>
@@ -94,7 +94,7 @@
   </axis>
 </joint>
 <link name="suspension_left_2">
-  <pose>1.00737 0 0.72 0 0 0</pose>
+  <pose>1.6475 0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.951</ixx>
@@ -126,7 +126,7 @@
   </axis>
 </joint>
 <link name="suspension_right_1">
-  <pose>2.61707 -0 0.72 0 0 0</pose>
+  <pose>3.1725 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.951</ixx>
@@ -158,7 +158,7 @@
   </axis>
 </joint>
 <link name="suspension_right_2">
-  <pose>1.00737 -0 0.72 0 0 0</pose>
+  <pose>1.6475 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.951</ixx>
@@ -191,7 +191,7 @@
 </joint>
 <!--BACK SUSPENSION-->
 <link name="suspension_back_3">
-  <pose>-2.67222 -0 0.72 0 0 0</pose>
+  <pose>-1.6475 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>20</ixx>
@@ -211,7 +211,7 @@
   </visual>
 </link>
 <link name="suspension_back_piston_3">
-  <pose>-2.67222 -0 0.72 0 0 0</pose>
+  <pose>-1.6475 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>5.1</ixx>
@@ -246,7 +246,7 @@
   </axis>
 </joint>
 <link name="suspension_back_4">
-  <pose>-4.28192 -0 0.72 0 0 0</pose>
+  <pose>-3.1725 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>20</ixx>
@@ -266,7 +266,7 @@
   </visual>
 </link>
 <link name="suspension_back_piston_4">
-  <pose>-4.28192 -0 0.72 0 0 0</pose>
+  <pose>-3.1725 -0 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>5.1</ixx>
@@ -304,7 +304,7 @@
 <!-------------------------->
 <!--steering setup-->
 <link name="steering_left_1">
-  <pose>2.61707 0.7 0.72 0 0 0</pose>
+  <pose>3.1725 0.85 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.01</ixx>
@@ -339,7 +339,7 @@
   </axis>
 </joint>
 <link name="steering_left_2">
-  <pose>1.00737 0.7 0.72 0 0 0</pose>
+  <pose>1.6475 0.85 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.01</ixx>
@@ -374,7 +374,7 @@
   </axis>
 </joint>
 <link name="steering_right_1">
-  <pose>2.61707 -0.7 0.72 0 0 0</pose>
+  <pose>3.1725 -0.85 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.01</ixx>
@@ -409,7 +409,7 @@
   </axis>
 </joint>
 <link name="steering_right_2">
-  <pose>1.00737 -0.7 0.72 0 0 0</pose>
+  <pose>1.6475 -0.85 0.6715 0 0 0</pose>
   <inertial>
     <inertia>
       <ixx>0.01</ixx>
@@ -449,15 +449,15 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<sphere>
-				<length>0.5</length>s
-				<radius>0.71</radius>
+				<length>0.44</length>s
+				<radius>0.6715</radius>
 			</sphere>
 		</geometry>
 	</collision>-->
 <!--Wheels Setup-->
 <link name='left_wheel_1'>
 <self_collide>0</self_collide>
-	<pose>2.61707 1.06 0.72 0 0 0</pose>
+	<pose>3.1725 1.0035 0.6715 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
@@ -475,7 +475,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.08</length>
-				<radius>0.71</radius>
+				<radius>0.6715</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -484,7 +484,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.12</length>
-				<radius>0.705</radius>
+				<radius>0.67</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -493,7 +493,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.3</length>
-				<radius>0.7</radius>
+				<radius>0.665</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -501,7 +501,7 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.5</length>
+				<length>0.44</length>
 				<radius>0.65</radius>
 			</cylinder>
 		</geometry>
@@ -527,7 +527,7 @@
 </joint>
 <link name='left_wheel_2'>
 <self_collide>0</self_collide>
-	<pose>1.00737 1.06 0.72 0 0 0</pose>
+	<pose>1.6475 1.0035 0.6715 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
@@ -545,7 +545,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.08</length>
-				<radius>0.71</radius>
+				<radius>0.6715</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -554,7 +554,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.12</length>
-				<radius>0.705</radius>
+				<radius>0.67</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -563,7 +563,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.3</length>
-				<radius>0.7</radius>
+				<radius>0.665</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -571,7 +571,7 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.5</length>
+				<length>0.44</length>
 				<radius>0.65</radius>
 			</cylinder>
 		</geometry>
@@ -597,7 +597,7 @@
 </joint>
 <link name='left_wheel_3'>
 <self_collide>0</self_collide>
-	<pose>-2.67222 1.06 0.72 0 0 0</pose>
+	<pose>-1.6475 1.0035 0.6715 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
@@ -615,7 +615,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.08</length>
-				<radius>0.71</radius>
+				<radius>0.6715</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -624,7 +624,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.12</length>
-				<radius>0.705</radius>
+				<radius>0.67</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -633,7 +633,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.3</length>
-				<radius>0.7</radius>
+				<radius>0.665</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -641,7 +641,7 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.5</length>
+				<length>0.44</length>
 				<radius>0.65</radius>
 			</cylinder>
 		</geometry>
@@ -667,7 +667,7 @@
 </joint>
 <link name='left_wheel_4'>
 <self_collide>0</self_collide>
-	<pose>-4.28192 1.06 0.72 0 0 0</pose>
+	<pose>-3.1725 1.0035 0.6715 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
@@ -685,7 +685,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.08</length>
-				<radius>0.71</radius>
+				<radius>0.6715</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -694,7 +694,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.12</length>
-				<radius>0.705</radius>
+				<radius>0.67</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -703,7 +703,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.3</length>
-				<radius>0.7</radius>
+				<radius>0.665</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -711,7 +711,7 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.5</length>
+				<length>0.44</length>
 				<radius>0.65</radius>
 			</cylinder>
 		</geometry>
@@ -737,7 +737,7 @@
 </joint>
 <link name='right_wheel_1'>
 <self_collide>0</self_collide>
-	<pose>2.61707 -1.06 0.72 0 0 0</pose>
+	<pose>3.1725 -1.0035 0.6715 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
@@ -755,7 +755,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.08</length>
-				<radius>0.71</radius>
+				<radius>0.6715</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -764,7 +764,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.12</length>
-				<radius>0.705</radius>
+				<radius>0.67</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -773,7 +773,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.3</length>
-				<radius>0.7</radius>
+				<radius>0.665</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -781,7 +781,7 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.5</length>
+				<length>0.44</length>
 				<radius>0.65</radius>
 			</cylinder>
 		</geometry>
@@ -807,7 +807,7 @@
 </joint>
 <link name='right_wheel_2'>
 <self_collide>0</self_collide>
-	<pose>1.00737 -1.06 0.72 0 0 0</pose>
+	<pose>1.6475 -1.0035 0.6715 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
@@ -825,7 +825,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.08</length>
-				<radius>0.71</radius>
+				<radius>0.6715</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -834,7 +834,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.12</length>
-				<radius>0.705</radius>
+				<radius>0.67</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -843,7 +843,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.3</length>
-				<radius>0.7</radius>
+				<radius>0.665</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -851,7 +851,7 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.5</length>
+				<length>0.44</length>
 				<radius>0.65</radius>
 			</cylinder>
 		</geometry>
@@ -877,7 +877,7 @@
 </joint>
 <link name='right_wheel_3'>
 <self_collide>0</self_collide>
-	<pose>-2.67222 -1.06 0.72 0 0 0</pose>
+	<pose>-1.6475 -1.0035 0.6715 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
@@ -895,7 +895,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.08</length>
-				<radius>0.71</radius>
+				<radius>0.6715</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -904,7 +904,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.12</length>
-				<radius>0.705</radius>
+				<radius>0.67</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -913,7 +913,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.3</length>
-				<radius>0.7</radius>
+				<radius>0.665</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -921,7 +921,7 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.5</length>
+				<length>0.44</length>
 				<radius>0.65</radius>
 			</cylinder>
 		</geometry>
@@ -947,7 +947,7 @@
 </joint>
 <link name='right_wheel_4'>
 <self_collide>0</self_collide>
-	<pose>-4.28192 -1.06 0.72 0 0 0</pose>
+	<pose>-3.1725 -1.0035 0.6715 0 0 0</pose>
 	<inertial>
 		<pose>0 0 0 0 0 0</pose>
 		<mass>80</mass>
@@ -965,7 +965,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.08</length>
-				<radius>0.71</radius>
+				<radius>0.6715</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -974,7 +974,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.12</length>
-				<radius>0.705</radius>
+				<radius>0.67</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -983,7 +983,7 @@
 		<geometry>
 			<cylinder>
 				<length>0.3</length>
-				<radius>0.7</radius>
+				<radius>0.665</radius>
 			</cylinder>
 		</geometry>
 	</collision>
@@ -991,7 +991,7 @@
 		<pose>0 0 0 1.57079633 0 0</pose>
 		<geometry>
 			<cylinder>
-				<length>0.5</length>
+				<length>0.44</length>
 				<radius>0.65</radius>
 			</cylinder>
 		</geometry>
