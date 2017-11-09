@@ -30,9 +30,9 @@
 // Maximum time delay before a "no command" behaviour is initiated.
 #define command_MAX_DELAY 0.3
 #define PI 3.14159265359
-#define VehicleLength 6
+#define VehicleLength 4.85
 #define VehicleWidth 2
-#define WheelRadius 0.71
+#define WheelRadius 0.6715
 
 //#define MY_GAZEBO_VER 5
 
@@ -99,7 +99,7 @@ public:
     BreakPedal_sub = this->Ros_nh->subscribe("/"+vehicle_name+"/Driving/Break", 60, &oshkoshDrivingPlugin::On_Break_command, this);
 
     platform_hb_pub_ = this->Ros_nh->advertise<std_msgs::Bool>("/Oshkosh/link_with_platform", 60);
-    platform_Speedometer_pub = this->Ros_nh->advertise<std_msgs::Float64>("/Oshkosh/Speedometer", 60);
+    platform_Speedometer_pub = this->Ros_nh->advertise<std_msgs::Float64>("/"+vehicle_name+"/Speedometer", 60);
     // Listen to the update event. This event is broadcast every simulation iteration.
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&oshkoshDrivingPlugin::OnUpdate, this, _1));
     std::cout << "Setting up dynamic config" << std::endl;
@@ -237,6 +237,7 @@ public:
     double Joint_Force = WheelPower - damping * wheel_omega;
 
     wheel_joint->SetForce(0, Joint_Force);
+    
     if (wheel_joint == right_wheel_4)
     {
       wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
@@ -245,7 +246,9 @@ public:
     }
     else
       wheelsSpeedSum = wheelsSpeedSum + wheel_omega;
+      
   }
+  
   void steer_controller(physics::JointPtr steer_joint, double Angle)
   {
     // std::cout << " getting angle"<< std::endl;
@@ -263,6 +266,8 @@ public:
     // std::cout << "efforting"<< std::endl;
     // this->jointController->SetJointPosition(steer_joint, Angle*0.61);
   }
+
+  
   void breaker()
   {
 
