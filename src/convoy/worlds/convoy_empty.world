@@ -217,7 +217,7 @@
         <include>
             <uri>model://hmmwv</uri>
             <name>hmmwv</name>
-            <pose>0 0 8 0 0 0</pose>
+            <pose>0 0 15 0 0 0</pose>
         </include>
 
 
@@ -239,7 +239,7 @@
         <include>
             <uri>model://oshkosh_velodyne16</uri> 
             <name>oshkosh1</name>
-            <pose>-40 0 8 0 0 0</pose>
+            <pose>-40 0 15 0 0 0</pose>
         </include>
 
 

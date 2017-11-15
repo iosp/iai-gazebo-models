@@ -12,11 +12,12 @@
 
   <!-- setting gazebo path for platform and sensors models -->
   <env name="GAZEBO_MODEL_PATH" value="$(arg oshkosh_model):$(arg hmmwv_model):$(arg velodyne_model):$(find gazebo_assets)/Models" />
+  <env name="GAZEBO_RESOURCE_PATH" value="$(find gazebo_assets)/Models:${GAZEBO_RESOURCE_PATH}" /> 
 
 
 
 
-    <arg name="world_name" value="$(find convoy)/worlds/convoy_empty.world"/>
+  <arg name="world_name" value="$(find convoy)/worlds/convoy_empty.world"/>
 
 
 
