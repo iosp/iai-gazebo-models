@@ -20,6 +20,8 @@ commad_time_limit = 0.1
 
 def model_states_callback(msg):	
 	global vehicle_name, vehicle_angular_vel, vehicle_linear_vel
+	global linear_vel_pub
+	
 	if not (vehicle_name in msg.name) :
 		rospy.loginfo("Error : No vehicle named ' %s ' in the scen", vehicle_name) 	 	
 
@@ -39,6 +41,8 @@ def model_states_callback(msg):
 		vehicle_vel_direction = math.atan2(vehicle_twist.linear.y, vehicle_twist.linear.x) 
 		if ( abs(vehicle_vel_direction - yaw) > 0.5*PI):
     			vehicle_linear_vel = -vehicle_linear_vel
+
+		linear_vel_pub.publish(Float64(vehicle_linear_vel))
     			
 
 def cmd_vel_callback(msg):
@@ -102,10 +106,13 @@ def listener():
 
 	init_vars()
 
-	global pub_throttel_cmd, pub_steering_cmd, pub_break_cmd
+	global pub_throttel_cmd, pub_steering_cmd, pub_break_cmd, linear_vel_pub
 	pub_throttel_cmd = rospy.Publisher(vehicle_name+'/Driving/Throttle', Float64, queue_size=10)
 	pub_steering_cmd = rospy.Publisher(vehicle_name+'/Driving/Steering', Float64, queue_size=10)
 	pub_break_cmd = rospy.Publisher(vehicle_name+'/Driving/Break', Float64, queue_size=10)
+	
+	linear_vel_pub = rospy.Publisher(vehicle_name+'/linear_vel', Float64, queue_size=10)
+
 	
 	rospy.Subscriber(vehicle_name+"/cmd_vel", Twist, cmd_vel_callback)
 	rospy.Subscriber("/gazebo/model_states", ModelStates, model_states_callback)
