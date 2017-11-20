@@ -68,8 +68,8 @@
         </include>
 
         <include>
-            <uri>model://oshkosh_dany</uri>
-            <name>oshkosh_dany</name>
+            <uri>model://oshkosh</uri>
+            <name>oshkosh</name>
             <pose>0 0 2 0 0 0</pose>
         </include>
 

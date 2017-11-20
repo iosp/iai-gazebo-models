@@ -115,7 +115,7 @@
       <lower>-0.61</lower>
       <upper>0.61</upper>
     </limit>
-    <xyz>0 0 -1</xyz>
+    <xyz>0 0 1</xyz>
   </axis>
 </joint>
 
@@ -180,7 +180,7 @@
   <parent>left_wheel_steering</parent>
   <child>left_wheel::wheel</child>
 	<axis>
-		<xyz>0 -1 0</xyz>
+		<xyz>0 1 0</xyz>
 	</axis>
 </joint>
 

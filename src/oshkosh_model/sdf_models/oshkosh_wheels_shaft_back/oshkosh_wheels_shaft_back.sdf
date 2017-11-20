@@ -109,7 +109,7 @@
   <parent>wheels_shaft</parent>
   <child>left_wheel::wheel</child>
 	<axis>
-		<xyz>0 -1 0</xyz>
+		<xyz>0 1 0</xyz>
 	</axis>
 </joint>
 

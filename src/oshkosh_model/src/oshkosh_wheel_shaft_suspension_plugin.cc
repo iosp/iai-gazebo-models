@@ -31,7 +31,7 @@ public:
   {
     std::cout << "My major GAZEBO VER = [" << GAZEBO_MAJOR_VERSION << "]" << std::endl;
     this->model = _model;
-    this->model_name = model->GetName(); 
+    this->vehicle_name = model->GetName(); 
     
 
     this->shaft_name = "";       
@@ -41,9 +41,14 @@ public:
        ROS_WARN("canot fined shaft_name");
 
 
-    // Test for whether the model is nested and a prefix is needed to find the joint
-    std::string pref = this->model_name + "::" +this->shaft_name;
-    std::cout << " Loding Plugin for Dumping in " << pref << std::endl;
+    std::string pref = "";
+    // Test for whether the model is nested and a prefix is needed to find the joints
+    if( this->model->GetLink("body") )
+          pref = this->vehicle_name + "::" +this->shaft_name;
+    else
+          pref = this->vehicle_name + "::oshkosh::" + this->shaft_name; 
+
+    std::cout << " Loading " << pref  << " Shaft Suspention Plugin " << std::endl;
     
 
     if( ! this->model->GetJoint(pref+"::torsion_spring") )
@@ -57,32 +62,31 @@ public:
     this->torsion_spring_joint = this->model->GetJoint(pref+"::torsion_spring");
     this->linear_spring_joint = this->model->GetJoint(pref+"::linear_spring");
         
-    this->Ros_nh = new ros::NodeHandle(this->model_name + "_" + this->shaft_name + "_PluginNode");
+    this->Ros_nh = new ros::NodeHandle(this->vehicle_name + "_" + this->shaft_name + "WheelShaftSuspension_PluginNode");
 
     
     // Listen to the update event. This event is broadcast every simulation iteration.
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&oshkoshWheelShaftSuspensionPlugin::OnUpdate, this, _1));
     
 
-    std::cout << "Setting up dynamic config" << std::endl;
+    //std::cout << "Setting up dynamic config" << std::endl;
     this->model_reconfiguration_server = new dynamic_reconfigure::Server<oshkosh_model::oshkosh_wheels_shaft_dumpingConfig>(*(this->Ros_nh));
     this->model_reconfiguration_server->setCallback(boost::bind(&oshkoshWheelShaftSuspensionPlugin::dynamic_Reconfiguration_callback, this, _1, _2));
-    std::cout << "dynamic configuration is set up" << std::endl;
+    //std::cout << "dynamic configuration is set up" << std::endl;
 
-
-    std::cout << "Oshkosh Wheel Shaft Suspension Plugin Loaded" << std::endl;
+    std::cout << " Loaded " << pref  << " Shaft Suspention Plugin " << std::endl;
   }
 
 public:
    void dynamic_Reconfiguration_callback(oshkosh_model::oshkosh_wheels_shaft_dumpingConfig &config, uint32_t level)
   {
-    this->linear_spring = config.Spring_back;
-    this->linear_damping = config.Damper_back;
-    this->linear_target = config.Target_back;
+    this->linear_spring = config.linear_Spring;
+    this->linear_damping = config.linear_Damping;
+    this->linear_target = config.linear_Target;
 
-    this->torsion_spring = config.Spring_torsion_back;
-    this->torsion_damping = config.Damper_torsion_back;
-    this->torsion_target = config.Target_torsion_back;
+    this->torsion_spring = config.torsion_Spring;
+    this->torsion_damping = config.torsion_Damping;
+    this->torsion_target = config.torsion_Target;
   }
 
 
@@ -107,11 +111,12 @@ public:
     Suspension_joint->SetForce(0, SpringForce);
   }
 
+
   
   // Defining private Pointer to model
   physics::ModelPtr model;
 
-  std::string model_name;
+  std::string vehicle_name;
   std::string shaft_name;
 
   // Defining private Pointer to joints

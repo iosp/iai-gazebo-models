@@ -3,6 +3,8 @@
 <sdf version='1.4'>
 <model name='oshkosh'>
 
+<plugin name="oshkoshTF_PublisherPlugin" filename="liboshkosh_TF_pub_plugin.so"/>
+
 <link name='body'>
 			<self_collide>0</self_collide>
 			<pose>0 0 0 0 0 0</pose>
@@ -62,8 +64,6 @@
 
 
 
-
-
 <!-- front wheels -->
 
 <include>
@@ -85,8 +85,19 @@
       </axis>
 </joint>
 
-<plugin name="oshkoshWheelShaftSuspensionPlugin" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+<plugin name="oshkoshWheelShaftSuspensionPlugin_front_1" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
     <shaft_name>oshkosh_wheels_shaft_front_1</shaft_name>
+</plugin>
+
+
+<plugin name="oshkoshWheelDrivePugin_front_1" filename="liboshkosh_wheel_drive_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_1</shaft_name>
+</plugin>
+
+<plugin name="oshkoshWheelSteerPugin_front_1" filename="liboshkosh_wheel_steer_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_1</shaft_name>
+    <VehicleLength>5.5825</VehicleLength>
+    <VehicleWidth>2</VehicleWidth>
 </plugin>
 
 
@@ -109,10 +120,19 @@
       </axis>
 </joint>
 
-<plugin name="oshkoshWheelShaftSuspensionPlugin" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+<plugin name="oshkoshWheelShaftSuspensionPlugin_front_2" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
     <shaft_name>oshkosh_wheels_shaft_front_2</shaft_name>
 </plugin>
 
+<plugin name="oshkoshWheelDrivePugin_front_2" filename="liboshkosh_wheel_drive_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_2</shaft_name>
+</plugin>
+
+<plugin name="oshkoshWheelSteerPugin_front_2" filename="liboshkosh_wheel_steer_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_2</shaft_name>
+     <VehicleLength>4.0575</VehicleLength>
+    <VehicleWidth>2</VehicleWidth>
+</plugin>
 
 <!-- back wheels -->
 
@@ -135,7 +155,11 @@
       </axis>
 </joint>
 
-<plugin name="oshkoshWheelShaftSuspensionPlugin" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+<plugin name="oshkoshWheelShaftSuspensionPlugin_back_1" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_back_1</shaft_name>
+</plugin>
+
+<plugin name="oshkoshWheelDrivePugin_back_1" filename="liboshkosh_wheel_drive_plugin.so">
     <shaft_name>oshkosh_wheels_shaft_back_1</shaft_name>
 </plugin>
 
@@ -158,9 +182,15 @@
       </axis>
 </joint>
 
-<plugin name="oshkoshWheelShaftSuspensionPlugin" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+<plugin name="oshkoshWheelShaftSuspensionPlugin_back_2" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
     <shaft_name>oshkosh_wheels_shaft_back_2</shaft_name>
 </plugin>
+
+<plugin name="oshkoshWheelDrivePugin_back_2" filename="liboshkosh_wheel_drive_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_back_2</shaft_name>
+</plugin>
+
+
 
  </model>
 </sdf>
