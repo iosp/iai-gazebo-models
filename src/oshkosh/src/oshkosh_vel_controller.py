@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import roslib; roslib.load_manifest('oshkosh_model')
+import roslib; roslib.load_manifest('oshkosh')
 import rospy
 import sys
 

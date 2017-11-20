@@ -9,7 +9,7 @@
 
 // Dynamic Configuration
 #include <dynamic_reconfigure/server.h>
-#include <oshkosh_model/oshkosh_wheels_shaft_dumpingConfig.h>
+#include <oshkosh/oshkosh_wheels_shaft_dumpingConfig.h>
 
 #include <boost/bind.hpp> // Boost Bind
 
@@ -70,7 +70,7 @@ public:
     
 
     //std::cout << "Setting up dynamic config" << std::endl;
-    this->model_reconfiguration_server = new dynamic_reconfigure::Server<oshkosh_model::oshkosh_wheels_shaft_dumpingConfig>(*(this->Ros_nh));
+    this->model_reconfiguration_server = new dynamic_reconfigure::Server<oshkoshoshkosh::oshkosh_wheels_shaft_dumpingConfig>(*(this->Ros_nh));
     this->model_reconfiguration_server->setCallback(boost::bind(&oshkoshWheelShaftSuspensionPlugin::dynamic_Reconfiguration_callback, this, _1, _2));
     //std::cout << "dynamic configuration is set up" << std::endl;
 
@@ -78,7 +78,7 @@ public:
   }
 
 public:
-   void dynamic_Reconfiguration_callback(oshkosh_model::oshkosh_wheels_shaft_dumpingConfig &config, uint32_t level)
+   void dynamic_Reconfiguration_callback(oshkosh::oshkosh_wheels_shaft_dumpingConfig &config, uint32_t level)
   {
     this->linear_spring = config.linear_Spring;
     this->linear_damping = config.linear_Damping;
@@ -132,7 +132,7 @@ public:
 
 
   //Dynamic Configuration Definitions
-dynamic_reconfigure::Server<oshkosh_model::oshkosh_wheels_shaft_dumpingConfig> *model_reconfiguration_server;
+dynamic_reconfigure::Server<oshkosh::oshkosh_wheels_shaft_dumpingConfig> *model_reconfiguration_server;
 double linear_spring, linear_damping, linear_target ;   
 double torsion_spring, torsion_damping, torsion_target;
 

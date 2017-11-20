@@ -13,7 +13,7 @@
 #include <boost/thread/mutex.hpp>
 // Dynamic Configuration
 #include <dynamic_reconfigure/server.h>
-#include <oshkosh_model/oshkosh_wheels_driveConfig.h>
+#include <oshkosh/oshkosh_wheels_driveConfig.h>
 // Boost Bind
 #include <boost/bind.hpp> 
 
@@ -83,7 +83,7 @@ public:
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&oshkoshWheelDrivePlugin::OnUpdate, this, _1));
     
     //std::cout << "Setting up dynamic config" << std::endl;
-    this->model_reconfiguration_server = new dynamic_reconfigure::Server<oshkosh_model::oshkosh_wheels_driveConfig>(*(this->Ros_nh));
+    this->model_reconfiguration_server = new dynamic_reconfigure::Server<oshkosh::oshkosh_wheels_driveConfig>(*(this->Ros_nh));
     this->model_reconfiguration_server->setCallback(boost::bind(&oshkoshWheelDrivePlugin::dynamic_Reconfiguration_callback, this, _1, _2));
     //std::cout << "dynamic configuration is set up" << std::endl;
 
@@ -92,7 +92,7 @@ public:
   }
 
 public:
-  void dynamic_Reconfiguration_callback(oshkosh_model::oshkosh_wheels_driveConfig &config, uint32_t level)
+  void dynamic_Reconfiguration_callback(oshkosh::oshkosh_wheels_driveConfig &config, uint32_t level)
   {
     power = config.WheelDrivePower;
     damping = config.WheelDriveDamping;
@@ -238,7 +238,7 @@ public:
   bool Breaks = false;
 
   //Dynamic Configuration Definitions
-  dynamic_reconfigure::Server<oshkosh_model::oshkosh_wheels_driveConfig> *model_reconfiguration_server;
+  dynamic_reconfigure::Server<oshkosh::oshkosh_wheels_driveConfig> *model_reconfiguration_server;
     double damping = 100, power = 2200, TempDamping;
 
 
