@@ -10,7 +10,7 @@
 
 
  <!-- hmmwv1 
-  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  <include file="$(find oshkosh)/launch/oshkosh_controller.launch">
   	<arg name="vehicle_name" value="hmmwv1"/>
   </include>
 
@@ -19,7 +19,7 @@
  -->
 
 <!-- oshkosh1 -->
-  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  <include file="$(find oshkosh)/launch/oshkosh_controller.launch">
   	<arg name="vehicle_name" value="oshkosh1"/>
   </include>
 
@@ -28,7 +28,7 @@
 
 
 <!-- oshkosh2 
-  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  <include file="$(find oshkosh)/launch/oshkosh_controller.launch">
   	<arg name="vehicle_name" value="oshkosh2"/>
   </include>
 
@@ -37,7 +37,7 @@
 -->
 
 <!-- oshkosh3     
-  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  <include file="$(find oshkosh)/launch/oshkosh_controller.launch">
   	<arg name="vehicle_name" value="oshkosh3"/>
   </include>
 
@@ -46,7 +46,7 @@
     -->  
 
 <!-- oshkosh4 
-  <include file="$(find oshkosh_model)/launch/oshkosh_controller.launch">
+  <include file="$(find oshkosh)/launch/oshkosh_controller.launch">
   	<arg name="vehicle_name" value="oshkosh4"/>
   </include>
 

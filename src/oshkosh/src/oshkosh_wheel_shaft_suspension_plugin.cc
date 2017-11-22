@@ -70,7 +70,7 @@ public:
     
 
     //std::cout << "Setting up dynamic config" << std::endl;
-    this->model_reconfiguration_server = new dynamic_reconfigure::Server<oshkoshoshkosh::oshkosh_wheels_shaft_dumpingConfig>(*(this->Ros_nh));
+    this->model_reconfiguration_server = new dynamic_reconfigure::Server<oshkosh::oshkosh_wheels_shaft_dumpingConfig>(*(this->Ros_nh));
     this->model_reconfiguration_server->setCallback(boost::bind(&oshkoshWheelShaftSuspensionPlugin::dynamic_Reconfiguration_callback, this, _1, _2));
     //std::cout << "dynamic configuration is set up" << std::endl;
 

@@ -6,12 +6,12 @@
 
 
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="oshkosh_model" default="$(find oshkosh_model)/sdf_models"/>
+  <arg name="oshkosh" default="$(find oshkosh)/sdf_models"/>
   <arg name="hmmwv_model" default="$(find hmmwv)/sdf_models"/>
   <arg name="velodyne_model" default="$(find velodyne)/models"/>
 
   <!-- setting gazebo path for platform and sensors models -->
-  <env name="GAZEBO_MODEL_PATH" value="$(arg oshkosh_model):$(arg hmmwv_model):$(arg velodyne_model):$(find gazebo_assets)/Models" />
+  <env name="GAZEBO_MODEL_PATH" value="$(arg oshkosh):$(arg hmmwv_model):$(arg velodyne_model):$(find gazebo_assets)/Models" />
   <env name="GAZEBO_RESOURCE_PATH" value="$(find gazebo_assets)/Models:${GAZEBO_RESOURCE_PATH}" /> 
 
 
