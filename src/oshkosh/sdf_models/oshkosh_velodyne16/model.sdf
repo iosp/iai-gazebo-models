@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- -*- mode: XML -*- -->
+<sdf version='1.4'>
+
+  <model name="Oshkosh_velodyne16">
+
+     <include>
+        <name>oshkosh</name>
+        <uri>model://oshkosh</uri>
+        <pose>0 0 0 0 0 0</pose>
+     </include>
+
+
+     <include>
+         <name>velodyne16</name>
+         <uri>model://velodyne16</uri>
+         <pose>4 0 3 0 0 0</pose>
+     </include>
+
+    
+    <joint name='oshkosh_to_velodyne16_joint' type='revolute'>
+      <parent>oshkosh::body</parent>
+      <child>velodyne16::base</child>
+      <axis>
+        <xyz>0 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+    </joint>
+
+
+  </model> 
+
+</sdf>

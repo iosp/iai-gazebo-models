@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- -*- mode: XML -*- -->
+<sdf version='1.4'>
+<model name="oshkosh_wheel" >
+
+<link name='wheel'>
+<self_collide>0</self_collide>
+	<pose>0 0 0 0 0 0</pose>
+	<inertial>
+		<pose>0 0 0 0 0 0</pose>
+		<mass>80</mass>
+		<inertia>
+			<ixx>7.34</ixx>
+			<ixy>0</ixy>
+			<ixz>0</ixz>
+			<iyy>12.6</iyy>
+			<iyz>0</iyz>
+			<izz>7.34</izz>
+		</inertia>
+	</inertial>
+	<collision name='wheel_1_col'>
+		<pose>0 0 0 1.57079633 0 0</pose>
+		<geometry>
+			<cylinder>
+				<length>0.08</length>
+				<radius>0.6715</radius>
+			</cylinder>
+		</geometry>
+		<surface>
+        <friction>
+          <ode>
+            <mu>0.30</mu>
+            <mu2>0.30</mu2>
+          </ode>
+        </friction>
+      </surface>
+	</collision>
+	<collision name='wheel_col'>
+		<pose>0 0 0 1.57079633 0 0</pose>
+		<geometry>
+			<cylinder>
+				<length>0.12</length>
+				<radius>0.67</radius>
+			</cylinder>
+		</geometry>
+	</collision>
+	<collision name='wheel_col2'>
+		<pose>0 0 0 1.57079633 0 0</pose>
+		<geometry>
+			<cylinder>
+				<length>0.3</length>
+				<radius>0.665</radius>
+			</cylinder>
+		</geometry>
+	</collision>
+	<collision name='wheel_col3'>
+		<pose>0 0 0 1.57079633 0 0</pose>
+		<geometry>
+			<cylinder>
+				<length>0.44</length>
+				<radius>0.65</radius>
+			</cylinder>
+		</geometry>
+	</collision>
+	<visual name='wheel_vis'>
+		<pose>0 0 0 0 0 0</pose>
+		<geometry>
+			<mesh>
+				<uri>model://../Assets/Oshkosh/Oshkosh_Wheel.dae</uri>
+			</mesh>
+		</geometry>
+	</visual>
+	<gravity>1</gravity>
+	<self_collide>0</self_collide>
+</link>
+
+</model>
+</sdf>

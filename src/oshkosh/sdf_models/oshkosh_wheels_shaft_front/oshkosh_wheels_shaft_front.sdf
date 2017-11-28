@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- -*- mode: XML -*- -->
+<sdf version='1.4'>
+	<model name='oshkosh_suspention'>
+		
+<link name="wheels_frame_base">
+  <pose>0 0 0 0 0 0</pose>
+  <inertial>
+    <inertia>
+      <ixx>1</ixx>
+      <iyy>1</iyy>
+      <izz>1</izz>
+    </inertia>
+    <mass>200</mass>
+  </inertial>
+</link>
+
+
+<!-- suspension -->
+
+<link name="suspension_ancre">
+  <pose>0 0 -0.6715 0 0 0</pose>
+  <inertial>
+    <inertia>
+      <ixx>5.1</ixx>
+      <iyy>5.1</iyy>
+      <izz>5.1</izz>
+    </inertia>
+    <mass>300</mass>
+  </inertial>
+</link>
+
+<link name="wheels_shaft">
+  <pose>0 0 -0.6715 0 0 0</pose>
+  <inertial>
+    <inertia>
+      <ixx>20</ixx>
+      <iyy>2</iyy>
+      <izz>20</izz>
+    </inertia>
+    <mass>200</mass>
+  </inertial>
+  <visual name='visual'>
+    <pose>0 0 0 0 0 0</pose>
+    <geometry>
+      <mesh>
+        <scale>1 1 1</scale>
+        <uri>model://../Assets/Oshkosh/wheels_shaft.dae</uri>
+      </mesh>
+    </geometry>
+  </visual>
+</link>
+
+
+
+<joint name="linear_spring" type="prismatic">
+  <parent>wheels_frame_base</parent>
+  <child>suspension_ancre</child>
+  <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+  <axis>
+    <limit>
+      <lower>-0.3</lower>
+      <upper>0.3</upper>
+    </limit>
+    <xyz>0 0 1</xyz>
+  </axis>
+</joint>
+
+
+
+<joint name="torsion_spring" type="revolute">
+  <parent>suspension_ancre</parent>
+  <child>wheels_shaft</child>
+  <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+  <axis>
+    <limit>
+      <lower>-0.4</lower>
+      <upper>0.4</upper>
+    </limit>
+    <xyz>-1 0 0</xyz>
+  </axis>
+</joint>
+
+
+
+<!---- Stering ---->
+
+<link name="right_wheel_steering">
+  <pose>0 -0.85 -0.6715 0 0 0</pose>
+  <inertial>
+    <inertia>
+      <ixx>0.01</ixx>
+      <iyy>0.01</iyy>
+      <izz>0.01</izz>
+    </inertia>
+    <mass>20</mass>
+  </inertial>
+  <visual name='visual'>
+    <pose>0 0 0 0 0 3.14159265359</pose>
+    <geometry>
+      <cylinder>
+        <radius>0.1</radius>
+        <length>0.3</length>
+      </cylinder>
+    </geometry>
+  </visual>
+</link>
+
+<joint name="steering_right_wheel_joint" type="revolute">
+  <parent>wheels_shaft</parent>
+  <child>right_wheel_steering</child>
+  <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+  <axis> <dynamics><damping>1</damping></dynamics>
+    <limit>
+      <lower>-0.61</lower>
+      <upper>0.61</upper>
+    </limit>
+    <xyz>0 0 1</xyz>
+  </axis>
+</joint>
+
+<link name="left_wheel_steering">
+  <pose>0 0.85 -0.6715 0 0 0</pose>
+  <inertial>
+    <inertia>
+      <ixx>0.01</ixx>
+      <iyy>0.01</iyy>
+      <izz>0.01</izz>
+    </inertia>
+    <mass>20</mass>
+  </inertial>
+  <visual name='visual'>
+    <pose>0 0 0 0 0 3.14159265359</pose>
+    <geometry>
+      <cylinder>
+        <radius>0.1</radius>
+        <length>0.3</length>
+      </cylinder>
+    </geometry>
+  </visual>
+</link>
+
+<joint name="steering_left_wheel_joint" type="revolute">
+  <parent>wheels_shaft</parent>
+  <child>left_wheel_steering</child>
+  <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+  <axis> <dynamics><damping>1</damping></dynamics>
+    <limit>
+      <lower>-0.61</lower>
+      <upper>0.61</upper>
+    </limit>
+    <xyz>0 0 1</xyz>
+  </axis>
+</joint>
+
+
+
+
+<!---- wheels ---->
+
+
+
+<include>
+    <name>right_wheel</name>
+    <uri>model://oshkosh_wheel</uri>
+    <pose>0 -1 -0.6715 0 0 0</pose>
+</include>
+
+<joint name="right_wheel_joint" type="revolute">
+  <parent>right_wheel_steering</parent>
+  <child>right_wheel::wheel</child>
+	<axis>
+		<xyz>0 1 0</xyz>
+	</axis>
+</joint>
+
+
+
+<joint name="left_wheel_joint" type="revolute">
+  <parent>left_wheel_steering</parent>
+  <child>left_wheel::wheel</child>
+	<axis>
+		<xyz>0 1 0</xyz>
+	</axis>
+</joint>
+
+
+<include>
+    <name>left_wheel</name>
+    <uri>model://oshkosh_wheel</uri>
+    <pose>0 1 -0.6715 3.1415 0 0</pose>
+</include>
+
+
+
+
+
+
+
+ </model>
+</sdf>

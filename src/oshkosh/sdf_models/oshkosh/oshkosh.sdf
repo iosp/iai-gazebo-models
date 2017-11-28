@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- -*- mode: XML -*- -->
+<sdf version='1.4'>
+<model name='oshkosh'>
+
+<plugin name="oshkoshTF_PublisherPlugin" filename="liboshkosh_TF_pub_plugin.so"/>
+
+<link name='body'>
+			<self_collide>0</self_collide>
+			<pose>0 0 0 0 0 0</pose>
+			<gravity>1</gravity>
+			<self_collide>0</self_collide>
+			<inertial>
+				<pose>-0.5 0 2 0 0 0</pose>
+				<mass>5000</mass>
+				<inertia>
+					<ixx>3000</ixx>
+					<iyy>20000</iyy>
+					<izz>20000</izz>
+				</inertia>
+			</inertial>
+			<collision name='body_collision_base_bottom'>
+				<pose>-1.71 0 1.5509 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>5 2.44 1</size>
+					</box>
+				</geometry>
+			</collision>
+			<collision name='body_collision_front'>
+				<pose>2.924 0 2 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>3.77 2.438 1.412</size>
+					</box>
+				</geometry>
+			</collision>
+			<!-- <collision name='body_collision_uppper_slope'>
+				<pose>3.88 0.022 0.73 0 -0.471 0</pose>
+				<geometry>
+					<box>
+						<size>1.162 2.898 1.436</size>
+					</box>
+				</geometry>
+			</collision> -->
+			<collision name='body_collision_lower_slope'>
+				<pose>4.531 0 1.576 0 2.35 0</pose>
+				<geometry>
+					<box>
+						<size>1.161 2.438 1</size>
+					</box>
+				</geometry>
+			</collision>
+			<visual name='body_visual'>
+				<pose>0 0 0 0 0 0</pose>
+				<geometry>
+					<mesh>
+						<scale>1 1 1</scale>
+						<uri>model://../Assets/Oshkosh/HEMTT2.dae</uri>
+					</mesh>
+				</geometry>
+			</visual>
+</link>		
+
+
+
+<!-- front wheels -->
+
+<include>
+    <name>oshkosh_wheels_shaft_front_1</name>
+    <uri>model://oshkosh_wheels_shaft_front</uri>
+    <pose>3.1725 0 1.343 0 0 0</pose>
+</include>
+
+<joint name="oshkosh_wheels_shaft_front_1_joint" type="revolute">
+  <parent>body</parent>
+  <child>oshkosh_wheels_shaft_front_1::wheels_frame_base</child>
+      <axis>
+        <xyz>0 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+</joint>
+
+<plugin name="oshkoshWheelShaftSuspensionPlugin_front_1" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_1</shaft_name>
+</plugin>
+
+
+<plugin name="oshkoshWheelDrivePugin_front_1" filename="liboshkosh_wheel_drive_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_1</shaft_name>
+</plugin>
+
+<plugin name="oshkoshWheelSteerPugin_front_1" filename="liboshkosh_wheel_steer_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_1</shaft_name>
+    <VehicleLength>5.5825</VehicleLength>
+    <VehicleWidth>2</VehicleWidth>
+</plugin>
+
+
+<include>
+    <name>oshkosh_wheels_shaft_front_2</name>
+    <uri>model://oshkosh_wheels_shaft_front</uri>
+    <pose>1.6475 0 1.343 0 0 0</pose>
+</include>
+
+<joint name="oshkosh_wheels_shaft_front_2_joint" type="revolute">
+  <parent>body</parent>
+  <child>oshkosh_wheels_shaft_front_2::wheels_frame_base</child>
+      <axis>
+        <xyz>0 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+</joint>
+
+<plugin name="oshkoshWheelShaftSuspensionPlugin_front_2" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_2</shaft_name>
+</plugin>
+
+<plugin name="oshkoshWheelDrivePugin_front_2" filename="liboshkosh_wheel_drive_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_2</shaft_name>
+</plugin>
+
+<plugin name="oshkoshWheelSteerPugin_front_2" filename="liboshkosh_wheel_steer_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_front_2</shaft_name>
+     <VehicleLength>4.0575</VehicleLength>
+    <VehicleWidth>2</VehicleWidth>
+</plugin>
+
+<!-- back wheels -->
+
+<include>
+    <name>oshkosh_wheels_shaft_back_1</name>
+    <uri>model://oshkosh_wheels_shaft_back</uri>
+    <pose>-1.6475 0 1.343 0 0 0</pose>
+</include>
+
+<joint name="oshkosh_wheels_shaft_back_1_joint" type="revolute">
+  <parent>body</parent>
+  <child>oshkosh_wheels_shaft_back_1::wheels_frame_base</child>
+      <axis>
+        <xyz>0 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+</joint>
+
+<plugin name="oshkoshWheelShaftSuspensionPlugin_back_1" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_back_1</shaft_name>
+</plugin>
+
+<plugin name="oshkoshWheelDrivePugin_back_1" filename="liboshkosh_wheel_drive_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_back_1</shaft_name>
+</plugin>
+
+<include>
+    <name>oshkosh_wheels_shaft_back_2</name>
+    <uri>model://oshkosh_wheels_shaft_back</uri>
+    <pose>-3.1725 0 1.343 0 0 0</pose>
+</include>
+
+<joint name="oshkosh_wheels_shaft_back_2_joint" type="revolute">
+  <parent>body</parent>
+  <child>oshkosh_wheels_shaft_back_2::wheels_frame_base</child>
+      <axis>
+        <xyz>0 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+</joint>
+
+<plugin name="oshkoshWheelShaftSuspensionPlugin_back_2" filename="liboshkosh_wheel_shaft_suspension_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_back_2</shaft_name>
+</plugin>
+
+<plugin name="oshkoshWheelDrivePugin_back_2" filename="liboshkosh_wheel_drive_plugin.so">
+    <shaft_name>oshkosh_wheels_shaft_back_2</shaft_name>
+</plugin>
+
+
+
+ </model>
+</sdf>

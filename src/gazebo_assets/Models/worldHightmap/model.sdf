@@ -7,8 +7,8 @@
         <collision name="collision">
           <geometry>
             <heightmap>
-              <uri>model://worldHightmap/materials/textures/worldHightmap.png</uri>
-              <size>250 250 20</size>
+              <uri>model://worldHightmap/materials/worldHightmap.png</uri>
+              <size>500 500 30</size>
               <pos>0 0 0</pos>
             </heightmap>
           </geometry>
@@ -18,30 +18,31 @@
             <heightmap>
               <use_terrain_paging>false</use_terrain_paging>
               <texture>
-                <diffuse>file://media/materials/textures/dirt_diffusespecular.png</diffuse>
-                <normal>file://media/materials/textures/flat_normal.png</normal>
+                <diffuse>model://worldHightmap/materials/textures/dirt_diffusespecular.png</diffuse>
+                <normal>model://worldHightmap/materials/textures/flat_normal.png</normal> 
                 <size>1</size>
               </texture>
               <texture>
-                <diffuse>file://media/materials/textures/grass_diffusespecular.png</diffuse>
-                <normal>file://media/materials/textures/flat_normal.png</normal>
+                <diffuse>model://worldHightmap/materials/textures/grass_diffusespecular.png</diffuse>
+                <normal>model://worldHightmap/materials/textures/flat_normal.png</normal>
                 <size>1</size>
               </texture>
               <texture>
-                <diffuse>file://media/materials/textures/fungus_diffusespecular.png</diffuse>
-                <normal>file://media/materials/textures/flat_normal.png</normal>
+                <diffuse>model://worldHightmap/materials/textures/fungus_diffusespecular.png</diffuse>
+                <normal>model://worldHightmap/materials/textures/flat_normal.png</normal>
                 <size>1</size>
               </texture> 
               <blend>
-                <min_height>2</min_height>
-                <fade_dist>5</fade_dist>
+                <min_height>5</min_height>
+                <fade_dist>10</fade_dist>
               </blend>
               <blend>
-                <min_height>4</min_height>
-                <fade_dist>5</fade_dist>
+                <min_height>10</min_height>
+                <fade_dist>10</fade_dist>
               </blend>
-              <uri>model://worldHightmap/materials/textures/worldHightmap.png</uri>
-              <size>250 250 20</size>
+              
+              <uri>model://worldHightmap/materials/worldHightmap.png</uri>
+              <size>500 500 30</size>
               <pos>0 0 0</pos>
             </heightmap>
           </geometry>

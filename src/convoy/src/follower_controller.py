@@ -50,7 +50,7 @@ def wp_time_callback(event):
 	#if (dis > 20):
 	wp = PoseStamped()
 	wp.pose.position = leader_pose
-	wp.pose.position.z = 10
+	wp.pose.position.z = 5
 
 	wp_path.poses.append(wp)
 	pub_path_cmd.publish(wp_path)	
