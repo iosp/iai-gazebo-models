@@ -27,14 +27,14 @@
         args="oshkosh1 hmmwv"/>
 
 
-<!-- oshkosh2 
+<!-- oshkosh2 -->
   <include file="$(find oshkosh)/launch/oshkosh_controller.launch">
   	<arg name="vehicle_name" value="oshkosh2"/>
   </include>
 
   <node name="follower_controller2"  type="follower_controller.py"  pkg="convoy"  output="screen" respawn="true"
         args="oshkosh2 oshkosh1"/>
--->
+
 
 <!-- oshkosh3     
   <include file="$(find oshkosh)/launch/oshkosh_controller.launch">
@@ -56,23 +56,23 @@
 
   <node name="leader_path_pub"      type="convoy_path_pub.py"      pkg="convoy"  output="screen" respawn="true" 
         args="hmmwv
-               100   0   5
-               100  100  5
-              -100  50  7
-              -100 -100  6
-               100 -100  5
+               100   0   4
+               100  100  4
+              -100  50  5
+              -100 -100  4
+               100 -100  4
                
                100   0   4
                100  100  4
               -100  50  5
               -100 -100  5
-               100 -100  7
+               100 -100  5
                
                100   0   3
                100  100  5
-              -100  50  4
+              -100  50  5
               -100 -100  5
-               100 -100  6
+               100 -100  5
               "/>
 
 <!-- -->

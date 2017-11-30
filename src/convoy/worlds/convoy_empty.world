@@ -243,14 +243,14 @@
         </include>
 
 
-<!--
+
         <include>
-            <uri>model://oshkosh</uri>
+            <uri>model://oshkosh_velodyne16</uri>
             <name>oshkosh2</name>
-            <pose>-80 0 2 0 0 0</pose>
+            <pose>-80 0 15 0 0 0</pose>
         </include>
         
-
+<!--
         <include>
             <uri>model://oshkosh_velodyne16</uri>
             <name>oshkosh3</name>
