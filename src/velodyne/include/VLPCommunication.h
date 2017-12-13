@@ -5,24 +5,26 @@
 * VLPCommunication.h
 * Manage communication between velodyne sensor with UDP socket
 * Author: Binyamin Appelbaum
+* Date: 7.11.17
 * VLP = Velodyne Lidar Puck
 */
 
 #include <string>
 #include <vector>
-#include <boost/date_time/posix_time/posix_time.hpp> // boost::posix_time::ptime
+#include <map>
+#include <boost/date_time/posix_time/posix_time.hpp> // boost::posix_time::time_duration
 #include <boost/thread.hpp> // boost::thread
 
 static const int SENSOR_FREQ = 10;
 static const int NUM_OF_VLP_DATA_CHANNELS_IN_BLOCK = 32;
 static const int NUM_OF_VLP_DATA_BLOCKS = 12;
-enum NumOfDataChannels {_VEL16_ = 16, _VEL32_ = 32};
-enum Resolution { _RES02_ = 200, _RES04_ = 400};
-enum ReturnMode { _STRONGEST_ = 37, _LAST_ = 38, _DUAL_ = 39};
-enum DataSource {_HDL32E_ = 21, _VLP16_ = 22};
 
 class VLPCommunication {
 public:
+    enum NumOfDataChannels {_VEL16_ = 16, _VEL32_ = 32};
+    enum Resolution { _RES02_ = 200, _RES04_ = 400};
+    enum ReturnMode { _STRONGEST_ = 37, _LAST_ = 38, _DUAL_ = 39};
+    enum DataSource {_HDL32E_ = 21, _VLP16_ = 22};
     /**
      * Hold VLP configuration
      */
@@ -35,9 +37,9 @@ public:
         ReturnMode m_returnMode;
         DataSource m_dataSource;
         int m_sensorFrequency;
-        VLPConfig() {}
+        VLPConfig() = default;
         VLPConfig(const std::string& ipAddress, const std::string& port, Resolution horizontalResolution = _RES02_,
-             NumOfDataChannels numOfRowsInColumn = _VEL16_, ReturnMode returnMode = _DUAL_, DataSource dataSource = _VLP16_,
+             NumOfDataChannels numOfRowsInColumn = _VEL16_, ReturnMode returnMode = _STRONGEST_, DataSource dataSource = _VLP16_,
              int sensorFrequency = SENSOR_FREQ);
         };
 
@@ -48,17 +50,18 @@ public:
     struct VLPData {
         double m_azimuth;
         t_channel_data m_channels;
-        boost::posix_time::ptime m_timeStamp;
-        VLPData(){}
-        VLPData(double azimuth, const t_channel_data& channels, const boost::posix_time::ptime& timeStamp) :
-            m_azimuth(azimuth), m_channels(channels), m_timeStamp(timeStamp) {} 
+        boost::posix_time::time_duration m_durationAfterLastHour;
+        VLPData() = default;
+        VLPData(double azimuth, const t_channel_data& channels, const boost::posix_time::time_duration& durationAfterLastHour) :
+            m_azimuth(azimuth), m_channels(channels), m_durationAfterLastHour(durationAfterLastHour) {} 
     };
 
 private:
     /**
      * VLP packet that defined by Velodyne
      */
-    struct VLPDataPacket {
+    class VLPDataPacket {
+    public:
         struct VLPDataBlock {
             struct DataChannel {
                 unsigned char distance[2]{};
@@ -73,20 +76,30 @@ private:
         VLPDataBlock dataBlocks[NUM_OF_VLP_DATA_BLOCKS];
         unsigned char timeStamp[4]{}; // time stamp is how much seconds passed after the last round hour
         unsigned char factory[2]{};
+        VLPDataPacket();
+        void InitVLPDataPacket();
     };
 
     /**
      * velodyne data to save on process  
     */
-    std::vector<VLPData> m_velodyneData; // TODO mutex!!
+    std::vector<VLPData> m_velodyneData;
     /**
      * VLP configuration values
      */ 
     VLPConfig m_vlpConfig;
     /**
+     * time to sleep between every packet send
+    */
+    int m_sleepTimeBetweenEverySend;
+    /**
      * thread of data send
      */ 
     boost::thread m_sendDataThread;
+    /**
+     * mutex to save velodyne data
+     */ 
+    mutable boost::mutex m_velodyneDataMutex;
     /**
      * Send data via UDP socket
      */
@@ -103,12 +116,7 @@ private:
      */
     void InitVelodyneData();
 
-    /**
-     * Create VLP packet to send
-     * @param dataStartIndex - index to velodyne data vector, to start sending from this point
-     * @return struct of VLPDataPacket 
-     */
-    VLPDataPacket CreateVLPPacket(int dataStartIndex) const;
+    void FillBlockInPacket(int dataIndex, int packetIndex, VLPDataPacket& packet) const;
 
     /**
      * Fill time stamp on VLP packet, on dataIndex in velodyne vector
@@ -132,29 +140,22 @@ private:
     void FillAzimuth(VLPDataPacket& packet, int dataIndex, int packetIndex) const;
 
     /**
+     * Transform vector of channels to adapt Velodyne format.
+     * The method converts vector indexes ( the example is for VLP16 but works also for VLP32)
+     * Orig: 0  1  2  3  4  5  6  7  8  9  10  11  12  13  14  15
+     * New:  0  8  1  9  2  10 3 11  4  12 5   13  6   14  7   15
+     * @param channels - vector of channel pairs (distance and reflectivity)
+     * @return dataIndex - new formatted vector
+     */
+    t_channel_data MapChannels(const t_channel_data& channels) const;
+
+    /**
      * Fill data records on VLP packet (on suitable block - according to packetIndex)
      * @param packet - struct of VLP packet
      * @param dataIndex - the index on velodyne data vector to get the data from
      * @param packetIndex - the index on VLP packet struct to put the data on
      */
     void FillDataRecords(VLPDataPacket& packet, int dataIndex, int packetIndex) const;
-
-    /**
-     * Fill signee data record on VLP packet
-     * @param dataIndex - the index on velodyne data vector to get the data from
-     * @param dataRecords - reference to the data records on VLP packet struct
-     */
-    void FillSingleDataRecord(int dataIndex, int dataRecordsIndex, VLPDataPacket::VLPDataBlock::DataChannel* dataRecords) const;
-
-    /**
-     * Check if current packet has been sent already (by its time stamp).
-     * The method also returns the current timeStamp of the packet by the reference member.
-     * @param packet - struct of VLP packet
-     * @param lastTimeStamp - last sent packet time stamp
-     * @param currTimeStamp - out member, current timestamp of the packet
-     * @return true if currTimeStamp < lastTimeStamp and false O.W 
-     */
-    bool IsPacketHasBeenSent(const VLPDataPacket& packet, unsigned int lastTimeStamp,/* out */ unsigned int& currTimeStamp) const;
 
     /**
      * Check validation of VLP data
@@ -196,6 +197,8 @@ private:
      */ 
     void printPacketData(const VLPDataPacket& packet) const;
 
+    static const std::map<VLPCommunication::ReturnMode, std::string> retModeToStr;
+    static const std::map<VLPCommunication::DataSource, std::string> dataSourceToStr;
 
 public:
     /**
@@ -218,7 +221,9 @@ public:
 
     const VLPConfig& GetConfig() const {
         return m_vlpConfig;
-    }   
+    }
+
+    static void printVelData(const std::vector<VLPCommunication::VLPData>& velData);
 
 };
 
