@@ -8,19 +8,14 @@
 #include "VLPCommunication.h"
 #include "Logger.h"
 
-#include <sstream>
 #include <boost/assign.hpp> // boost::assign::map_list_of
 #include <boost/asio.hpp> // boost::asio::io_service
 #include <boost/range/irange.hpp> // boost::irange
 #include <boost/lexical_cast.hpp>
 
-static const int DEGREES = 360;
 static const int DISTANCE_MULT = 500;
 static const int AZIMUTH_MULT = 100;
-static const int SECOND_TO_MICROSECOND  = 1e6;
 static const unsigned long HOUR_TO_MICRO_SEC = 360 * SECOND_TO_MICROSECOND;
-static const std::string PORT = "2368";
-static const std::string IP_ADDRESS = "192.168.1.77";
 
 const std::map<VLPCommunication::ReturnMode, std::string> VLPCommunication::retModeToStr = 
             boost::assign::map_list_of(VLPCommunication::_STRONGEST_, "strongest")(VLPCommunication::_LAST_, "last")(VLPCommunication::_DUAL_, "dual");
@@ -50,8 +45,8 @@ void VLPCommunication::VLPDataPacket::InitVLPDataPacket() {
 }
 
 VLPCommunication::VLPConfig::VLPConfig(const std::string& ipAddress, const std::string& port, Resolution horizontalResolution,
-             NumOfDataChannels numOfRowsInColumn, ReturnMode returnMode, DataSource dataSource, int sensorFrequency) :
-             m_ipAddress(ipAddress), m_port(port), m_horizontalResolution(horizontalResolution), m_numOfRowsInColumn(numOfRowsInColumn),
+             ReturnMode returnMode, DataSource dataSource, int sensorFrequency) :
+             m_ipAddress(ipAddress), m_port(port), m_horizontalResolution(horizontalResolution),
               m_returnMode(returnMode), m_dataSource(dataSource), m_sensorFrequency(sensorFrequency) {
     m_realHorizontalResolution = m_horizontalResolution / 1000.0;     
 }
@@ -71,7 +66,7 @@ bool VLPCommunication::CheckDataValidation(const VLPData& data) const {
         return false;
     }
     // check that the data size corresponds to the number of columns
-    if (data.m_channels.size() != m_vlpConfig.m_numOfRowsInColumn) {
+    if (data.m_channels.size() != GetNumOfrowsInColumn()) {
         LOG(_ERROR_, "Channels size is not valid: " + std::to_string(data.m_channels.size()));
         return false;
     }
@@ -91,8 +86,6 @@ void VLPCommunication::SetData(const std::vector<VLPData>& data) {
         m_velodyneData[index].m_channels = block.m_channels;
         m_velodyneData[index].m_durationAfterLastHour = block.m_durationAfterLastHour;
         m_velodyneData[index].m_azimuth = block.m_azimuth;
-        LOG(_DEBUG_, "HAS BEEN SET: azimuth: " + std::to_string(block.m_azimuth));
-        LOG(_DEBUG_, "HAS BEEN SET: index: " + std::to_string(index));
         m_velodyneDataMutex.unlock();
     }
 }
@@ -105,7 +98,6 @@ void VLPCommunication::SendPacket(const VLPDataPacket& packet) const {
     boost::asio::io_service io_service;
     ip::udp::socket socket(io_service);
     socket.open(ip::udp::v4());
-
     ip::udp::endpoint remote_endpoint = ip::udp::endpoint(ip::address::from_string(m_vlpConfig.m_ipAddress),
          boost::lexical_cast<int>(m_vlpConfig.m_port));
     // set the ip address of the configuration
@@ -133,28 +125,29 @@ void VLPCommunication::SendData() const {
             // send packet when it contains the required number of blocks
             if (blocksCounter == NUM_OF_VLP_DATA_BLOCKS) {
                 SendPacket(packet);
-                printPacketData(packet);
+                //printPacketData(packet);
                 packet.InitVLPDataPacket();
                 blocksCounter = 0;
                 // calculate sleep time: (<time to sleep> - <time of the iteration>)
                 ptime endTime = microsec_clock::local_time();
                 time_duration diff = endTime - startTime;
-                int tts = m_sleepTimeBetweenEverySend - diff.total_microseconds();
-                if (tts > 0) {
-                    usleep(tts);
+                int sleepTime = m_sleepTimeBetweenEverySend - diff.total_microseconds();
+                LOG(_NORMAL_, "diff: " + std::to_string(diff.total_microseconds()));
+                if (sleepTime > 0) {
+                    usleep(sleepTime);
                 }
                 startTime = microsec_clock::local_time();
             }
             // critical section - try to fill a block
             m_velodyneDataMutex.lock();
             // fill block only if the time stamps of the blocks are valid
-            if ((lastDuration < m_velodyneData[dataIndex].m_durationAfterLastHour) && 
-                (m_velodyneData[dataIndex].m_durationAfterLastHour < m_velodyneData[dataIndex + 1].m_durationAfterLastHour)) {
+            if (CanAddToPacket(lastDuration, dataIndex)) {
                 FillBlockInPacket(dataIndex, blocksCounter, packet);
-                lastDuration = m_velodyneData[dataIndex + 1].m_durationAfterLastHour;
+                // take the last duration from the last cell that was inserted
+                lastDuration = m_velodyneData[dataIndex + DataIndexIncrement() - 1].m_durationAfterLastHour;
                 blocksCounter++;
             }
-            dataIndex += 2;
+            dataIndex += DataIndexIncrement();
             m_velodyneDataMutex.unlock();
         }
     }
@@ -187,17 +180,10 @@ void VLPCommunication::FillAzimuth(VLPDataPacket& packet, int dataIndex, int pac
         packet.dataBlocks[packetIndex].azimuth, sizeof(packet.dataBlocks[packetIndex].azimuth));
 }
 
-void VLPCommunication::FillDataRecords(VLPDataPacket& packet, int dataIndex, int packetIndex) const {
-    auto values = MapChannels(m_velodyneData[dataIndex].m_channels);
-    // for vel16 we need 2 blocks of channels, because the data records is in size 32
-    if (m_vlpConfig.m_numOfRowsInColumn == _VEL16_) {
-        auto additionalValues = MapChannels(m_velodyneData[dataIndex + 1].m_channels);
-        values.insert(values.end(), additionalValues.begin(), additionalValues.end());
-    }
-    
-    for (auto i : boost::irange<size_t>(0, values.size())) {
+void VLPCommunication::FillChannelsInPacket(VLPDataPacket& packet, const t_channel_data& channels, int packetIndex) const {
+    for (auto i : boost::irange<size_t>(0, channels.size())) {
          // convert the distance * 500 (in order to save double information) to array on the suitable block of the packet
-        ToByteArray((unsigned int)(values[i].first * DISTANCE_MULT), 
+        ToByteArray((unsigned int)(channels[i].first * DISTANCE_MULT), 
             packet.dataBlocks[packetIndex].dataRecords[i].distance, sizeof(packet.dataBlocks[packetIndex].dataRecords[i].distance));
     }
 }
@@ -278,49 +264,3 @@ void VLPCommunication::printPacketData(const VLPDataPacket& packet) const {
     LOG(_NORMAL_, "*********** Time After startup: " + 
         std::to_string(FormatBlock(packet.timeStamp, sizeof(packet.timeStamp), tsFunc)) + " *********************");
 }
-
-std::vector<VLPCommunication::VLPData> generateData(VLPCommunication::NumOfDataChannels noc, VLPCommunication::Resolution res, int vecSize) {
-    using namespace boost::posix_time;
-    
-    std::vector<VLPCommunication::VLPData> v;
-    for (auto i : boost::irange(0, vecSize)) {
-        VLPCommunication::t_channel_data channel;
-        for (auto j : boost::irange(0, (int)noc)) {
-            channel.push_back(std::pair<double,short>(10, 0));
-        }
-        double azimuth = (double) (i / (1000.0 / res));
-        time_duration td =  microsec_clock::local_time() - from_time_t(0);
-        VLPCommunication::VLPData data(azimuth, channel, td);
-        v.push_back(data);
-    }
-    
-    return v;
-}
-
-int main() {
-    std::stringstream ss;
-    ss << "********************* starting " << __FILE__ << ". Time: " << boost::posix_time::microsec_clock::local_time() << " ******************";
-    LOG(_ALWAYS_, ss.str());
-
-    VLPCommunication::Resolution res = VLPCommunication::_RES02_;
-    VLPCommunication::NumOfDataChannels noc = VLPCommunication::_VEL16_;
-    double realRes = (res / 1000.0);
-    int vecSize = DEGREES / realRes;
-    const int JUMP = 15;
-    VLPCommunication::VLPConfig conf(IP_ADDRESS, PORT, res, noc);
-    VLPCommunication vlp(conf);
-
-    vlp.Run();
-    while (true) {
-        std::vector<VLPCommunication::VLPData> data = generateData(noc, res, vecSize);
-        for (auto i : boost::irange(0, vecSize, JUMP)) {
-            std::vector<VLPCommunication::VLPData> newVec(data.begin() + i, data.begin() + i + JUMP);
-            vlp.SetData(newVec);
-        }
-    }
-
-    ss.str("");
-    ss << "********************* Ending " << __FILE__ << ". Time: " << boost::posix_time::microsec_clock::local_time();
-    LOG(_ALWAYS_, ss.str());
-}
-

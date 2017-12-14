@@ -39,8 +39,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(include ${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS})
 
-add_library(vlp 
-  src/VLPCommunication.cpp 
+add_library(vlp
+  src/VLPCommunication.cpp
+  src/VLPCommunication16.cpp
+  src/VLPCommunication32.cpp
   src/Logger.cpp
   src/Utilities.cpp
 )

@@ -49,12 +49,13 @@ void Logger::PrintToFile(LogLevel level, const std::string& message) const {
 void Logger::PrintToScreen(LogLevel level, const std::string& message) const {
     // error messages are displayed in red
     std::string msgToDisp = message;
+    if (level < m_screenLogLevel) {
+        return;
+    }
     if (level == _ERROR_) {
         msgToDisp = MarkMessageWithColor(message, RED);
     }
-    if (level >= m_screenLogLevel) {
-        std::cout << msgToDisp << std::endl;
-    }
+    std::cout << msgToDisp << std::endl;
 }
 
 template <typename T>

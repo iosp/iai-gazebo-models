@@ -15,13 +15,14 @@
 #include <boost/date_time/posix_time/posix_time.hpp> // boost::posix_time::time_duration
 #include <boost/thread.hpp> // boost::thread
 
+static const int DEGREES = 360;
+static const int SECOND_TO_MICROSECOND  = 1e6;
 static const int SENSOR_FREQ = 10;
 static const int NUM_OF_VLP_DATA_CHANNELS_IN_BLOCK = 32;
 static const int NUM_OF_VLP_DATA_BLOCKS = 12;
 
 class VLPCommunication {
 public:
-    enum NumOfDataChannels {_VEL16_ = 16, _VEL32_ = 32};
     enum Resolution { _RES02_ = 200, _RES04_ = 400};
     enum ReturnMode { _STRONGEST_ = 37, _LAST_ = 38, _DUAL_ = 39};
     enum DataSource {_HDL32E_ = 21, _VLP16_ = 22};
@@ -33,13 +34,12 @@ public:
         std::string m_port;
         Resolution m_horizontalResolution;
         double m_realHorizontalResolution;
-        NumOfDataChannels m_numOfRowsInColumn;
         ReturnMode m_returnMode;
         DataSource m_dataSource;
         int m_sensorFrequency;
         VLPConfig() = default;
         VLPConfig(const std::string& ipAddress, const std::string& port, Resolution horizontalResolution = _RES02_,
-             NumOfDataChannels numOfRowsInColumn = _VEL16_, ReturnMode returnMode = _STRONGEST_, DataSource dataSource = _VLP16_,
+            ReturnMode returnMode = _STRONGEST_, DataSource dataSource = _VLP16_,
              int sensorFrequency = SENSOR_FREQ);
         };
 
@@ -56,7 +56,7 @@ public:
             m_azimuth(azimuth), m_channels(channels), m_durationAfterLastHour(durationAfterLastHour) {} 
     };
 
-private:
+protected:
     /**
      * VLP packet that defined by Velodyne
      */
@@ -116,6 +116,12 @@ private:
      */
     void InitVelodyneData();
 
+    /**
+     * Fill one block in packet
+     * @param packet - struct of VLP packet
+     * @param dataIndex - the index on velodyne data vector to get the time from
+     * @param packetIndex - the index on VLP packet struct to put the data on
+     */ 
     void FillBlockInPacket(int dataIndex, int packetIndex, VLPDataPacket& packet) const;
 
     /**
@@ -150,19 +156,48 @@ private:
     t_channel_data MapChannels(const t_channel_data& channels) const;
 
     /**
+     * Fill channles in specific packet in packet index
+     * @param packet - struct of VLP packet
+     * @param channels - the data of the channels
+     * @param packetIndex - the index on VLP packet struct to put the data on
+     */
+    void FillChannelsInPacket(VLPDataPacket& packet, const t_channel_data& channels, int packetIndex) const;
+
+    /**
      * Fill data records on VLP packet (on suitable block - according to packetIndex)
      * @param packet - struct of VLP packet
      * @param dataIndex - the index on velodyne data vector to get the data from
      * @param packetIndex - the index on VLP packet struct to put the data on
      */
-    void FillDataRecords(VLPDataPacket& packet, int dataIndex, int packetIndex) const;
-
+    virtual void FillDataRecords(VLPDataPacket& packet, int dataIndex, int packetIndex) const = 0;
+    
     /**
      * Check validation of VLP data
      * @param data - VLP data struct
+     * @param numOfRowsInColumn - number of rows expected in every column
      * @return true if data is valid and false otherwise
     */
-    bool CheckDataValidation(const VLPData& data) const;
+    virtual bool CheckDataValidation(const VLPData& data) const;
+
+    /**
+     * Get how many rows in column on the data table
+     * @return integer of the number
+    */
+    virtual int GetNumOfrowsInColumn() const = 0;
+
+    /**
+     * Check if the last duration enables us to add the next element to the packet
+     * @param lastDuration - last duration that inserted
+     * @param dataIndex - the index on velodyne data vector to get the data from
+     * @return true if the next element can be added and false O.W
+    */
+    virtual bool CanAddToPacket(const boost::posix_time::time_duration& lastDuration, int dataIndex) const = 0;
+
+    /**
+     * get a number to add in every data iteration
+     * @return integer of the number
+    */
+    virtual int DataIndexIncrement() const = 0;
 
     /**
      * convert number to unsigned char array with HEX values of this number. the array bytes are reversed.

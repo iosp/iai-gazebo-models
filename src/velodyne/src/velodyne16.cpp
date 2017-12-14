@@ -1,5 +1,5 @@
 
-#include "VLPCommunication.h"
+#include "VLPCommunication16.h"
 #include "Logger.h"
 #include "velodyne16.h"
 #include "Utilities.h"
@@ -15,15 +15,8 @@ using namespace gazebo;
 static const double DEG_TO_RAD = ( M_PI / 180.0 );
 static const double RAD_TO_DEG = ( 1 / DEG_TO_RAD );
 static const double FIRING_SEQUENCE = 55.296;
-double DEF_VAL = 10;
-
-// #include <iostream>
-// void velodyne16::threadInput() {
-//     // while (true) {
-//     //     std::cin >> DEF_VAL;
-//     //     sleep(1);
-//     // }
-// }
+static const std::string PORT = "2368";
+static const std::string IP_ADDRESS = "192.168.1.77";
 
 velodyne16::~velodyne16() {
      delete m_vlp;
@@ -80,12 +73,11 @@ void velodyne16::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
     initSensors();
 
     // create instance of VLP communication
-    VLPCommunication::VLPConfig conf("192.168.1.77", "2368", VLPCommunication::_RES02_, VLPCommunication::_VEL16_);
-    m_vlp = new VLPCommunication(conf);
+    VLPCommunication::VLPConfig conf(IP_ADDRESS, PORT, VLPCommunication::_RES02_);
+    m_vlp = new VLPCommunication16(conf);
     m_vlp->Run();
 
     this->m_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne16::OnUpdate, this, _1));
-    // boost::thread(&velodyne16::threadInput, this);
 }
 
 bool velodyne16::GetValueFromSdfFile(sdf::ElementPtr _sdf, const std::string& elemName, double& outValue, double defaultValue) const {
@@ -171,21 +163,17 @@ void velodyne16::OnUpdate(const common::UpdateInfo &_info) {
 }
 
 void velodyne16::SetVLPData(const ignition::math::Angle& angle) {
- 
     double timeOffset = 0;
     std::vector<VLPCommunication::VLPData> dataCollection;
-    double degAngle = Utilities::dmod(angle.Radian() * RAD_TO_DEG, 360);
 
     for (auto sensor_i : boost::irange(0, this->m_numOfRaySensors)) {
         for (double offset = 0; offset < m_angleRes; offset += 0.2) {
             // create azimuth
-            // double offset = 0;
             double azimuth = angle.Radian() +  (offset * DEG_TO_RAD) + sensor_i * m_angleRes * DEG_TO_RAD;
-            azimuth = Utilities::dmod(azimuth * RAD_TO_DEG, 360);
+            azimuth = Utilities::dmod(azimuth * RAD_TO_DEG, DEGREES);
             // create distance and reflectivity channels data
             std::vector<double> ranges(this->m_rangesArray[sensor_i], 
                 this->m_rangesArray[sensor_i] + sizeof(this->m_rangesArray[sensor_i]) / sizeof(this->m_rangesArray[sensor_i][0]));
-            // std::vector<double> ranges2(ranges.size(), DEF_VAL);
             std::vector<short> reflections(ranges.size());
             VLPCommunication::t_channel_data channelsData;
             channelsData.reserve(ranges.size());
@@ -193,7 +181,7 @@ void velodyne16::SetVLPData(const ignition::math::Angle& angle) {
                         [](double distance, short ref) { return std::make_pair(distance, ref); });
             // create time stamp
             timeOffset +=  FIRING_SEQUENCE;
-            boost::posix_time::time_duration td = boost::posix_time::microseconds((this->m_lastUpdateTime.Double() * 1000000) + timeOffset);
+            boost::posix_time::time_duration td = boost::posix_time::microseconds((this->m_lastUpdateTime.Double() * SECOND_TO_MICROSECOND) + timeOffset);
             VLPCommunication::VLPData data(azimuth, channelsData, td);
             dataCollection.push_back(data);
         }

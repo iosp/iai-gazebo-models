@@ -1,3 +1,6 @@
+#ifndef UTILITIES_H
+#define UTILITIES_H
+
 /**
 * Utilities.h
 * Author: Binyamin Appelbaum
@@ -22,3 +25,4 @@ namespace Utilities {
     void PrintToFile(const std::string& fileName, const std::string& text);
 }
 
+#endif // UTILITIES_H
