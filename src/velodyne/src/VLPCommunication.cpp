@@ -132,7 +132,6 @@ void VLPCommunication::SendData() const {
                 ptime endTime = microsec_clock::local_time();
                 time_duration diff = endTime - startTime;
                 int sleepTime = m_sleepTimeBetweenEverySend - diff.total_microseconds();
-                LOG(_NORMAL_, "diff: " + std::to_string(diff.total_microseconds()));
                 if (sleepTime > 0) {
                     usleep(sleepTime);
                 }
