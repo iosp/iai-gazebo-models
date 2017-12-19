@@ -17,7 +17,7 @@ void VLPCommunication32::FillDataRecords(VLPDataPacket& packet, int dataIndex, i
 }
 
 bool VLPCommunication32::CanAddToPacket(const boost::posix_time::time_duration& lastDuration, int dataIndex) const {
-    return (lastDuration < m_velodyneData[dataIndex].m_durationAfterLastHour);
+    return (lastDuration < m_velodyneData[dataIndex].m_durationAfterLastHour && !IsDataZeroed(dataIndex));
 }
 
 int VLPCommunication32::DataIndexIncrement() const {

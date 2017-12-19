@@ -73,6 +73,11 @@ bool VLPCommunication::CheckDataValidation(const VLPData& data) const {
     return true;
 }
 
+bool VLPCommunication::IsDataZeroed(int dataIndex) const {
+    return std::all_of(m_velodyneData[dataIndex].m_channels.begin(), m_velodyneData[dataIndex].m_channels.end(), 
+            [](const std::pair<double, short>& p) { return p.first == 0; });
+}
+
 void VLPCommunication::SetData(const std::vector<VLPData>& data) {
     for (auto const& block : data) {
         m_velodyneDataMutex.lock();
@@ -112,22 +117,25 @@ void VLPCommunication::SendPacket(const VLPDataPacket& packet) const {
 
 void VLPCommunication::SendData() const {
     using namespace boost::posix_time;
-
-    int blocksCounter = 0;
+    
+    long packetsCounter = 0;
+    VLPDataPacket packet;
+    FillFactory(packet);
+    int packetIndex = 0;
+    time_duration lastDuration = microseconds(0);
+    ptime startTime = microsec_clock::local_time();
+    // thread works until interrupt
     while (true) {
-        VLPDataPacket packet;
-        FillFactory(packet);
-        time_duration lastDuration = microseconds(0);
         int dataIndex = 0; 
-        ptime startTime = microsec_clock::local_time();
         // run over m_velodyneData
         while (dataIndex < (DEGREES / m_vlpConfig.m_realHorizontalResolution)) {
             // send packet when it contains the required number of blocks
-            if (blocksCounter == NUM_OF_VLP_DATA_BLOCKS) {
+            if (packetIndex == NUM_OF_VLP_DATA_BLOCKS) {
+                packetsCounter++;
                 SendPacket(packet);
-                //printPacketData(packet);
+                // printPacketData(packet);
                 packet.InitVLPDataPacket();
-                blocksCounter = 0;
+                packetIndex = 0;
                 // calculate sleep time: (<time to sleep> - <time of the iteration>)
                 ptime endTime = microsec_clock::local_time();
                 time_duration diff = endTime - startTime;
@@ -141,10 +149,10 @@ void VLPCommunication::SendData() const {
             m_velodyneDataMutex.lock();
             // fill block only if the time stamps of the blocks are valid
             if (CanAddToPacket(lastDuration, dataIndex)) {
-                FillBlockInPacket(dataIndex, blocksCounter, packet);
+                FillBlockInPacket(dataIndex, packetIndex, packet);
                 // take the last duration from the last cell that was inserted
                 lastDuration = m_velodyneData[dataIndex + DataIndexIncrement() - 1].m_durationAfterLastHour;
-                blocksCounter++;
+                packetIndex++;
             }
             dataIndex += DataIndexIncrement();
             m_velodyneDataMutex.unlock();
@@ -227,7 +235,7 @@ bool VLPCommunication::ToByteArray(T num, unsigned char* ret, size_t size) const
     return true;
 }
 
-void VLPCommunication::printVelData() const {
+void VLPCommunication::printVelData() const {       
     for (auto const& data : m_velodyneData) {
         auto values = data.m_channels;
         if (values.empty()) {
@@ -254,9 +262,9 @@ void VLPCommunication::printPacketData(const VLPDataPacket& packet) const {
             std::stringstream ss;
             ss << "  Distance " << i++ << ": "  << FormatBlock(channel.distance, sizeof(channel.distance), distanceFunc);
             //ss << "  Reflectivity: " << channel.reflectivity;
-            LOG(_DEBUG_, ss.str());
+            LOG(_NORMAL_, ss.str());
         }
-        LOG(_DEBUG_, "\n");
+        LOG(_NORMAL_, "\n");
     }
     LOG(_DEBUG_, "Return mode: " + retModeToStr.find((ReturnMode)packet.factory[0])->second);
     LOG(_DEBUG_, "Data source: " + dataSourceToStr.find((DataSource)packet.factory[1])->second);

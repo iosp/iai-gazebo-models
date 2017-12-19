@@ -152,10 +152,11 @@ void velodyne16::OnUpdate(const common::UpdateInfo &_info) {
     }
     float test = 0; // sensorDelay * 1000;
 
-    boost::thread(&velodyne16::thread_RVIZ, this,  this->m_rangesArray, currentJointAngle - AngleCorrectionToSensorDelay  ,this->m_lastUpdateTime , test );
+    ignition::math::Angle correctedAngle = currentJointAngle - AngleCorrectionToSensorDelay;
+    boost::thread(&velodyne16::thread_RVIZ, this,  this->m_rangesArray, ignition::math::Angle(0) - correctedAngle  ,this->m_lastUpdateTime , test );
     //std::cout << " sensorDelay = " << sensorDelay <<  "     AngleCorrectionToSensorDelay = "  << AngleCorrectionToSensorDelay.Degree()  << std::endl;
-    if (currentJointAngle - AngleCorrectionToSensorDelay >= 0) {
-        SetVLPData(currentJointAngle - AngleCorrectionToSensorDelay);
+    if (correctedAngle >= 0) {
+        SetVLPData(correctedAngle);
     }
 
     this->m_joint->SetPosition(0,jointNextAngle.Radian()); 
@@ -174,6 +175,8 @@ void velodyne16::SetVLPData(const ignition::math::Angle& angle) {
             // create distance and reflectivity channels data
             std::vector<double> ranges(this->m_rangesArray[sensor_i], 
                 this->m_rangesArray[sensor_i] + sizeof(this->m_rangesArray[sensor_i]) / sizeof(this->m_rangesArray[sensor_i][0]));
+            //std::for_each(ranges.begin(), ranges.end(), [](double &n){ if (n == std::numeric_limits<double>::infinity()) { n = 0;}});
+
             std::vector<short> reflections(ranges.size());
             VLPCommunication::t_channel_data channelsData;
             channelsData.reserve(ranges.size());
@@ -211,7 +214,7 @@ common::Time velodyne16::getRanges() {
         if ( rayDataTime.Double() - sensorDataTime.Double() > 0.000  ) { 
             std::fill(rayMeasuresVec.begin(), rayMeasuresVec.end(), 0);   // getting rid of the scans that are not in sync with sensor_i = 0 ,  more relevant for the GPU
             unSyncRaysConter++;
-            gzerr << this->m_model_name << " : velodyne rayDataTime unsync - throwing mesurment    ( sensor_i = " << sensor_i <<  " rayDataTime = " <<  rayDataTime.Double()  << "   sensorDataTime = "  << sensorDataTime.Double() << " ) \n"; 
+            //gzerr << this->m_model_name << " : velodyne rayDataTime unsync - throwing mesurment    ( sensor_i = " << sensor_i <<  " rayDataTime = " <<  rayDataTime.Double()  << "   sensorDataTime = "  << sensorDataTime.Double() << " ) \n"; 
         }
         
         for (int plain_i = 0; plain_i < NUM_OF_PLANES; plain_i++) {    

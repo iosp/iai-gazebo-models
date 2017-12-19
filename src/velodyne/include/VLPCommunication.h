@@ -194,6 +194,13 @@ protected:
     virtual bool CanAddToPacket(const boost::posix_time::time_duration& lastDuration, int dataIndex) const = 0;
 
     /**
+     * Check if the velodyne data in specific index is all zero values
+     * @param dataIndex - the index on velodyne data vector to get the data from
+     * @return true if the data is zeroed and false O.W
+    */
+    virtual bool IsDataZeroed(int dataIndex) const;
+
+    /**
      * get a number to add in every data iteration
      * @return integer of the number
     */
