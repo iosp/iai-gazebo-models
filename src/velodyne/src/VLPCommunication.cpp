@@ -118,7 +118,6 @@ void VLPCommunication::SendPacket(const VLPDataPacket& packet) const {
 void VLPCommunication::SendData() const {
     using namespace boost::posix_time;
     
-    long packetsCounter = 0;
     VLPDataPacket packet;
     FillFactory(packet);
     int packetIndex = 0;
@@ -126,12 +125,11 @@ void VLPCommunication::SendData() const {
     ptime startTime = microsec_clock::local_time();
     // thread works until interrupt
     while (true) {
-        int dataIndex = 0; 
+        int dataIndex = 0;
         // run over m_velodyneData
         while (dataIndex < (DEGREES / m_vlpConfig.m_realHorizontalResolution)) {
             // send packet when it contains the required number of blocks
             if (packetIndex == NUM_OF_VLP_DATA_BLOCKS) {
-                packetsCounter++;
                 SendPacket(packet);
                 // printPacketData(packet);
                 packet.InitVLPDataPacket();
