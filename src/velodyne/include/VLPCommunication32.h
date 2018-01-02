@@ -24,6 +24,7 @@ protected:
 
 public:
     VLPCommunication32(const VLPConfig& vlpConfig);
+    ~VLPCommunication32() {}
 };
 
 

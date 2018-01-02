@@ -175,7 +175,7 @@ void velodyne16::SetVLPData(const ignition::math::Angle& angle) {
             // create distance and reflectivity channels data
             std::vector<double> ranges(this->m_rangesArray[sensor_i], 
                 this->m_rangesArray[sensor_i] + sizeof(this->m_rangesArray[sensor_i]) / sizeof(this->m_rangesArray[sensor_i][0]));
-            //std::for_each(ranges.begin(), ranges.end(), [](double &n){ if (n == std::numeric_limits<double>::infinity()) { n = 0;}});
+            std::for_each(ranges.begin(), ranges.end(), [](double &n){ if (n == std::numeric_limits<double>::infinity()) { n = 0;}});
 
             std::vector<short> reflections(ranges.size());
             VLPCommunication::t_channel_data channelsData;

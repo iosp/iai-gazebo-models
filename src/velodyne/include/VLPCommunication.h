@@ -37,11 +37,14 @@ public:
         ReturnMode m_returnMode;
         DataSource m_dataSource;
         int m_sensorFrequency;
+        std::string toString();
         VLPConfig() = default;
         VLPConfig(const std::string& ipAddress, const std::string& port, Resolution horizontalResolution = _RES02_,
             ReturnMode returnMode = _STRONGEST_, DataSource dataSource = _VLP16_,
              int sensorFrequency = SENSOR_FREQ);
         };
+
+        
 
     typedef std::vector<std::pair<double, short> > t_channel_data;
     /**
@@ -248,7 +251,7 @@ public:
      * @param vlpConfig - struct of VLPConfig
      */ 
     VLPCommunication(const VLPConfig& vlpConfig);
-    ~VLPCommunication();
+    virtual ~VLPCommunication();
 
     /**
      * Set data on inner velodyne data vector

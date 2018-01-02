@@ -48,7 +48,21 @@ VLPCommunication::VLPConfig::VLPConfig(const std::string& ipAddress, const std::
              ReturnMode returnMode, DataSource dataSource, int sensorFrequency) :
              m_ipAddress(ipAddress), m_port(port), m_horizontalResolution(horizontalResolution),
               m_returnMode(returnMode), m_dataSource(dataSource), m_sensorFrequency(sensorFrequency) {
-    m_realHorizontalResolution = m_horizontalResolution / 1000.0;     
+    m_realHorizontalResolution = m_horizontalResolution / 1000.0;
+    LOG(_NORMAL_, toString());
+}
+
+std::string VLPCommunication::VLPConfig::toString() {
+    std::stringstream ss;
+    ss << "Configuration is: " << std::endl <<
+         "     ip address: |" << m_ipAddress << "|" << std::endl <<
+         "     port: |" << m_port << "|" << std::endl <<
+         "     horizontalResolution: " << m_horizontalResolution << std::endl <<
+         "     returnMode: " << m_returnMode << std::endl <<
+         "     dataSource: " << m_dataSource << std::endl <<
+         "     sensorFrequency: " << m_sensorFrequency << std::endl <<
+         "     realHorizontalResolution: " << m_realHorizontalResolution;
+    return ss.str();
 }
 
 void VLPCommunication::InitVelodyneData() {
@@ -117,7 +131,7 @@ void VLPCommunication::SendPacket(const VLPDataPacket& packet) const {
 
 void VLPCommunication::SendData() const {
     using namespace boost::posix_time;
-    
+
     VLPDataPacket packet;
     FillFactory(packet);
     int packetIndex = 0;
